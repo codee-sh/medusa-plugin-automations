@@ -9,6 +9,58 @@ import {
 } from "@tanstack/react-query"
 import { sdk } from "../../admin/lib/sdk"
 
+
+export type UseOrdersParams = {
+  limit?: number;
+  offset?: number;
+  extraKey?: unknown[];
+  enabled?: boolean;
+  fields?: string;
+};
+
+type OrdersQueryData = {
+  orders: any;
+  count: number;
+};
+
+export const useOrders = (
+  params: UseOrdersParams = {},
+  options?: Omit<
+    UseQueryOptions<OrdersQueryData, FetchError, OrdersQueryData, QueryKey>,
+    "queryFn" | "queryKey"
+  >
+) => {
+  const { limit = 100, offset = 0, extraKey = [], enabled, fields = "id,display_id" } = params;
+
+  const queryKey: QueryKey = [
+    "orders", 
+    ...extraKey
+  ];
+  
+  const query = {
+    limit,
+    offset,
+    fields,
+  } as any;
+
+  const { data, ...rest } = useQuery<
+    OrdersQueryData,
+    FetchError,
+    OrdersQueryData,
+    QueryKey
+  >({
+    queryKey,
+    queryFn: async () => {
+      return await sdk.admin.order.list(query)
+    },
+    enabled,
+    ...(options as any),
+  });
+
+  return { data, ...rest };
+};
+
+
 export type UseOrderParams = {
   order_id: string
   extraKey?: unknown[]
@@ -36,7 +88,8 @@ export const useOrder = (
   } = params
 
   const queryKey: QueryKey = [
-    "orders",
+    "order",
+    order_id,
     ...extraKey,
   ]
 

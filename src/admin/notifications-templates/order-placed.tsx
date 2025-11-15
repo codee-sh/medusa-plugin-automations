@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-import { useOrder } from "../../hooks/api/orders";
+import { useOrder, useOrders } from "../../hooks/api/orders";
 import { usePreview } from "../../hooks/api/preview";
 import { getFormattedAddress, formatDate, getLocaleAmount, getTotalCaptured, getStylizedAmount } from "../../utils";
 
-export const OrderPlacedTemplate = () => {
+export const OrderPlacedTemplate = ({ orderId }: { orderId: string }) => {
   const [templateData, setTemplateData] = useState<any>(null);
+  const [previewData, setPreviewData] = useState<any>(null);
+
   const { data: order, isLoading: isOrderLoading } = useOrder({
-    // order_id: "order_01K90KMYFE30CN70BPRP15597H",
-    order_id: "order_01K7RSJCYQQBRB5D2PQ6293Z3N",
-    enabled: true,
+    order_id: orderId,
+    enabled: !!orderId
   });
 
   useEffect(() => {
-    if (order) {
+    if (order?.display_id) {
       const shippingAddressText = getFormattedAddress({ address: order.shipping_address }).join("<br/>");
       const billingAddressText = getFormattedAddress({ address: order.billing_address }).join("<br/>");
       const templateData = {
@@ -39,10 +40,8 @@ export const OrderPlacedTemplate = () => {
           currency: order.currency_code,
         }
       };
-      setTemplateData(templateData);
 
-      console.log(order);
-      console.log(templateData);
+      setTemplateData(templateData);
     }
   }, [order]);
 
@@ -51,21 +50,33 @@ export const OrderPlacedTemplate = () => {
     templateData: templateData,
     locale: "pl",
     enabled: !!templateData,
+    extraKey: [templateData, orderId]
   });
 
   useEffect(() => {
+    if (isOrderLoading) {
+      console.log("Loading order", orderId);
+      setPreviewData(null);
+    }
+  }, [isOrderLoading]);
+
+  useEffect(() => {
     if (preview) {
-      console.log(preview);
+      console.log("Loading preview", preview);
+      setPreviewData(preview);
     }
   }, [preview]);
 
   return (
-    <div className="px-6 py-4">
-        <iframe
-        srcDoc={preview?.html || ""}
-        style={{ width: '100%', border: 'none', minHeight: '600px' }}
-        sandbox="allow-same-origin"
-        />
+    <div>
+      {isOrderLoading && <div>Loading preview for order {orderId}...</div>}
+      {previewData && <div className="px-6 py-4">
+          <iframe
+            srcDoc={previewData?.html || ""}
+            style={{ width: '100%', border: 'none', minHeight: '600px' }}
+            sandbox="allow-same-origin"
+          />
+      </div>}
     </div>
   );
 };

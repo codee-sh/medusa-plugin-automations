@@ -7,19 +7,15 @@ import {
   import { formatDate, getFormattedAddress, getLocaleAmount, getStylizedAmount, getTotalCaptured } from "@codee_team/medusa-plugin-notification/utils"
   
   export default async function orderPlacedHandler({
-    event: { data: { id, type } },
+    event: { data: { id, trigger_type } },
     container,
     pluginOptions,
-  }: SubscriberArgs<{ id: string, type: 'preview' | 'system' | 'admin' }>) {
+  }: SubscriberArgs<{ id: string, trigger_type: string }>) {
     const notificationModuleService = container.resolve(
       Modules.NOTIFICATION
     )
     const query = container.resolve(ContainerRegistrationKeys.QUERY)
-    const config = pluginOptions
-
-    if (type !== 'preview') {
-      return
-    }
+    const triggerType = trigger_type || 'system'
 
     const { data: [order] } = await query.graph({
       entity: "order",
@@ -83,10 +79,13 @@ import {
       to: order.email,
       channel: "email",
       template,
+      trigger_type: triggerType,
+      resource_id: id,
+      resource_type: "order",
       data: {
-        html,
-        text,
         subject: templateData.subject,
+        html,
+        text
       },
     })
   }
