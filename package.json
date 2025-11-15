@@ -1,0 +1,71 @@
+{
+  "name": "@codee_team/medusa-plugin-notification",
+  "version": "0.0.1",
+  "description": "Medusa plugin for sending notifications.",
+  "author": "Codee Team (https://codee.dev)",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    ".medusa/server"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    "./workflows": "./.medusa/server/src/workflows/index.js",
+    "./.medusa/server/src/modules/*": "./.medusa/server/src/modules/*/index.js",
+    "./modules/*": "./.medusa/server/src/modules/*/index.js",
+    "./providers/*": "./.medusa/server/src/providers/*/index.js",
+    "./templates/emails": "./.medusa/server/src/templates/emails/index.js",
+    "./templates/emails/*": "./.medusa/server/src/templates/emails/*/index.js",
+    "./utils": "./.medusa/server/src/utils/index.js",
+    "./*": "./.medusa/server/src/*.js"
+  },
+  "keywords": [
+    "medusa",
+    "plugin",
+    "medusa-plugin-notification",
+    "medusa-plugin",
+    "medusa-v2"
+  ],
+  "scripts": {
+    "build": "medusa plugin:build",
+    "dev": "medusa plugin:develop",
+    "prepublishOnly": "medusa plugin:build",
+    "publish-local": "npx medusa plugin:publish",
+    "publish-package": "dotenv npm publish --access public"
+  },
+  "devDependencies": {
+    "@codee_team/medusa-notification-templates": "^1.0.1",
+    "@medusajs/admin-sdk": "2.8.8",
+    "@medusajs/cli": "2.8.8",
+    "@medusajs/framework": "2.8.8",
+    "@medusajs/icons": "2.8.8",
+    "@medusajs/medusa": "2.8.8",
+    "@medusajs/test-utils": "2.8.8",
+    "@medusajs/ui": "^4.0.9",
+    "@swc/core": "1.5.7",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.2.25",
+    "prop-types": "^15.8.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2",
+    "vite": "^5.2.11",
+    "yalc": "^1.0.0-pre.53"
+  },
+  "peerDependencies": {
+    "@medusajs/admin-sdk": "^2.8.8 || ^2.11.0",
+    "@medusajs/cli": "^2.8.8 || ^2.11.0",
+    "@medusajs/framework": "^2.8.8 || ^2.11.0",
+    "@medusajs/icons": "^2.8.8 || ^2.11.0",
+    "@medusajs/medusa": "^2.8.8 || ^2.11.0",
+    "@medusajs/test-utils": "^2.8.8 || ^2.11.0",
+    "@medusajs/ui": "^4.0.9"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
