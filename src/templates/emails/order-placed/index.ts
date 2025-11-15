@@ -61,7 +61,7 @@ export function getOrderCreatedText(
     .join("\n");
 
   const shippingAddressText = data.shippingAddress
-    ? `${data.shippingAddress.street}\n${data.shippingAddress.postalCode} ${data.shippingAddress.city}\n${data.shippingAddress.country}`
+    ? data.shippingAddress.replace(/<br\s*\/?>/gi, "\n")
     : t.noData;
 
   return `
