@@ -1,6 +1,6 @@
 {
   "name": "@codee_team/medusa-plugin-notification",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Medusa plugin for sending notifications.",
   "author": "Codee Team (https://codee.dev)",
   "license": "MIT",
@@ -36,6 +36,11 @@
     "publish-local": "npx medusa plugin:publish",
     "publish-package": "dotenv npm publish --access public"
   },
+  "dependencies": {
+    "mjml": "^4.16.1",
+    "@types/mjml": "^4.7.4",
+    "deepmerge": "^4.3.1"
+  },
   "devDependencies": {
     "@codee_team/medusa-notification-templates": "^1.0.1",
     "@medusajs/admin-sdk": "2.8.8",
@@ -49,7 +54,6 @@
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.2.25",
-    "deepmerge": "^4.3.1",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
