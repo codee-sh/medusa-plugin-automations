@@ -2,8 +2,7 @@
  * Type definitions for order-created template data
  */
 
-export type OrderCreatedTemplateData = {
-  subject: string;
+export type OrderCreatedTemplateDataType = {
   sales_channel: {
     name: string;
     description: string;

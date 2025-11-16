@@ -1,15 +1,19 @@
 import mjml2html from "mjml";
-import { Theme } from "../../shared/components";
 import { escapeHtml } from "../../shared/utils";
 import { getTranslations } from "../../shared/i18n";
 import { translations, Locale } from "./locales";
-import { getOrderCreatedMain } from "./main";
-import { OrderCreatedTemplateData } from "./types";
-
-interface OrderCreatedOptions {
-  theme?: Theme;
-  locale?: Locale;
-}
+import { OrderCreatedTemplateDataType } from "./types";
+import { TemplateOptionsType } from "../types";
+import {
+  sectionHeader,
+  sectionFooter,
+  sectionText,
+  sectionDivider,
+  buttonSection,
+  richTextSection,
+  sectionWrapper,
+} from "../../shared/components";
+import { renderLabel } from "../../shared/utils";
 
 /**
  * Generates HTML email for order created notification
@@ -19,15 +23,12 @@ interface OrderCreatedOptions {
  * @returns HTML string ready to send
  */
 export function getOrderCreatedHtml(
-  data: OrderCreatedTemplateData,
-  options: OrderCreatedOptions = {}
+  data: OrderCreatedTemplateDataType,
+  options: TemplateOptionsType
 ): string {
   return mjml2html(
     `
     <mjml>
-      <mj-head>
-        <mj-title>${escapeHtml(data.subject)}</mj-title>
-      </mj-head>
       <mj-body>
         ${getOrderCreatedMain(data, options)}
       </mj-body>
@@ -39,6 +40,103 @@ export function getOrderCreatedHtml(
   ).html;
 }
 
+export function getOrderCreatedMain(
+  data: OrderCreatedTemplateDataType,
+  options: TemplateOptionsType
+): string {
+  const theme = options.theme;
+  const locale = options.locale || "pl";
+  const t = getTranslations(locale, translations, options.customTranslations);
+
+  const itemsList = data.items
+    .map(
+      (item) =>
+        `${escapeHtml(item.title)} - ${item.quantity}x ${escapeHtml(
+          item.price
+        )}`
+    )
+    .join("<br/>");
+
+  return `
+    ${sectionHeader(renderLabel(t.headerTitle, data), { theme })}
+
+    ${richTextSection(renderLabel(t.headerDescription, data), { theme, align: "center" })}
+
+    ${sectionDivider({ theme })}
+
+    ${sectionText(renderLabel(t.labels.salesChannel, data), escapeHtml(data.sales_channel.name), {
+      theme,
+      twoColumn: true,
+    })}
+
+    ${sectionDivider({ theme })}
+
+    ${sectionText(renderLabel(t.labels.orderNumber, data), escapeHtml(data.orderNumber), {
+      theme,
+      twoColumn: true,
+    })}
+
+    ${sectionDivider({ theme })}
+
+    ${sectionText(renderLabel(t.labels.orderDate, data), escapeHtml(data.orderDate), { theme, twoColumn: true })}
+
+    ${sectionDivider({ theme })}
+
+    ${sectionText(renderLabel(t.labels.products, data), itemsList, { theme })}
+
+    ${sectionDivider({ theme })}
+
+    ${sectionText(renderLabel(t.labels.shippingAddress, data), data?.shippingAddress || t.noData, {
+      theme,
+    })}
+
+    ${sectionDivider({ theme })}
+
+    ${sectionWrapper(
+      `
+        ${sectionText(
+          renderLabel(t.labels.discountTotal, data),
+          escapeHtml(data.summary.discount_total),
+          { theme, twoColumn: true }
+        )}
+        ${sectionText(
+          renderLabel(t.labels.orderTotal, data),
+          `${escapeHtml(data.summary.total)} ${escapeHtml(
+            data.summary.currency_code
+          )}`,
+          { theme, twoColumn: true }
+        )}
+        ${sectionText(
+          renderLabel(t.labels.paidTotal, data),
+          `${escapeHtml(data.summary.paid_total)} ${escapeHtml(
+            data.summary.currency_code
+          )}`,
+          { theme, twoColumn: true }
+        )}
+        ${sectionText(renderLabel(t.labels.taxTotal, data), escapeHtml(data.summary.tax_total), {
+          theme,
+          twoColumn: true
+        })}
+      `,
+      { theme, hasBackground: true }
+    )}
+
+    ${sectionDivider({ theme })}
+
+    ${data.orderUrl ? sectionDivider({ theme }) : ""}
+
+    ${
+      data.orderUrl
+        ? buttonSection(renderLabel(t.viewOrderButton, data), data.orderUrl, {
+            theme,
+          })
+        : ""
+    }
+
+    ${sectionFooter(renderLabel(t.footer, data), { theme })}
+  `.trim();
+}
+
 /**
  * Generates plain text email for order created notification
  * 
@@ -47,11 +145,11 @@ export function getOrderCreatedHtml(
  * @returns Plain text string ready to send
  */
 export function getOrderCreatedText(
-  data: OrderCreatedTemplateData,
-  options: OrderCreatedOptions = {}
+  data: OrderCreatedTemplateDataType,
+  options: TemplateOptionsType
 ): string {
   const locale = options.locale || "pl";
-  const t = getTranslations(translations, locale);
+  const t = getTranslations(locale, translations, options.customTranslations);
 
   const itemsList = data.items
     .map(
@@ -65,25 +163,25 @@ export function getOrderCreatedText(
     : t.noData;
 
   return `
-${data.subject}
+${renderLabel(t.headerTitle, data)}
 
 ${t.headerDescription}
 
-${t.labels.orderNumber}: ${data.orderNumber}
-${t.labels.orderDate}: ${data.orderDate}
+${renderLabel(t.labels.orderNumber, data)}: ${data.orderNumber}
+${renderLabel(t.labels.orderDate, data)}: ${data.orderDate}
 
-${t.labels.products}:
+${renderLabel(t.labels.products, data)}:
 ${itemsList}
 
-${t.labels.shippingAddress}:
+${renderLabel(t.labels.shippingAddress, data)}:
 ${shippingAddressText}
 
-${t.labels.orderTotal}: ${data.totalAmount} ${data.currency}
+${renderLabel(t.labels.orderTotal, data)}: ${data.totalAmount} ${data.currency}
 
-${data.orderUrl ? `${t.viewOrderButton}: ${data.orderUrl}` : ""}
+${data.orderUrl ? `${renderLabel(t.viewOrderButton, data)}: ${data.orderUrl}` : ""}
 
 ---
-${t.footer}
+${renderLabel(t.footer, data)}
   `.trim();
 }
 

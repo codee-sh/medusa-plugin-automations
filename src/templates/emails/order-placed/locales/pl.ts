@@ -1,7 +1,7 @@
 import { OrderCreatedTranslations } from "./types";
 
 export const pl: OrderCreatedTranslations = {
-  headerTitle: "#{{orderNumber}} - Zamówienie zostało złożone",
+  headerTitle: ({ data }) => `#${data?.orderNumber} - Zamówienie zostało złożone`,
   headerDescription: "Twoje zamówienie zostało przyjęte i jest w trakcie realizacji. Wkrótce otrzymasz e-mail z informacją o statusie zamówienia.",
   labels: {
     salesChannel: "Kanał sprzedaży",

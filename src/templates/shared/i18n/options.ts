@@ -8,5 +8,6 @@ import { Theme } from "../theme";
 export interface TemplateOptions {
   theme?: Theme;
   locale?: Locale;
+  customTranslations?: Partial<Record<Locale, any>>;
 }
 

@@ -1,16 +1,22 @@
 import { OrderCreatedTranslations } from "./types";
 
 export const en: OrderCreatedTranslations = {
-  thankYouMessage: "Thank you for your order! Your order has been received and is being processed.",
+  headerTitle: ({ data }) => `#${data?.orderNumber} - Order placed`,
+  headerDescription: "Your order has been received and is being processed. You will receive an email with information about the status of your order shortly.",
   labels: {
+    salesChannel: "Sales Channel",
+    salesChannelDescription: "Sales Channel Description",
     orderNumber: "Order Number",
     orderDate: "Order Date",
-    products: "Products",
+    products: "Products", 
     shippingAddress: "Shipping Address",
-    orderTotal: "Order Total",
-    taxTotal: "Tax",
+    orderTotal: "Order Total", 
+    taxTotal: "VAT",
     discountTotal: "Discount",
     paidTotal: "Paid",
+    currency: "Currency", 
+    currencyCode: "Currency Code",
+    currencySymbol: "Currency Symbol",
   },
   noData: "No data",
   viewOrderButton: "View Order Details",

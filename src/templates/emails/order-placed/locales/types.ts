@@ -3,7 +3,7 @@
  */
 
 export interface OrderCreatedTranslations {
-  headerTitle: string;
+  headerTitle: string | ((data: any) => string);
   headerDescription: string;
   labels: {
     salesChannel: string;

@@ -1,4 +1,4 @@
-export type ContactFormTemplateData = {
+export type ContactFormTemplateDataType = {
   subject: string;
   name: string;
   email: string;

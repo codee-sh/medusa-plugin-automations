@@ -4,14 +4,15 @@ import {
   } from "@medusajs/medusa"
   import { Modules, ContainerRegistrationKeys } from "@medusajs/framework/utils"
   import { renderTemplate } from "@codee_team/medusa-plugin-notification/templates/emails"
-  // import { getTranslations } from "@codee_team/medusa-plugin-notification/templates/emails/order-placed"
   import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee_team/medusa-plugin-notification/utils"
-  
+  import { getPluginOptions } from "@codee_team/medusa-plugin-notification/utils/plugins"
+
   export default async function orderPlacedHandler({
     event: { data: { id, trigger_type } },
     container,
-    pluginOptions,
   }: SubscriberArgs<{ id: string, trigger_type: string }>) {
+    const pluginOptions = getPluginOptions(container, "@codee_team/medusa-plugin-notification")
+
     const notificationModuleService = container.resolve(
       Modules.NOTIFICATION
     )
@@ -30,6 +31,8 @@ import {
         "items.variant.product.*",
         "currency_code",
         "display_id",
+        "sales_channel.name",
+        "sales_channel.description",
         "shipping_address.*",
         "billing_address.*",
         "summary.*",
@@ -48,7 +51,6 @@ import {
     const shippingAddressText = getFormattedAddress({ address: order.shipping_address }).join("<br/>");
     const billingAddressText = getFormattedAddress({ address: order.billing_address }).join("<br/>");
     const templateData = {
-      subject: `#${order.display_id} - Zamówienie zostało złożone`,
       sales_channel: {
         name: order?.sales_channel?.name,
         description: order?.sales_channel?.description,
@@ -77,11 +79,15 @@ import {
     };
     
     const templateName = "order-placed"
+    const subject = `#${order.display_id} - Zamówienie zostało złożone`
 
     const { html, text } = renderTemplate(
       templateName,
       templateData,
-      { locale: "pl" }
+      { 
+        locale: "pl",
+        customTranslations: pluginOptions?.customTranslations[templateName]
+      }
     )
   
     const result = await notificationModuleService.createNotifications({
@@ -92,7 +98,7 @@ import {
       resource_id: id,
       resource_type: "order",
       data: {
-        subject: templateData.subject,
+        subject: subject,
         html,
         text
       },
