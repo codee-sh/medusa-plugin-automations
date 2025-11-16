@@ -90,7 +90,7 @@ import {
         customTranslations: pluginOptions?.customTranslations?.[templateName]
       }
     )
-  
+
     const result = await notificationModuleService.createNotifications({
       to: order.email,
       channel: "email",
@@ -98,10 +98,11 @@ import {
       trigger_type: triggerType,
       resource_id: id,
       resource_type: "order",
-      data: {
+      data: templateData,
+      content: {
         subject: subject,
         html,
-        text
+        text,
       },
     })
   }
