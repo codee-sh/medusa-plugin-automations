@@ -4,6 +4,10 @@
 
 export type OrderCreatedTemplateData = {
   subject: string;
+  sales_channel: {
+    name: string;
+    description: string;
+  };
   orderNumber: string;
   customerName: string;
   customerEmail: string;

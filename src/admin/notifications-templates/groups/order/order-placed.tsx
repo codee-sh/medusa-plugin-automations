@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useOrder, useOrders } from "../../hooks/api/orders";
-import { usePreview } from "../../hooks/api/preview";
-import { getFormattedAddress, formatDate, getLocaleAmount, getTotalCaptured, getStylizedAmount } from "../../utils";
+import { Alert } from "@medusajs/ui"
+import { useOrder } from "../../../../hooks/api/orders";
+import { usePreview } from "../../../../hooks/api/preview";
+import { getFormattedAddress, formatDate, getLocaleAmount, getTotalCaptured } from "../../../../utils";
 
 export const OrderPlacedTemplate = ({ orderId }: { orderId: string }) => {
   const [templateData, setTemplateData] = useState<any>(null);
@@ -17,7 +18,7 @@ export const OrderPlacedTemplate = ({ orderId }: { orderId: string }) => {
       const shippingAddressText = getFormattedAddress({ address: order.shipping_address }).join("<br/>");
       const billingAddressText = getFormattedAddress({ address: order.billing_address }).join("<br/>");
       const templateData = {
-        subject: `#${order.display_id} - Order Placed`,
+        // subject: `#${order.display_id} - Zamówienie zostało złożone`,
         orderNumber: `#${order.display_id}`,
         customerName: order.email,
         customerEmail: order.email,
@@ -38,8 +39,14 @@ export const OrderPlacedTemplate = ({ orderId }: { orderId: string }) => {
           tax_total: getLocaleAmount(order.tax_total, order.currency_code),
           discount_total: getLocaleAmount(order.discount_total, order.currency_code),
           currency: order.currency_code,
+        },
+        sales_channel: {
+          name: order?.sales_channel?.name,
+          description: order?.sales_channel?.description,
         }
       };
+
+      console.log(order);
 
       setTemplateData(templateData);
     }
@@ -55,21 +62,19 @@ export const OrderPlacedTemplate = ({ orderId }: { orderId: string }) => {
 
   useEffect(() => {
     if (isOrderLoading) {
-      console.log("Loading order", orderId);
       setPreviewData(null);
     }
   }, [isOrderLoading]);
 
   useEffect(() => {
     if (preview) {
-      console.log("Loading preview", preview);
       setPreviewData(preview);
     }
   }, [preview]);
 
   return (
-    <div>
-      {isOrderLoading && <div>Loading preview for order {orderId}...</div>}
+    <div className="px-6 py-4">
+      {isOrderLoading && <Alert variant="info">Loading order {orderId}...</Alert>}
       {previewData && <div className="px-6 py-4">
           <iframe
             srcDoc={previewData?.html || ""}

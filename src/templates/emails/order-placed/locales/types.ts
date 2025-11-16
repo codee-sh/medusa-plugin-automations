@@ -3,8 +3,11 @@
  */
 
 export interface OrderCreatedTranslations {
-  thankYouMessage: string;
+  headerTitle: string;
+  headerDescription: string;
   labels: {
+    salesChannel: string;
+    salesChannelDescription: string;
     orderNumber: string;
     orderDate: string;
     products: string;
@@ -13,6 +16,9 @@ export interface OrderCreatedTranslations {
     taxTotal: string;
     discountTotal: string;
     paidTotal: string;
+    currency: string;
+    currencyCode: string;
+    currencySymbol: string;
   };
   noData: string;
   viewOrderButton: string;

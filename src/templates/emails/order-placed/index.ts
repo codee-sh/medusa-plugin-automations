@@ -67,7 +67,7 @@ export function getOrderCreatedText(
   return `
 ${data.subject}
 
-${t.thankYouMessage}
+${t.headerDescription}
 
 ${t.labels.orderNumber}: ${data.orderNumber}
 ${t.labels.orderDate}: ${data.orderDate}

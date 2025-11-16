@@ -1,9 +1,12 @@
 import { OrderCreatedTranslations } from "./types";
 
 export const pl: OrderCreatedTranslations = {
-  thankYouMessage: "Dziękujemy za złożenie zamówienia! Twoje zamówienie zostało przyjęte i jest w trakcie realizacji.",
+  headerTitle: "#{{orderNumber}} - Zamówienie zostało złożone",
+  headerDescription: "Twoje zamówienie zostało przyjęte i jest w trakcie realizacji. Wkrótce otrzymasz e-mail z informacją o statusie zamówienia.",
   labels: {
-    orderNumber: "Numer zamówienias",
+    salesChannel: "Kanał sprzedaży",
+    salesChannelDescription: "Opis kanału sprzedaży",
+    orderNumber: "Numer zamówienia",
     orderDate: "Data zamówienia",
     products: "Produkty",
     shippingAddress: "Adres dostawy",
@@ -11,6 +14,9 @@ export const pl: OrderCreatedTranslations = {
     taxTotal: "VAT",
     discountTotal: "Rabat",
     paidTotal: "Zapłacone",
+    currency: "Waluta",
+    currencyCode: "Kod waluty",
+    currencySymbol: "Symbol waluty",
   },
   noData: "Brak danych",
   viewOrderButton: "Zobacz szczegóły zamówienia",

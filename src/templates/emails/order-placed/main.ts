@@ -9,9 +9,9 @@ import {
   Theme,
 } from "../../shared/components";
 import { getTranslations } from "../../shared/i18n";
-import { escapeHtml } from "../../shared/utils";
 import { translations, Locale } from "./locales";
 import { OrderCreatedTemplateData } from "./types";
+import { escapeHtml } from "../../shared/utils";
 
 interface OrderCreatedMainOptions {
   theme?: Theme;
@@ -26,7 +26,6 @@ export function getOrderCreatedMain(
   const locale = options.locale || "pl";
   const t = getTranslations(translations, locale);
 
-  // Format items list
   const itemsList = data.items
     .map(
       (item) =>
@@ -37,19 +36,27 @@ export function getOrderCreatedMain(
     .join("<br/>");
 
   return `
-    ${sectionHeader(data.subject, { theme })}
+    ${sectionHeader(t.headerTitle.replace("{{orderNumber}}", escapeHtml(data.orderNumber)), { theme })}
 
-    ${richTextSection(t.thankYouMessage, { theme, align: "center" })}
+    ${richTextSection(t.headerDescription, { theme, align: "center" })}
+
+    ${sectionDivider({ theme })}
+
+    ${sectionText(t.labels.salesChannel, escapeHtml(data.sales_channel.name), {
+      theme,
+      twoColumn: true,
+    })}
 
     ${sectionDivider({ theme })}
 
     ${sectionText(t.labels.orderNumber, escapeHtml(data.orderNumber), {
       theme,
+      twoColumn: true,
     })}
 
     ${sectionDivider({ theme })}
 
-    ${sectionText(t.labels.orderDate, escapeHtml(data.orderDate), { theme })}
+    ${sectionText(t.labels.orderDate, escapeHtml(data.orderDate), { theme, twoColumn: true })}
 
     ${sectionDivider({ theme })}
 

@@ -4,7 +4,8 @@ import {
   } from "@medusajs/medusa"
   import { Modules, ContainerRegistrationKeys } from "@medusajs/framework/utils"
   import { renderTemplate } from "@codee_team/medusa-plugin-notification/templates/emails"
-  import { formatDate, getFormattedAddress, getLocaleAmount, getStylizedAmount, getTotalCaptured } from "@codee_team/medusa-plugin-notification/utils"
+  // import { getTranslations } from "@codee_team/medusa-plugin-notification/templates/emails/order-placed"
+  import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee_team/medusa-plugin-notification/utils"
   
   export default async function orderPlacedHandler({
     event: { data: { id, trigger_type } },
@@ -47,7 +48,11 @@ import {
     const shippingAddressText = getFormattedAddress({ address: order.shipping_address }).join("<br/>");
     const billingAddressText = getFormattedAddress({ address: order.billing_address }).join("<br/>");
     const templateData = {
-      subject: `#${order.display_id} - Order Placed`,
+      subject: `#${order.display_id} - Zamówienie zostało złożone`,
+      sales_channel: {
+        name: order?.sales_channel?.name,
+        description: order?.sales_channel?.description,
+      },
       orderNumber: `#${order.display_id}`,
       customerName: order.email,
       customerEmail: order.email,
@@ -71,14 +76,18 @@ import {
       }
     };
     
-    const template = "order-placed"
+    const templateName = "order-placed"
 
-    const { html, text } = renderTemplate(template, templateData, { locale: "pl" })
+    const { html, text } = renderTemplate(
+      templateName,
+      templateData,
+      { locale: "pl" }
+    )
   
     const result = await notificationModuleService.createNotifications({
       to: order.email,
       channel: "email",
-      template,
+      template: templateName,
       trigger_type: triggerType,
       resource_id: id,
       resource_type: "order",
