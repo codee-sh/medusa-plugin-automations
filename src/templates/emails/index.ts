@@ -4,6 +4,11 @@ import { getOrderCreatedHtml, getOrderCreatedText } from "./order-placed";
 import { TEMPLATES_NAMES } from "./types";
 
 /**
+ * Template names constants
+ */
+export { TEMPLATES_NAMES };
+
+/**
  * Available templates
  */
 export type TemplateName = (typeof TEMPLATES_NAMES)[keyof typeof TEMPLATES_NAMES];

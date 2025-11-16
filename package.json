@@ -18,6 +18,7 @@
     "./providers/*": "./.medusa/server/src/providers/*/index.js",
     "./templates/emails": "./.medusa/server/src/templates/emails/index.js",
     "./templates/emails/*": "./.medusa/server/src/templates/emails/*/index.js",
+    "./templates/emails/types": "./.medusa/server/src/templates/emails/types.js",
     "./utils": "./.medusa/server/src/utils/index.js",
     "./*": "./.medusa/server/src/*.js"
   },

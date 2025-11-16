@@ -6,7 +6,8 @@ import {
   import { renderTemplate } from "@codee_team/medusa-plugin-notification/templates/emails"
   import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee_team/medusa-plugin-notification/utils"
   import { getPluginOptions } from "@codee_team/medusa-plugin-notification/utils/plugins"
-
+  import { TEMPLATES_NAMES } from "@codee_team/medusa-plugin-notification/templates/emails/types"
+  
   export default async function orderPlacedHandler({
     event: { data: { id, trigger_type } },
     container,
@@ -78,7 +79,7 @@ import {
       }
     };
     
-    const templateName = "order-placed"
+    const templateName = TEMPLATES_NAMES.ORDER_PLACED
     const subject = `#${order.display_id} - Zamówienie zostało złożone`
 
     const { html, text } = renderTemplate(
@@ -86,7 +87,7 @@ import {
       templateData,
       { 
         locale: "pl",
-        customTranslations: pluginOptions?.customTranslations[templateName]
+        customTranslations: pluginOptions?.customTranslations?.[templateName]
       }
     )
   

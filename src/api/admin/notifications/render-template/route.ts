@@ -15,7 +15,7 @@ export async function POST(
   const { html, text } = renderTemplate(
     templateName as any,
     templateData,
-    { locale: locale as any, customTranslations: pluginOptions?.customTranslations[templateName] }
+    { locale: locale as any, customTranslations: pluginOptions?.customTranslations?.[templateName] }
   )
 
   res.status(200).json({
