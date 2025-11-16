@@ -1,16 +1,18 @@
+import { useState } from "react";
 import { defineRouteConfig } from "@medusajs/admin-sdk";
 import { ChatBubbleLeftRight } from "@medusajs/icons";
-import { useState } from "react";
 import { Container, Heading, Select, Text } from "@medusajs/ui";
 import { SingleColumnPage } from "../../../components/layout/pages";
-import { OrderTemplateGroup } from "../../../notifications-templates/groups/order/order";
+import { OrderTemplateGroup } from "../../../notifications-templates/groups/order";
+import { ContactFormTemplateGroup } from "../../../notifications-templates/groups/contact-form";
+import { TEMPLATES_NAMES } from "../../../../templates/emails/types";
 
 const PreviewTemplatePage = () => {
   const templateName = "";
   const [selectedTemplate, setSelectedTemplate] =
     useState<string>(templateName);
   const templates = [
-    { label: "Contact Form", value: "contact-form" },
+    { label: "Contact Form", value: TEMPLATES_NAMES.CONTACT_FORM },
     { label: "Order", value: "order" },
   ];
 
@@ -50,6 +52,7 @@ const PreviewTemplatePage = () => {
                 <Heading level="h2">Choose template type:</Heading>
               </div>
               {selectedTemplate === "order" && <OrderTemplateGroup />}
+              {selectedTemplate === TEMPLATES_NAMES.CONTACT_FORM && <ContactFormTemplateGroup />}
             </div>
           )}
         </div>

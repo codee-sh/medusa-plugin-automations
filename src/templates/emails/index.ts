@@ -1,28 +1,27 @@
 import { TemplateOptions } from "../shared/i18n";
 import { getContactFormHtml, getContactFormText } from "./contact-form";
 import { getOrderCreatedHtml, getOrderCreatedText } from "./order-placed";
-import { ContactFormTemplateData } from "./contact-form/types";
-import { OrderCreatedTemplateData } from "./order-placed/types";
+import { TEMPLATES_NAMES } from "./types";
 
 /**
- * Available template names
+ * Available templates
  */
-export type TemplateName = "contact-form" | "order-placed";
+export type TemplateName = (typeof TEMPLATES_NAMES)[keyof typeof TEMPLATES_NAMES];
 
 /**
- * Template data types union
+ * Template data type
  */
-export type TemplateData = ContactFormTemplateData | OrderCreatedTemplateData;
+export type TemplateData = any
 
 /**
  * Template registry mapping template names to their renderers
  */
 const templateRegistry: Record<TemplateName, TemplateRenderer> = {
-  "contact-form": {
+  [TEMPLATES_NAMES.CONTACT_FORM]: {
     getHtml: getContactFormHtml,
     getText: getContactFormText,
   },
-  "order-placed": {
+  [TEMPLATES_NAMES.ORDER_PLACED]: {
     getHtml: getOrderCreatedHtml,
     getText: getOrderCreatedText,
   },
