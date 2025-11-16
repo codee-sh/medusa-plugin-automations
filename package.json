@@ -1,6 +1,6 @@
 {
   "name": "@codee_team/medusa-plugin-notification",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "Medusa plugin for sending notifications.",
   "author": "Codee Team (https://codee.dev)",
   "license": "MIT",
@@ -20,7 +20,12 @@
     "./templates/emails/*": "./.medusa/server/src/templates/emails/*/index.js",
     "./templates/emails/types": "./.medusa/server/src/templates/emails/types.js",
     "./utils": "./.medusa/server/src/utils/index.js",
-    "./*": "./.medusa/server/src/*.js"
+    "./*": "./.medusa/server/src/*.js",
+    "./admin": {
+      "import": "./.medusa/server/src/admin/index.mjs",
+      "require": "./.medusa/server/src/admin/index.js",
+      "default": "./.medusa/server/src/admin/index.js"
+    }    
   },
   "keywords": [
     "medusa",
@@ -61,15 +66,6 @@
     "typescript": "^5.6.2",
     "vite": "^5.2.11",
     "yalc": "^1.0.0-pre.53"
-  },
-  "peerDependencies": {
-    "@medusajs/admin-sdk": "^2.8.8 || ^2.11.0",
-    "@medusajs/cli": "^2.8.8 || ^2.11.0",
-    "@medusajs/framework": "^2.8.8 || ^2.11.0",
-    "@medusajs/icons": "^2.8.8 || ^2.11.0",
-    "@medusajs/medusa": "^2.8.8 || ^2.11.0",
-    "@medusajs/test-utils": "^2.8.8 || ^2.11.0",
-    "@medusajs/ui": "^4.0.9"
   },
   "engines": {
     "node": ">=20"
