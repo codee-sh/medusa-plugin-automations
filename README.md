@@ -1,64 +1,93 @@
-<p align="center">
-  <a href="https://www.medusajs.com">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/59018053/229103275-b5e482bb-4601-46e6-8142-244f531cebdb.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/59018053/229103726-e5b529a3-9b3f-4970-8a1f-c6af37f087bf.svg">
-    <img alt="Medusa logo" src="https://user-images.githubusercontent.com/59018053/229103726-e5b529a3-9b3f-4970-8a1f-c6af37f087bf.svg">
-    </picture>
-  </a>
-</p>
-<h1 align="center">
-  Medusa Plugin Starter
-</h1>
+# @codee_team/medusa-plugin-notification
 
-<h4 align="center">
-  <a href="https://docs.medusajs.com">Documentation</a> |
-  <a href="https://www.medusajs.com">Website</a>
-</h4>
+A comprehensive notification plugin for Medusa v2 that provides a flexible email template system with internationalization support, custom translations, and seamless integration with Medusa's notification module.
 
-<p align="center">
-  Building blocks for digital commerce
-</p>
-<p align="center">
-  <a href="https://github.com/medusajs/medusa/blob/master/CONTRIBUTING.md">
-    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat" alt="PRs welcome!" />
-  </a>
-    <a href="https://www.producthunt.com/posts/medusa"><img src="https://img.shields.io/badge/Product%20Hunt-%231%20Product%20of%20the%20Day-%23DA552E" alt="Product Hunt"></a>
-  <a href="https://discord.gg/xpCwq3Kfn8">
-    <img src="https://img.shields.io/badge/chat-on%20discord-7289DA.svg" alt="Discord Chat" />
-  </a>
-  <a href="https://twitter.com/intent/follow?screen_name=medusajs">
-    <img src="https://img.shields.io/twitter/follow/medusajs.svg?label=Follow%20@medusajs" alt="Follow @medusajs" />
-  </a>
-</p>
+## Features
+
+- **Email Templates**: Pre-built, customizable email templates for common use cases
+- **Internationalization**: Built-in support for multiple locales (Polish, English)
+- **Customizable**: Override translations and customize templates without modifying core files
+- **Integration**: Integrates with Medusa's notification module
+- **Admin Panel**: Preview and test templates directly from Medusa Admin
+- **Type-Safe**: Full TypeScript support with exported types
 
 ## Compatibility
 
-This starter is compatible with versions >= 2.4.0 of `@medusajs/medusa`. 
+- **Medusa Version**: `>= 2.8.8`
+- **Node Version**: `>= 20`
 
-## Getting Started
+## Installation
 
-Visit the [Quickstart Guide](https://docs.medusajs.com/learn/installation) to set up a server.
+```bash
+npm install @codee_team/medusa-plugin-notification
+# or
+yarn add @codee_team/medusa-plugin-notification
+```
 
-Visit the [Plugins documentation](https://docs.medusajs.com/learn/fundamentals/plugins) to learn more about plugins and how to create them.
+## Quick Start
 
-Visit the [Docs](https://docs.medusajs.com/learn/installation#get-started) to learn more about our system requirements.
+### 1. Register the Plugin
 
-## What is Medusa
+Add to your `medusa-config.ts`:
 
-Medusa is a set of commerce modules and tools that allow you to build rich, reliable, and performant commerce applications without reinventing core commerce logic. The modules can be customized and used to build advanced ecommerce stores, marketplaces, or any product that needs foundational commerce primitives. All modules are open-source and freely available on npm.
+```typescript
+module.exports = defineConfig({
+  plugins: [
+    "@codee_team/medusa-plugin-notification"s
+  ]
+})
+```
 
-Learn more about [Medusa’s architecture](https://docs.medusajs.com/learn/introduction/architecture) and [commerce modules](https://docs.medusajs.com/learn/fundamentals/modules/commerce-modules) in the Docs.
+### 2. Configure Notification Provider
 
-## Community & Contributions
+Set up a notification provider - see [Configuration Documentation](./docs/configuration.md) for details.
 
-The community and core team are available in [GitHub Discussions](https://github.com/medusajs/medusa/discussions), where you can ask for support, discuss roadmap, and share ideas.
+### 3. Use Templates
 
-Join our [Discord server](https://discord.com/invite/medusajs) to meet other community members.
+The plugin includes a built-in subscriber for `order.placed` events. You can also use templates in your code:
 
-## Other channels
+```typescript
+import { renderTemplate, TEMPLATES_NAMES } from "@codee_team/medusa-plugin-notification/templates/emails"
 
-- [GitHub Issues](https://github.com/medusajs/medusa/issues)
-- [Twitter](https://twitter.com/medusajs)
-- [LinkedIn](https://www.linkedin.com/company/medusajs)
-- [Medusa Blog](https://medusajs.com/blog/)
+const { html, text } = renderTemplate(
+  TEMPLATES_NAMES.ORDER_PLACED,
+  templateData,
+  { locale: "pl" }
+)
+```
+
+See [Templates Documentation](./docs/templates.md) for detailed usage examples.
+
+## Available Templates
+
+- **[Order Placed](./docs/templates/order-placed.md)** (`order-placed`) - Order confirmation email template
+- **[Contact Form](./docs/templates/contact-form.md)** (`contact-form`) - Contact form submission email template
+
+See [Templates Documentation](./docs/templates.md) for general template information.
+
+## Admin Panel
+
+Access the template preview in Medusa Admin at `/app/notifications/render`. See [Admin Panel Documentation](./docs/admin.md) for details.
+
+## Documentation
+
+- [Templates](./docs/templates.md) - Detailed template documentation
+- [Translations](./docs/translations.md) - Internationalization and custom translations
+- [Configuration](./docs/configuration.md) - Plugin configuration options
+- [Admin Panel](./docs/admin.md) - Admin interface usage
+
+## Exports
+
+The plugin exports the following:
+
+- `@codee_team/medusa-plugin-notification/templates/emails` - Template rendering functions
+- `@codee_team/medusa-plugin-notification/templates/emails/types` - Template types and constants
+- `@codee_team/medusa-plugin-notification/utils` - Utility functions
+
+## License
+
+MIT
+
+## Author
+
+Codee Team - [https://codee.dev](https://codee.dev)
