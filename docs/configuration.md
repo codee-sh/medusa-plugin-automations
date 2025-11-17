@@ -1,6 +1,6 @@
 # Configuration Documentation
 
-Complete guide to configuring the `@codee_team/medusa-plugin-notification` plugin.
+Complete guide to configuring the `@codee-sh/medusa-plugin-notification` plugin.
 
 ## Plugin Registration
 
@@ -10,7 +10,7 @@ Register the plugin in your `medusa-config.ts`:
 module.exports = defineConfig({
   plugins: [
     {
-      resolve: "@codee_team/medusa-plugin-notification",
+      resolve: "@codee-sh/medusa-plugin-notification",
       options: {
         // Plugin options here
       }
@@ -51,7 +51,7 @@ To customize behavior:
 module.exports = defineConfig({
   plugins: [
     {
-      resolve: "@codee_team/medusa-plugin-notification",
+      resolve: "@codee-sh/medusa-plugin-notification",
       options: {
         customTranslations: {
           "order-placed": {

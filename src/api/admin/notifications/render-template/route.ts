@@ -6,7 +6,7 @@ export async function POST(
   req: MedusaRequest<{ templateName: string, templateData: any, locale: string }>,
   res: MedusaResponse
 ) {
-  const pluginOptions = getPluginOptions(req.scope, "@codee_team/medusa-plugin-notification")
+  const pluginOptions = getPluginOptions(req.scope, "@codee-sh/medusa-plugin-notification")
 
   const templateName = req.body?.templateName || "contact-form"
   const templateData = req.body?.templateData

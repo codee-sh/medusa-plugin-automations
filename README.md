@@ -1,4 +1,4 @@
-# @codee_team/medusa-plugin-notification
+# @codee-sh/medusa-plugin-notification
 
 A comprehensive notification plugin for Medusa v2 that provides a flexible email template system with internationalization support, custom translations, and seamless integration with Medusa's notification module.
 
@@ -19,9 +19,9 @@ A comprehensive notification plugin for Medusa v2 that provides a flexible email
 ## Installation
 
 ```bash
-npm install @codee_team/medusa-plugin-notification
+npm install @codee-sh/medusa-plugin-notification
 # or
-yarn add @codee_team/medusa-plugin-notification
+yarn add @codee-sh/medusa-plugin-notification
 ```
 
 ## Quick Start
@@ -33,7 +33,7 @@ Add to your `medusa-config.ts`:
 ```typescript
 module.exports = defineConfig({
   plugins: [
-    "@codee_team/medusa-plugin-notification"s
+    "@codee-sh/medusa-plugin-notification"s
   ]
 })
 ```
@@ -47,7 +47,7 @@ Set up a notification provider - see [Configuration Documentation](./docs/config
 The plugin includes a built-in subscriber for `order.placed` events. You can also use templates in your code:
 
 ```typescript
-import { renderTemplate, TEMPLATES_NAMES } from "@codee_team/medusa-plugin-notification/templates/emails"
+import { renderTemplate, TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails"
 
 const { html, text } = renderTemplate(
   TEMPLATES_NAMES.ORDER_PLACED,
@@ -80,9 +80,9 @@ Access the template preview in Medusa Admin at `/app/notifications/render`. See 
 
 The plugin exports the following:
 
-- `@codee_team/medusa-plugin-notification/templates/emails` - Template rendering functions
-- `@codee_team/medusa-plugin-notification/templates/emails/types` - Template types and constants
-- `@codee_team/medusa-plugin-notification/utils` - Utility functions
+- `@codee-sh/medusa-plugin-notification/templates/emails` - Template rendering functions
+- `@codee-sh/medusa-plugin-notification/templates/emails/types` - Template types and constants
+- `@codee-sh/medusa-plugin-notification/utils` - Utility functions
 
 ## License
 

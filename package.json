@@ -1,6 +1,6 @@
 {
-  "name": "@codee_team/medusa-plugin-notification",
-  "version": "0.0.8",
+  "name": "@codee-sh/medusa-plugin-notification",
+  "version": "0.0.9",
   "description": "Medusa plugin for sending notifications.",
   "author": "Codee Team (https://codee.dev)",
   "license": "MIT",

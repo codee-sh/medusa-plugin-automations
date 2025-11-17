@@ -25,7 +25,7 @@ src/templates/emails/
 Translations are automatically applied when rendering templates:
 
 ```typescript
-import { renderTemplate, TEMPLATES_NAMES } from "@codee_team/medusa-plugin-notification/templates/emails"
+import { renderTemplate, TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails"
 
 // Uses Polish translations (default)
 const { html } = renderTemplate(
@@ -54,7 +54,7 @@ Override translations globally in `medusa-config.ts`:
 module.exports = defineConfig({
   plugins: [
     {
-      resolve: "@codee_team/medusa-plugin-notification",
+      resolve: "@codee-sh/medusa-plugin-notification",
       options: {
         customTranslations: {
           "order-placed": {
@@ -160,7 +160,7 @@ When you override a function translation, the entire function is replaced (not m
 You can access translations directly using the `getTranslations` utility:
 
 ```typescript
-import { getTranslations } from "@codee_team/medusa-plugin-notification/templates/shared/i18n"
+import { getTranslations } from "@codee-sh/medusa-plugin-notification/templates/shared/i18n"
 import { translations } from "./locales"
 
 const t = getTranslations("pl", translations, customTranslations)
