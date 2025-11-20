@@ -20,7 +20,12 @@
     "./templates/emails/*": "./.medusa/server/src/templates/emails/*/index.js",
     "./templates/emails/types": "./.medusa/server/src/templates/emails/types.js",
     "./utils": "./.medusa/server/src/utils/index.js",
-    "./*": "./.medusa/server/src/*.js"
+    "./*": "./.medusa/server/src/*.js",
+    "./admin": {
+      "import": "./.medusa/server/src/admin/index.mjs",
+      "require": "./.medusa/server/src/admin/index.js",
+      "default": "./.medusa/server/src/admin/index.js"
+    }
   },
   "keywords": [
     "medusa",
@@ -42,9 +47,7 @@
   "dependencies": {
     "@react-email/components": "^0.3.3",
     "@react-email/render": "^1.1.4",
-    "@types/mjml": "^4.7.4",
-    "deepmerge": "^4.3.1",
-    "mjml": "^4.16.1"
+    "deepmerge": "^4.3.1"
   },
   "devDependencies": {
     "@react-email/components": "^0.3.3",
