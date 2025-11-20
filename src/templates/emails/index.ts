@@ -1,6 +1,6 @@
 import { TemplateOptions } from "../shared/i18n";
-import { getContactFormHtml, getContactFormText } from "./contact-form";
-import { getOrderCreatedHtml, getOrderCreatedText } from "./order-placed";
+import { getContactFormHtml, getContactFormText } from "./contact-form/index";
+import { getOrderCreatedHtml, getOrderCreatedText } from "./order-placed/index";
 import { TEMPLATES_NAMES } from "./types";
 
 /**
@@ -23,12 +23,20 @@ export type TemplateData = any
  */
 const templateRegistry: Record<TemplateName, TemplateRenderer> = {
   [TEMPLATES_NAMES.CONTACT_FORM]: {
-    getHtml: getContactFormHtml,
-    getText: getContactFormText,
+    getHtml: async (data: any, options?: TemplateOptions): Promise<string> => {
+      return await getContactFormHtml(data, options as any);
+    },
+    getText: async (data: any, options?: TemplateOptions): Promise<string> => {
+      return await getContactFormText(data, options as any);
+    },
   },
   [TEMPLATES_NAMES.ORDER_PLACED]: {
-    getHtml: getOrderCreatedHtml,
-    getText: getOrderCreatedText,
+    getHtml: async (data: any, options?: TemplateOptions): Promise<string> => {
+      return await getOrderCreatedHtml(data, options as any);
+    },
+    getText: async (data: any, options?: TemplateOptions): Promise<string> => {
+      return await getOrderCreatedText(data, options as any);
+    },
   },
 };
 
@@ -36,8 +44,8 @@ const templateRegistry: Record<TemplateName, TemplateRenderer> = {
  * Template renderer interface
  */
 export interface TemplateRenderer {
-  getHtml: (data: any, options?: TemplateOptions) => string;
-  getText: (data: any, options?: TemplateOptions) => string;
+  getHtml: (data: any, options?: TemplateOptions) => Promise<string>;
+  getText: (data: any, options?: TemplateOptions) => Promise<string>;
 }
 
 /**
@@ -67,15 +75,15 @@ export function getTemplate(templateName: any): TemplateRenderer {
  * @param options - Optional theme and locale configuration
  * @returns Object with html and text properties
  */
-export function renderTemplate(
+export async function renderTemplate(
   templateName: TemplateName,
   data: TemplateData,
   options?: TemplateOptions
-): { html: string; text: string } {
+): Promise<{ html: any; text: any }> {
   const template = getTemplate(templateName);
   
   return {
-    html: template.getHtml(data, options),
-    text: template.getText(data, options),
+    html: await template.getHtml(data, options),
+    text: await template.getText(data, options),
   };
 }

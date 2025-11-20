@@ -1,6 +1,6 @@
 {
   "name": "@codee-sh/medusa-plugin-notification",
-  "version": "0.0.9",
+  "version": "1.0.0",
   "description": "Medusa plugin for sending notifications.",
   "author": "Codee Team (https://codee.dev)",
   "license": "MIT",
@@ -20,12 +20,7 @@
     "./templates/emails/*": "./.medusa/server/src/templates/emails/*/index.js",
     "./templates/emails/types": "./.medusa/server/src/templates/emails/types.js",
     "./utils": "./.medusa/server/src/utils/index.js",
-    "./*": "./.medusa/server/src/*.js",
-    "./admin": {
-      "import": "./.medusa/server/src/admin/index.mjs",
-      "require": "./.medusa/server/src/admin/index.js",
-      "default": "./.medusa/server/src/admin/index.js"
-    }    
+    "./*": "./.medusa/server/src/*.js"
   },
   "keywords": [
     "medusa",
@@ -37,17 +32,23 @@
   "scripts": {
     "build": "medusa plugin:build",
     "dev": "medusa plugin:develop",
+    "watch:tsx": "node scripts/watch-tsx.mjs",
+    "dev:full": "npm run dev & npm run watch:tsx",
+    "dev:watch": "npm run watch:tsx",
     "prepublishOnly": "medusa plugin:build",
     "publish-local": "npx medusa plugin:publish",
     "publish-package": "dotenv npm publish --access public"
   },
   "dependencies": {
-    "mjml": "^4.16.1",
+    "@react-email/components": "^0.3.3",
+    "@react-email/render": "^1.1.4",
     "@types/mjml": "^4.7.4",
-    "deepmerge": "^4.3.1"
+    "deepmerge": "^4.3.1",
+    "mjml": "^4.16.1"
   },
   "devDependencies": {
-    "@codee_team/medusa-notification-templates": "^1.0.1",
+    "@react-email/components": "^0.3.3",
+    "@react-email/render": "^1.1.4",
     "@medusajs/admin-sdk": "2.8.8",
     "@medusajs/cli": "2.8.8",
     "@medusajs/framework": "2.8.8",
@@ -59,6 +60,7 @@
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.2.25",
+    "chokidar": "^3.6.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

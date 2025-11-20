@@ -12,7 +12,7 @@ export async function POST(
   const templateData = req.body?.templateData
   const locale = req.body?.locale || "pl"
 
-  const { html, text } = renderTemplate(
+  const { html } = await renderTemplate(
     templateName as any,
     templateData,
     { locale: locale as any, customTranslations: pluginOptions?.customTranslations?.[templateName] }
@@ -20,7 +20,7 @@ export async function POST(
 
   res.status(200).json({
     html,
-    text,
+    // text,
   })
 }
 

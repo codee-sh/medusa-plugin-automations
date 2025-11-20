@@ -11,10 +11,10 @@ import {
   sectionDivider,
 } from "../../shared/components";
 
-export function getContactFormHtml(
+export async function getContactFormHtml(
   data: ContactFormTemplateDataType, 
   options: TemplateOptionsType
-): string {
+): Promise<string> {
   return mjml2html(`
     <mjml>
       <mj-head>
@@ -60,10 +60,10 @@ function getContactFormMain(
   `.trim();
 }
 
-export function getContactFormText(
+export async function getContactFormText(
   data: ContactFormTemplateDataType, 
   options: TemplateOptionsType
-): string {
+): Promise<string> {
   const locale = options.locale || "pl";
   const t = getTranslations(locale, translations, options.customTranslations);
 
