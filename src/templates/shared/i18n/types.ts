@@ -1,6 +1,15 @@
-/**
- * Common i18n types
- */
+import type { Locale } from "date-fns"
+// import enUS from "./translations/en.json"
 
-export type Locale = "pl" | "en";
+// const resources = {
+//   translation: enUS,
+// } as const
 
+// export type Resources = typeof resources
+
+export type Language = {
+  code: string
+  display_name: string
+  ltr: boolean
+  date_locale: Locale
+}

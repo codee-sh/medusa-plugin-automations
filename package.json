@@ -42,7 +42,9 @@
     "dev:watch": "npm run watch:tsx",
     "prepublishOnly": "medusa plugin:build",
     "publish-local": "npx medusa plugin:publish",
-    "publish-package": "dotenv npm publish --access public"
+    "publish-package": "dotenv npm publish --access public",
+    "email:dev": "email dev",
+    "email:export": "email export"
   },
   "dependencies": {
     "@react-email/components": "^0.3.3",
@@ -50,8 +52,6 @@
     "deepmerge": "^4.3.1"
   },
   "devDependencies": {
-    "@react-email/components": "^0.3.3",
-    "@react-email/render": "^1.1.4",
     "@medusajs/admin-sdk": "2.8.8",
     "@medusajs/cli": "2.8.8",
     "@medusajs/framework": "2.8.8",
@@ -59,6 +59,9 @@
     "@medusajs/medusa": "2.8.8",
     "@medusajs/test-utils": "2.8.8",
     "@medusajs/ui": "^4.0.9",
+    "@react-email/components": "^0.3.3",
+    "@react-email/preview-server": "^4.2.5",
+    "@react-email/render": "^1.1.4",
     "@swc/core": "1.5.7",
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.2",
@@ -67,6 +70,7 @@
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-email": "^4.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
     "vite": "^5.2.11",

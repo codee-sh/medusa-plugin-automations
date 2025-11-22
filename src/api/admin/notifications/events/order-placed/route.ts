@@ -14,7 +14,7 @@ export async function POST(
     throw new MedusaError(MedusaError.Types.INVALID_ARGUMENT, "Order ID and trigger type are required")
   }
 
-  const result = await eventModuleService.emit({
+  await eventModuleService.emit({
     name: "order.placed",
     data: {
       id: order_id,

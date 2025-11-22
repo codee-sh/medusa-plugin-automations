@@ -4,7 +4,7 @@ import { render, pretty } from "@react-email/render";
 import { ContactFormTemplateDataType } from "./types";
 import { TemplateOptionsType } from "../types";
 import { getTranslations } from "../../shared/i18n";
-import { translations } from "./locales";
+import { translations } from "./translations";
 import { escapeHtml } from "../../shared/utils";
 
 export function renderHTMLReact(
@@ -24,7 +24,7 @@ export function renderHTMLReact(
           theme: theme
         }}
       >
-        <Body className="mx-auto my-auto bg-white px-4 font-arial font-normal text-base">         
+        <Body className="mx-auto my-auto bg-default px-4 font-arial font-normal text-base">         
           <Container>
             <Section>
               <Heading className="text-xl text-center font-bold mb-4">

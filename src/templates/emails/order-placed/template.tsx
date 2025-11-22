@@ -4,7 +4,7 @@ import { render, pretty } from "@react-email/render";
 import { OrderCreatedTemplateDataType } from "./types";
 import { TemplateOptionsType } from "../types";
 import { getTranslations } from "../../shared/i18n";
-import { translations } from "./locales";
+import { translations } from "./translations";
 import { renderLabel, escapeHtml } from "../../shared/utils";
 
 export function renderHTMLReact(

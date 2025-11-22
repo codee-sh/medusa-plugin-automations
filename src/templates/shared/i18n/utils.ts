@@ -1,4 +1,3 @@
-import { Locale } from "./types";
 import deepmerge from "deepmerge";
 
 /**
@@ -37,8 +36,8 @@ function isObject(value: any): value is Record<string, any> {
  * @returns Translations for the specified locale
  */
 export function getTranslations<T extends Record<string, any>>(
-  locale: Locale = "pl",
-  translations: Record<Locale, T>,
+  locale: string,
+  translations: Record<string, T>,
   customTranslations?: Record<string, Partial<T> | Record<string, any>>
 ): T {
   const baseTranslations = translations[locale] || translations.pl;

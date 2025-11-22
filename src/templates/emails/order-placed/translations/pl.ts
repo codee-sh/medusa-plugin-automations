@@ -1,6 +1,6 @@
-import { OrderCreatedTranslations } from "./types";
+import { OrderCreatedTranslationsType } from "../types";
 
-export const pl: OrderCreatedTranslations = {
+export const pl: OrderCreatedTranslationsType = {
   headerTitle: ({ data }) => `#${data?.orderNumber} - Zamówienie zostało złożone`,
   headerDescription: "Twoje zamówienie zostało przyjęte i jest w trakcie realizacji. Wkrótce otrzymasz e-mail z informacją o statusie zamówienia.",
   labels: {

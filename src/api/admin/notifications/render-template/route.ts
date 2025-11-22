@@ -2,6 +2,7 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { MedusaError } from "@medusajs/framework/utils"
 import { renderTemplate } from "../../../../templates/emails"
 import { getPluginOptions } from "../../../../utils/plugins"
+import { defaultTheme } from "../../../../templates/shared/theme"
 
 export async function POST(
   req: MedusaRequest<{ templateName: string, templateData: any, locale: string }>,
@@ -22,6 +23,7 @@ export async function POST(
     templateData,
     { 
       locale: locale as any,
+      theme: pluginOptions?.theme || defaultTheme,
       customTranslations: pluginOptions?.customTranslations?.[templateName]
     }
   )

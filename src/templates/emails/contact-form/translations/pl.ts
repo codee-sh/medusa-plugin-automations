@@ -1,6 +1,6 @@
-import { ContactFormTranslations } from "./types";
+import { ContactFormTranslationsType } from "../types";
 
-export const pl: ContactFormTranslations = {
+export const pl: ContactFormTranslationsType = {
   labels: {
     name: "Imię i nazwisko1",
     email: "Email",
