@@ -2,7 +2,7 @@ import {
   SubscriberArgs,
   type SubscriberConfig,
 } from "@medusajs/medusa"
-import { Modules, ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { Modules, ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
 import { renderTemplate } from "@codee-sh/medusa-plugin-notification/templates/emails"
 import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee-sh/medusa-plugin-notification/utils"
 import { getPluginOptions } from "@codee-sh/medusa-plugin-notification/utils/plugins"
@@ -19,6 +19,10 @@ export default async function orderPlacedHandler({
   )
   const query = container.resolve(ContainerRegistrationKeys.QUERY)
   const triggerType = trigger_type || 'system'
+
+  if (!id) {
+    throw new MedusaError(MedusaError.Types.INVALID_ARGUMENT, "Order ID is required")
+  }
 
   const { data: [order] } = await query.graph({
     entity: "order",
