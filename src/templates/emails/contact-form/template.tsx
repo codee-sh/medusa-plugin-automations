@@ -24,7 +24,7 @@ export function renderHTMLReact(
           theme: theme
         }}
       >
-        <Body className="mx-auto my-auto bg-default px-4 font-arial font-normal text-base">         
+        <Body className="mx-auto my-auto px-4 font-arial font-normal text-base bg-ui-bg text-ui-text">         
           <Container>
             <Section>
               <Heading className="text-xl text-center font-bold mb-4">
@@ -32,7 +32,7 @@ export function renderHTMLReact(
               </Heading>
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* Name */}
             <Section>
@@ -42,7 +42,7 @@ export function renderHTMLReact(
               </Row>
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* Email */}
             <Section>
@@ -52,7 +52,7 @@ export function renderHTMLReact(
               </Row>
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* Phone */}
             {data.phone && (
@@ -63,7 +63,7 @@ export function renderHTMLReact(
                     <Column className="text-right">{escapeHtml(data.phone)}</Column>
                   </Row>
                 </Section>
-                <Hr className="my-4 border-gray-300" />
+                <Hr className="my-4 border-ui-border" />
               </>
             )}
 
@@ -73,11 +73,11 @@ export function renderHTMLReact(
               <Text className="m-0 p-0">{escapeHtml(data.message)}</Text>
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* Footer */}
             <Section>
-              <Text className="text-sm text-gray-600 text-center">
+              <Text className="text-sm text-ui-text text-center">
                 {i18n.t('footer', data)}
               </Text>
             </Section>

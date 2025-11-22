@@ -29,7 +29,7 @@ export function renderHTMLReact(
           theme: theme
         }}
       >
-        <Body className="mx-auto my-auto bg-white px-4 font-arial font-normal text-base">         
+        <Body className="mx-auto my-auto px-4 font-arial font-normal text-base bg-ui-bg text-ui-text">         
           <Container>
             <Section>
               <Heading className="text-xl text-center font-bold mb-4">
@@ -40,7 +40,7 @@ export function renderHTMLReact(
               </Text>
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* Sales Channel */}
             <Section>
@@ -50,7 +50,7 @@ export function renderHTMLReact(
               </Row>
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* Order Number */}
             <Section>
@@ -60,7 +60,7 @@ export function renderHTMLReact(
               </Row>
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* Order Date */}
             <Section>
@@ -70,7 +70,7 @@ export function renderHTMLReact(
               </Row>
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* Products */}
             <Section className="p-0">
@@ -87,7 +87,7 @@ export function renderHTMLReact(
               </Text>
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* Shipping Address */}
             <Section>
@@ -100,7 +100,7 @@ export function renderHTMLReact(
               />
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* Summary Section with Background */}
             <Section className="bg-gray-50 p-4 rounded">
@@ -126,7 +126,7 @@ export function renderHTMLReact(
               </Row>
             </Section>
 
-            <Hr className="my-4 border-gray-300" />
+            <Hr className="my-4 border-ui-border" />
 
             {/* View Order Button */}
             {data.orderUrl && (
@@ -134,12 +134,12 @@ export function renderHTMLReact(
                 <Section className="text-center">
                   <Button
                     href={data.orderUrl}
-                    className="bg-black text-white py-3 px-8 inline-block rounded"
+                    className="bg-ui-button text-ui-button-text py-3 px-8 inline-block rounded"
                   >
                     {i18n.t('viewOrderButton', data)}
                   </Button>
                 </Section>
-                <Hr className="my-4 border-gray-300" />
+                <Hr className="my-4 border-ui-border" />
               </>
             )}
 
