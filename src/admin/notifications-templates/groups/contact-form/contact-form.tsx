@@ -1,25 +1,19 @@
 import { useEffect, useState } from "react";
 import { Alert } from "@medusajs/ui";
 import { usePreview } from "../../../../hooks/api/preview";
+import { contactFormMockData } from "../../../../../emails-previews/contact-form";
+import { TEMPLATES_NAMES } from "../../../../templates/emails";
 
 export const ContactFormTemplate = () => {
   const [templateData, setTemplateData] = useState<any>(null);
   const [previewData, setPreviewData] = useState<any>(null);
 
   useEffect(() => {
-    const templateData = {
-      subject: "Nowa wiadomość z formularza kontaktowego",
-      name: "Test Name",
-      email: "test@test.com",
-      phone: "1234567890",
-      message: "Test message",
-    };
-
-    setTemplateData(templateData);
+    setTemplateData(contactFormMockData);
   }, []);
 
   const { data: preview, isLoading: isPreviewLoading } = usePreview({
-    templateName: "contact-form",
+    templateName: TEMPLATES_NAMES.CONTACT_FORM,
     templateData: templateData,
     locale: "pl",
     enabled: !!templateData,

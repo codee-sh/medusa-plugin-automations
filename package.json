@@ -37,19 +37,17 @@
   "scripts": {
     "build": "medusa plugin:build",
     "dev": "medusa plugin:develop",
-    "watch:tsx": "node scripts/watch-tsx.mjs",
-    "dev:full": "npm run dev & npm run watch:tsx",
-    "dev:watch": "npm run watch:tsx",
     "prepublishOnly": "medusa plugin:build",
     "publish-local": "npx medusa plugin:publish",
     "publish-package": "dotenv npm publish --access public",
-    "email:dev": "email dev",
-    "email:export": "email export"
+    "email:dev": "email dev --dir emails-previews"
   },
   "dependencies": {
     "@react-email/components": "^0.3.3",
+    "@react-email/preview-server": "^4.2.5",
     "@react-email/render": "^1.1.4",
-    "deepmerge": "^4.3.1"
+    "react-email": "^4.2.5",
+    "i18next": "^23.7.11"
   },
   "devDependencies": {
     "@medusajs/admin-sdk": "2.8.8",
@@ -66,7 +64,6 @@
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.2.25",
-    "chokidar": "^3.6.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

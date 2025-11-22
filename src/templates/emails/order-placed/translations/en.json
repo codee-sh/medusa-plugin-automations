@@ -1,0 +1,25 @@
+{
+  "general": {
+    "headerTitle": "#{{orderNumber}} - Order placed",
+    "headerDescription": "Your order has been received and is being processed. You will receive an email with information about the status of your order shortly.",
+    "labels": {
+      "salesChannel": "Sales Channel",
+      "salesChannelDescription": "Sales Channel Description",
+      "orderNumber": "Order Number",
+      "orderDate": "Order Date",
+      "products": "Products",
+      "shippingAddress": "Shipping Address",
+      "orderTotal": "Order Total",
+      "taxTotal": "VAT",
+      "discountTotal": "Discount",
+      "paidTotal": "Paid",
+      "currency": "Currency",
+      "currencyCode": "Currency Code",
+      "currencySymbol": "Currency Symbol"
+    },
+    "noData": "No data",
+    "viewOrderButton": "View Order Details",
+    "footer": "If you have any questions about your order, please contact us."
+  }
+}
+

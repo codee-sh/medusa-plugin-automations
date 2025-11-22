@@ -1,12 +1,10 @@
-import { ContactFormTranslationsType } from "../types";
-import { pl } from "./pl";
-import { en } from "./en";
+import pl from "./pl.json";
+import en from "./en.json";
 
-export const translations: Record<any, ContactFormTranslationsType> = {
-  pl,
-  en,
+export const translations: Record<any, any> = {
+  pl: pl,
+  en: en,
 };
 
-export { type ContactFormTranslationsType } from "../types";
 export { pl, en };
 

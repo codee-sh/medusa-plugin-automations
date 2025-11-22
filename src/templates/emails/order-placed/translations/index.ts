@@ -1,12 +1,10 @@
-import { OrderCreatedTranslationsType } from "../types";
-import { pl } from "./pl";
-import { en } from "./en";
+import pl from "./pl.json";
+import en from "./en.json";
 
-export const translations: Record<any, OrderCreatedTranslationsType> = {
-  pl,
-  en,
+export const translations: Record<any, any> = {
+  pl: pl,
+  en: en,
 };
 
-export { type OrderCreatedTranslationsType } from "../types";
 export { pl, en };
 

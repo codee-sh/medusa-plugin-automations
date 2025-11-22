@@ -1,0 +1,15 @@
+{
+  "general": {
+    "labels": {
+      "name": "Imię i nazwisko",
+      "email": "Email",
+      "phone": "Telefon",
+      "message": "Wiadomość"
+    },
+    "header": {
+      "title": "Nowa wiadomość z formularza kontaktowego",
+      "description": "Ta wiadomość została wysłana automatycznie z formularza kontaktowego"
+    },
+    "footer": "Ta wiadomość została wysłana automatycznie z formularza kontaktowego"
+  }
+}

@@ -20,15 +20,3 @@ export function escapeHtml(text: string | undefined | null): string {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
-
-/**
- * Render a label from the translations object
- * 
- * @param translations - Translations object
- * @param label - Label to render
- * @param data - Data to pass to the label function
- * @returns Rendered label
- */
-export function renderLabel(label: string | ((data: any) => string), data: any) {
-  return typeof label === "function" ? label({ data }) : label;
-}

@@ -13,7 +13,7 @@ export function renderHTMLReact(
 ): React.ReactNode {
   const theme = options.theme || {};
   const locale = options.locale || "pl";
-  const t = getTranslations(locale, translations, options.customTranslations);
+  const i18n = getTranslations(locale, translations, options.customTranslations);
 
   return (
     <Html>
@@ -37,7 +37,7 @@ export function renderHTMLReact(
             {/* Name */}
             <Section>
               <Row>
-                <Column className="font-semibold">{t.labels.name}</Column>
+                <Column className="font-semibold">{i18n.t('labels.name', data)}</Column>
                 <Column className="text-right">{escapeHtml(data.name)}</Column>
               </Row>
             </Section>
@@ -47,7 +47,7 @@ export function renderHTMLReact(
             {/* Email */}
             <Section>
               <Row>
-                <Column className="font-semibold">{t.labels.email}</Column>
+                <Column className="font-semibold">{i18n.t('labels.email', data)}</Column>
                 <Column className="text-right">{escapeHtml(data.email)}</Column>
               </Row>
             </Section>
@@ -59,7 +59,7 @@ export function renderHTMLReact(
               <>
                 <Section>
                   <Row>
-                    <Column className="font-semibold">{t.labels.phone}</Column>
+                    <Column className="font-semibold">{i18n.t('labels.phone', data)}</Column>
                     <Column className="text-right">{escapeHtml(data.phone)}</Column>
                   </Row>
                 </Section>
@@ -69,7 +69,7 @@ export function renderHTMLReact(
 
             {/* Message */}
             <Section>
-              <Text className="font-semibold m-0 p-0">{t.labels.message}</Text>
+              <Text className="font-semibold m-0 p-0">{i18n.t('labels.message', data)}</Text>
               <Text className="m-0 p-0">{escapeHtml(data.message)}</Text>
             </Section>
 
@@ -78,7 +78,7 @@ export function renderHTMLReact(
             {/* Footer */}
             <Section>
               <Text className="text-sm text-gray-600 text-center">
-                {t.footer}
+                {i18n.t('footer', data)}
               </Text>
             </Section>
           </Container>

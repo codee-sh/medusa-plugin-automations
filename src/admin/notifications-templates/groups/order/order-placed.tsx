@@ -3,6 +3,7 @@ import { Alert } from "@medusajs/ui"
 import { useOrder } from "../../../../hooks/api/orders";
 import { usePreview } from "../../../../hooks/api/preview";
 import { getFormattedAddress, formatDate, getLocaleAmount, getTotalCaptured } from "../../../../utils";
+import { TEMPLATES_NAMES } from "../../../../templates/emails";
 
 export const OrderPlacedTemplate = ({ orderId }: { orderId: string }) => {
   const [templateData, setTemplateData] = useState<any>(null);
@@ -53,7 +54,7 @@ export const OrderPlacedTemplate = ({ orderId }: { orderId: string }) => {
   }, [order]);
 
   const { data: preview, isLoading: isPreviewLoading } = usePreview({
-    templateName: "order-placed",
+    templateName: TEMPLATES_NAMES.ORDER_PLACED,
     templateData: templateData,
     locale: "pl",
     enabled: !!templateData,
