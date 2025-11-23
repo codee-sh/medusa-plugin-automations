@@ -38,7 +38,7 @@ export const useEvents = (
     EventsMutationVariables
   >({
     mutationFn: async (variables) => {
-      return await sdk.client.fetch("/admin/notifications/events", {
+      return await sdk.client.fetch("/admin/notification-plugin/events", {
         method: "POST",
         body: {
           name: variables.name,

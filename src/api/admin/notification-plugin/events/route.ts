@@ -15,8 +15,6 @@ export async function POST(
     data: data,
   })
 
-  console.log('Event emitted:', name, data)
-
   res.status(200).json({
     success: true,
     message: `Event ${name} was emitted`,
