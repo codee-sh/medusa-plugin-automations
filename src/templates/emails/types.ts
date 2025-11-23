@@ -1,5 +1,6 @@
 export const TEMPLATES_NAMES = {
   ORDER_PLACED: "order-placed",
+  ORDER_COMPLETED: "order-completed",
   CONTACT_FORM: "contact-form",
 } as const;
 

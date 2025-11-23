@@ -1,6 +1,7 @@
 import { TemplateOptionsType } from "./types";
 import { getContactFormHtml, getContactFormText } from "./contact-form/index";
 import { getOrderCreatedHtml, getOrderCreatedText } from "./order-placed/index";
+import { getOrderCompletedHtml, getOrderCompletedText } from "./order-completed/index";
 import { TEMPLATES_NAMES } from "./types";
 
 /**
@@ -36,6 +37,14 @@ const templateRegistry: Record<TemplateName, TemplateRenderer> = {
     },
     getText: async (data: any, options?: TemplateOptionsType): Promise<string> => {
       return await getOrderCreatedText(data, options as any);
+    },
+  },
+  [TEMPLATES_NAMES.ORDER_COMPLETED]: {
+    getHtml: async (data: any, options?: TemplateOptionsType): Promise<string> => {
+      return await getOrderCompletedHtml(data, options as any);
+    },
+    getText: async (data: any, options?: TemplateOptionsType): Promise<string> => {
+      return await getOrderCompletedText(data, options as any);
     },
   },
 };

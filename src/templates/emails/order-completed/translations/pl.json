@@ -1,12 +1,13 @@
 {
   "general": {
-    "headerTitle": "#{{orderNumber}} - Zamówienie zostało złożone",
-    "headerDescription": "Twoje zamówienie zostało przyjęte i jest w trakcie realizacji. Wkrótce otrzymasz e-mail z informacją o statusie zamówienia.",
+    "headerTitle": "#{{orderNumber}} - Zamówienie zostało zrealizowane",
+    "headerDescription": "Twoje zamówienie zostało zrealizowane i wysłane. Dziękujemy za zakupy!",
     "labels": {
       "salesChannel": "Kanał sprzedaży",
       "salesChannelDescription": "Opis kanału sprzedaży",
       "orderNumber": "Numer zamówienia",
       "orderDate": "Data zamówienia",
+      "completedDate": "Data realizacji",
       "products": "Produkty",
       "shippingAddress": "Adres dostawy",
       "orderTotal": "Wartość zamówienia",
