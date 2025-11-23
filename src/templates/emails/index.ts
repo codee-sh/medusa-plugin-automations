@@ -1,4 +1,4 @@
-import { TemplateOptionsType } from "./types";
+import { TemplateOptionsType, TemplateRenderOptionsType } from "./types";
 import { getContactFormHtml, getContactFormText } from "./contact-form/index";
 import { getOrderCreatedHtml, getOrderCreatedText } from "./order-placed/index";
 import { getOrderCompletedHtml, getOrderCompletedText } from "./order-completed/index";
@@ -100,7 +100,7 @@ export function getTemplate(templateName: any): TemplateRenderer {
 export async function renderTemplate(
   templateName: TemplateName,
   data: TemplateData,
-  options?: TemplateOptionsType
+  options?: TemplateRenderOptionsType
 ): Promise<{ html: any; text: any; subject: string }> {
   const template = getTemplate(templateName);
   const locale = options?.locale || "pl";
