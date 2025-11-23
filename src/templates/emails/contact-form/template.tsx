@@ -29,7 +29,7 @@ export function renderHTMLReact(
           <Container>
             <Section>
               <Heading className="text-xl text-center font-bold mb-4">
-                {escapeHtml(data.subject)}
+                {i18n.t('headerTitle', data)}
               </Heading>
             </Section>
 

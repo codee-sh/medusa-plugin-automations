@@ -122,7 +122,7 @@ export async function renderTemplate(
   
   // Get subject from translations
   const subject = i18n.t("headerTitle", data);
-  
+
   // Pass processed i18n in options to render functions
   const renderOptions: TemplateOptionsType = {
     ...options,

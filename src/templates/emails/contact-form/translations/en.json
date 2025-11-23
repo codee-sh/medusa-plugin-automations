@@ -1,5 +1,6 @@
 {
   "general": {
+    "headerTitle": "New message from contact form",
     "labels": {
       "name": "Name",
       "email": "Email",
