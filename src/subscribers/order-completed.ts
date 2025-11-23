@@ -4,11 +4,11 @@ import {
 } from "@medusajs/medusa"
 import { Modules, ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
 import { renderTemplate } from "@codee-sh/medusa-plugin-notification/templates/emails"
+import { TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails/types"
 import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee-sh/medusa-plugin-notification/utils"
 import { getPluginOptions } from "@codee-sh/medusa-plugin-notification/utils/plugins"
-import { TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails/types"
   
-export default async function orderPlacedHandler({
+export default async function orderCompletedHandler({
   event: { data: { id, trigger_type } },
   container,
 }: SubscriberArgs<{ id: string, trigger_type: string }>) {
@@ -30,6 +30,7 @@ export default async function orderPlacedHandler({
       "id",
       "email",
       "created_at",
+      "updated_at",
       "payment_collections.*",
       "items.*",
       "items.variant.*",
@@ -64,6 +65,7 @@ export default async function orderPlacedHandler({
     customerName: order.email,
     customerEmail: order.email,
     orderDate: formatDate({ date: order.created_at, includeTime: true, localeCode: "pl" }),
+    completedDate: formatDate({ date: order.updated_at || order.created_at, includeTime: true, localeCode: "pl" }),
     totalAmount: order.items.reduce((acc, item) => acc + (item.variant?.prices?.[0]?.amount || 0) * item.quantity, 0),
     currency: order.currency_code,
     items: order.items.map((item) => ({
@@ -84,9 +86,8 @@ export default async function orderPlacedHandler({
   };
   
   const templateName = TEMPLATES_NAMES.ORDER_COMPLETED
-  const subject = `#${order.display_id} - Zamówienie zostało zrealizowane`
 
-  const { html, text } = await renderTemplate(
+  const { html, text, subject } = await renderTemplate(
     templateName,
     templateData,
     { 

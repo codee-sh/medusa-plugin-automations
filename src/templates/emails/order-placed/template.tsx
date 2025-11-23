@@ -3,8 +3,6 @@ import { Html, Tailwind, Head, Text, Body, Container, pixelBasedPreset, Section,
 import { render, pretty } from "@react-email/render";
 import { OrderCreatedTemplateDataType } from "./types";
 import { TemplateOptionsType } from "../types";
-import { getTranslations } from "../../shared/i18n";
-import { translations } from "./translations";
 import { escapeHtml } from "../../shared/utils";
 
 export function renderHTMLReact(
@@ -12,8 +10,11 @@ export function renderHTMLReact(
   options: TemplateOptionsType
 ): React.ReactNode {
   const theme = options.theme || {};
-  const locale = options.locale || "pl";
-  const i18n = getTranslations(locale, translations, options.customTranslations);
+  const i18n = options.i18n;
+  
+  if (!i18n) {
+    throw new Error("i18n is required in options. It should be provided by renderTemplate.");
+  }
 
   // Prepare items list
   const itemsList = data.items.map(

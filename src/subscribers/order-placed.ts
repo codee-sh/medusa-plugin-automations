@@ -4,9 +4,9 @@ import {
 } from "@medusajs/medusa"
 import { Modules, ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
 import { renderTemplate } from "@codee-sh/medusa-plugin-notification/templates/emails"
+import { TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails/types"
 import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee-sh/medusa-plugin-notification/utils"
 import { getPluginOptions } from "@codee-sh/medusa-plugin-notification/utils/plugins"
-import { TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails/types"
   
 export default async function orderPlacedHandler({
   event: { data: { id, trigger_type } },
@@ -84,9 +84,8 @@ export default async function orderPlacedHandler({
   };
   
   const templateName = TEMPLATES_NAMES.ORDER_PLACED
-  const subject = `#${order.display_id} - Zamówienie zostało złożone`
 
-  const { html, text } = await renderTemplate(
+  const { html, text, subject } = await renderTemplate(
     templateName,
     templateData,
     { 

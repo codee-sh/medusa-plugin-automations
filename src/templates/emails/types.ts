@@ -8,4 +8,5 @@ export interface TemplateOptionsType {
   theme?: any;
   locale?: any;  
   customTranslations?: Record<string, Record<string, any>>;
+  i18n?: any; // Pre-processed translations object from renderTemplate
 }
