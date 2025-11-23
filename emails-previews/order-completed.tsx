@@ -1,6 +1,8 @@
 import { renderHTMLReact } from "../src/templates/emails/order-completed/template";
 import { OrderCompletedTemplateDataType } from "../src/templates/emails/order-completed/types";
 import { defaultTheme } from "../src/templates/shared/theme"
+import { getTranslations } from "../src/templates/shared/i18n";
+import { translations as orderCompletedTranslations } from "../src/templates/emails/order-completed/translations";
 
 export const orderCompletedMockData: OrderCompletedTemplateDataType = {
   sales_channel: {
@@ -34,7 +36,8 @@ export const orderCompletedMockData: OrderCompletedTemplateDataType = {
 export default function OrderCompleted() {
   return renderHTMLReact(orderCompletedMockData, {
     locale: "pl",
-    theme: defaultTheme
+    theme: defaultTheme,
+    i18n: getTranslations("pl", orderCompletedTranslations)
   });
 }
 

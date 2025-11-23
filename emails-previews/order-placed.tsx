@@ -1,6 +1,8 @@
 import { renderHTMLReact } from "../src/templates/emails/order-placed/template";
 import { OrderCreatedTemplateDataType } from "../src/templates/emails/order-placed/types";
 import { defaultTheme } from "../src/templates/shared/theme"
+import { getTranslations } from "../src/templates/shared/i18n";
+import { translations as orderPlacedTranslations } from "../src/templates/emails/order-placed/translations";
 
 export const orderPlacedMockData: OrderCreatedTemplateDataType = {
   sales_channel: {
@@ -33,6 +35,7 @@ export const orderPlacedMockData: OrderCreatedTemplateDataType = {
 export default function OrderPlaced() {
   return renderHTMLReact(orderPlacedMockData, {
     locale: "pl",
-    theme: defaultTheme
+    theme: defaultTheme,
+    i18n: getTranslations("pl", orderPlacedTranslations)
   });
 }
