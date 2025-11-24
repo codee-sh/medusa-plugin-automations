@@ -1,6 +1,6 @@
 import React from "react";
 import { Html, Tailwind, Head, Text, Body, Container, pixelBasedPreset, Section, Row, Column, Heading, Button, Hr } from "@react-email/components";
-import { render, pretty } from "@react-email/render";
+import { render, pretty, toPlainText } from "@react-email/render";
 import { OrderCreatedTemplateDataType } from "./types";
 import { TemplateOptionsType } from "../types";
 import { escapeHtml } from "../../shared/utils";
@@ -168,5 +168,6 @@ export async function renderText(
   data: OrderCreatedTemplateDataType,
   options: TemplateOptionsType
 ): Promise<any> {
-  return await render(renderHTMLReact(data, options));
+  const html = await render(renderHTMLReact(data, options));
+  return toPlainText(html);
 }
