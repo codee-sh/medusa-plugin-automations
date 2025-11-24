@@ -56,7 +56,11 @@ module.exports = defineConfig({
         customTranslations: {
           "order-placed": {
             pl: {
-              headerTitle: ({ data }) => `Zamówienie #${data.orderNumber} zostało złożone`
+              // Use string interpolation with {{variable}} syntax
+              headerTitle: "#{{orderNumber}} - Zamówienie zostało złożone",
+              labels: {
+                orderNumber: "Numer zamówienia"
+              }
             }
           }
         }
@@ -68,7 +72,9 @@ module.exports = defineConfig({
 })
 ```
 
-See [Translations Documentation](./translations.md) for more examples of custom translations.
+**Note**: Custom translations use JSON structure with string interpolation. Variables are replaced using `{{variable}}` syntax, where `variable` matches properties in the template data object.
+
+See [Translations Documentation](./translations.md) for more examples and details about i18next interpolation.
 
 ## Troubleshooting
 
