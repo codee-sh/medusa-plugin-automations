@@ -2,15 +2,26 @@ import { Container, Heading, Text } from "@medusajs/ui"
 import { useTranslation } from "react-i18next"
 import { useEvents } from "../../../hooks/api/events"
 import { Actions as OrderActions } from "./components/order-actions"
+import { Actions as OrderPaymentActions } from "./components/order-payment-actions"
 
-export const NotificationsDetail = ({ entityId, entityType }: { entityId: string, entityType: string }) => {
+export const NotificationsDetail = ({ type, data }: { type: string, data: any }) => {
   const { mutate: sendEvent, isPending, isError, data: eventsData } = useEvents()
 
-  const handleSendNotification = ({ name, trigger_type }: { name: string, trigger_type: string }) => {
+  const handleSendOrderNotification = ({ name, trigger_type }: { name: string, trigger_type: string }) => {
     sendEvent({
       name: name,
       data: {
-        id: entityId,
+        id: data.id,
+        trigger_type: trigger_type,
+      },
+    })
+  }
+
+  const handleSendPaymentNotification = ({ name, trigger_type }: { name: string, trigger_type: string }) => {
+    sendEvent({
+      name: name,
+      data: {
+        id: data?.payment_collections[0]?.payments[0]?.id,
         trigger_type: trigger_type,
       },
     })
@@ -19,8 +30,11 @@ export const NotificationsDetail = ({ entityId, entityType }: { entityId: string
   return (
     <Container className="p-0">
       <Header />
-      {entityType === "order" && (
-        <OrderActions onSend={handleSendNotification} isPending={isPending} isError={isError} eventsData={eventsData} />
+      {type === "order" && (
+        <>
+          <OrderActions onSend={handleSendOrderNotification} isPending={isPending} isError={isError} eventsData={eventsData} />
+          <OrderPaymentActions onSend={handleSendPaymentNotification} isPending={isPending} isError={isError} eventsData={eventsData} />
+        </>
       )}
     </Container>
   )

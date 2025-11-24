@@ -13,7 +13,7 @@ const OrderNotificationActivityWidget = ({ data }: { data: WidgetData }) => {
 
   return (
     <div className="flex w-full flex-col gap-y-3">
-      <NotificationsDetail entityId={entityId} entityType={entityType} />
+      <NotificationsDetail type="order" data={data} />
       <NotificationsList entityId={entityId} entityType={entityType} />
     </div>
   )

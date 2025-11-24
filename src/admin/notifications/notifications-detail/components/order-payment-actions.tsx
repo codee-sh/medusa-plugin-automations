@@ -1,14 +1,13 @@
 import { Button, Label, Select, Text } from "@medusajs/ui"
 import { useState } from "react"
 
-interface OrderActionsProps {
+interface OrderPaymentActionsProps {
   onSend: (eventName: string) => void
   isPending: boolean
 }
 
 const actionOptions = [
-  { value: "order.placed", label: "Order Placed" },
-  { value: "order.completed", label: "Order Completed" }
+  { value: "payment.captured", label: "Payment Captured" },
 ]
 
 export const Actions = ({ onSend, isPending, isError, eventsData }: { onSend: (any: any) => any, isPending: boolean, isError: boolean, eventsData: any }) => {
@@ -34,8 +33,8 @@ export const Actions = ({ onSend, isPending, isError, eventsData }: { onSend: (a
   )
 }
 
-export const SelectAction = ({ onSend, isPending }: OrderActionsProps) => {
-  const [selectedEvent, setSelectedEvent] = useState<string>("order.placed")
+export const SelectAction = ({ onSend, isPending }: OrderPaymentActionsProps) => {
+  const [selectedEvent, setSelectedEvent] = useState<string>("payment.captured")
 
   return (
     <div className="grid grid-cols-2 gap-2">
