@@ -39,11 +39,87 @@ See [Templates Documentation](./templates.md) for examples of using templates wi
 
 ## Subscribers
 
-The plugin includes a built-in subscriber for `order.placed` events that automatically sends email notifications when orders are placed.
+The plugin includes built-in subscribers that automatically send email notifications for various Medusa events. These subscribers are registered automatically when the plugin is loaded.
 
-To customize behavior:
-- Override translations via plugin options (see [Translations Documentation](./translations.md))
-- Create your own subscriber using template rendering functions (see [Templates Documentation](./templates.md))
+### Available Subscribers
+
+#### `order.placed`
+
+Sends an order confirmation email when a new order is placed.
+
+- **Event**: `order.placed`
+- **Template**: `order-placed`
+- **Trigger**: Automatically triggered when an order is created
+- **Email sent to**: Customer email address from the order
+
+**Template Data Includes**:
+- Order number and date
+- Sales channel information
+- Order items with prices and quantities
+- Shipping and billing addresses
+- Order summary (totals, taxes, discounts)
+- Order URL (if available)
+
+#### `order.completed`
+
+Sends an order completion notification when an order is marked as completed.
+
+- **Event**: `order.completed`
+- **Template**: `order-completed`
+- **Trigger**: Automatically triggered when an order status changes to completed
+- **Email sent to**: Customer email address from the order
+
+**Template Data Includes**:
+- Order number and dates (order date and completion date)
+- Sales channel information
+- Order items with prices and quantities
+- Shipping and billing addresses
+- Order summary (totals, taxes, discounts)
+- Order URL (if available)
+
+### Customizing Subscribers
+
+To customize subscriber behavior:
+
+1. **Override translations**: Use `customTranslations` in plugin options to customize email content (see [Translations Documentation](./translations.md))
+
+```typescript
+module.exports = defineConfig({
+  plugins: [
+    {
+      resolve: "@codee-sh/medusa-plugin-notification",
+      options: {
+        customTranslations: {
+          "order-placed": {
+            pl: {
+              headerTitle: "#{{orderNumber}} - Twoje zamówienie"
+            }
+          },
+          "order-completed": {
+            pl: {
+              headerTitle: "#{{orderNumber}} - Zamówienie zrealizowane"
+            }
+          }
+        }
+      }
+    }
+  ]
+})
+```
+
+2. **Create custom subscribers**: Create your own subscribers using template rendering functions (see [Templates Documentation](./templates.md))
+
+### How Subscribers Work
+
+1. **Event Detection**: Subscribers listen to Medusa events (`order.placed`, `order.completed`)
+2. **Data Fetching**: When an event is triggered, the subscriber fetches relevant data (order details, customer info, etc.)
+3. **Template Rendering**: The subscriber uses `renderTemplate()` to generate HTML and plain text versions using React Email
+4. **Notification Sending**: The rendered email is sent via Medusa's notification module using the configured provider
+5. **Translation Support**: Custom translations from plugin options are automatically applied
+
+### Disabling Subscribers
+
+If you need to disable a subscriber, you can create your own subscriber that handles the same event and it will take precedence, or modify the plugin's subscriber files directly.
 
 ## Complete Configuration Example
 

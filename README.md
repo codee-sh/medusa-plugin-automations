@@ -46,7 +46,7 @@ Set up a notification provider - see [Configuration Documentation](./docs/config
 
 ### 3. Use Templates
 
-The plugin includes a built-in subscriber for `order.placed` events. You can also use templates in your code:
+The plugin includes built-in subscribers that automatically send email notifications for various events. You can also use templates directly in your code:
 
 ```typescript
 import { renderTemplate, TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails"
@@ -65,9 +65,25 @@ See [Templates Documentation](./docs/templates.md) for detailed usage examples.
 ## Available Templates
 
 - **[Order Placed](./docs/templates/order-placed.md)** (`order-placed`) - Order confirmation email template
+- **[Order Completed](./docs/templates/order-completed.md)** (`order-completed`) - Order completion notification template
 - **[Contact Form](./docs/templates/contact-form.md)** (`contact-form`) - Contact form submission email template
 
 See [Templates Documentation](./docs/templates.md) for general template information.
+
+## Built-in Subscribers
+
+The plugin includes automatic email notifications for the following events:
+
+- **`order.placed`** - Sends order confirmation email when an order is placed
+- **`order.completed`** - Sends order completion notification when an order is completed
+
+These subscribers automatically:
+- Fetch order data from Medusa
+- Render email templates using React Email
+- Send notifications via Medusa's notification module
+- Respect custom translations configured in plugin options
+
+See [Configuration Documentation](./docs/configuration.md) for details on customizing subscriber behavior.
 
 ## Admin Panel
 
@@ -75,10 +91,11 @@ Access the template preview in Medusa Admin at `/app/notifications/render`. See 
 
 ## Documentation
 
-- [Templates](./docs/templates.md) - Detailed template documentation
+- [Templates](./docs/templates.md) - Using templates and creating custom subscribers
 - [Translations](./docs/translations.md) - Internationalization and custom translations
 - [Configuration](./docs/configuration.md) - Plugin configuration options
 - [Admin Panel](./docs/admin.md) - Admin interface usage
+- [Creating Custom Templates](./docs/contributing/creating-templates.md) - Guide for contributing new templates
 
 ## Exports
 
