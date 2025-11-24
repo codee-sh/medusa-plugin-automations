@@ -1,5 +1,4 @@
 import { defineWidgetConfig } from "@medusajs/admin-sdk"
-import { useEvents } from "../../hooks/api/events"
 import { NotificationsDetail } from "../notifications/notifications-detail/notifications-detail"
 import { NotificationsList } from "../notifications/notifications-list/notifications-list"
 

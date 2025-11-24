@@ -16,7 +16,7 @@ export const Actions = ({ onSend, isPending, isError, eventsData }: { onSend: (a
   }
 
   return (
-    <div className="px-6 py-4">
+    <div className="px-6 py-0">
       <SelectAction onSend={handleSend} isPending={isPending} />
 
       {eventsData && (
