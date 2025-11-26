@@ -1,0 +1,104 @@
+import { pickValueFromObject, MathBN, isString } from "@medusajs/framework/utils"
+
+export interface NotificationRule {
+  id: string
+  attribute: string
+  operator: string
+  description: string | null
+  metadata: Record<string, any> | null
+  rule_values: Array<{
+    id: string
+    value: string | null
+    metadata: Record<string, any> | null
+  }>
+}
+
+/**
+ * Evaluates a single rule value condition based on operator
+ */
+export function evaluateRuleValueCondition(
+  ruleValues: string[],
+  operator: string,
+  ruleValuesToCheck: (string | number)[] | (string | number)
+): boolean {
+  const valuesToCheck = Array.isArray(ruleValuesToCheck)
+    ? ruleValuesToCheck
+    : [ruleValuesToCheck]
+
+  if (!valuesToCheck.length) {
+    return false
+  }
+
+  switch (operator) {
+    case "eq": {
+      const ruleValueSet = new Set(ruleValues)
+      return valuesToCheck.every((val) => ruleValueSet.has(`${val}`))
+    }
+    case "in": {
+      const ruleValueSet = new Set(ruleValues)
+      return valuesToCheck.some((val) => ruleValueSet.has(`${val}`))
+    }
+    case "ne": {
+      const ruleValueSet = new Set(ruleValues)
+      return valuesToCheck.every((val) => !ruleValueSet.has(`${val}`))
+    }
+    case "gt":
+      return valuesToCheck.every((val) =>
+        ruleValues.some((ruleVal) => MathBN.gt(val, ruleVal))
+      )
+    case "gte":
+      return valuesToCheck.every((val) =>
+        ruleValues.some((ruleVal) => MathBN.gte(val, ruleVal))
+      )
+    case "lt":
+      return valuesToCheck.every((val) =>
+        ruleValues.some((ruleVal) => MathBN.lt(val, ruleVal))
+      )
+    case "lte":
+      return valuesToCheck.every((val) =>
+        ruleValues.some((ruleVal) => MathBN.lte(val, ruleVal))
+      )
+    default:
+      return false
+  }
+}
+
+/**
+ * Checks if rules are valid for the given context (inventory level data)
+ */
+export function areRulesValidForContext(
+  rules: NotificationRule[],
+  context: Record<string, any>
+): boolean {
+  if (!rules?.length) {
+    return true
+  }
+
+  return rules.every((rule) => {
+    if (!rule.attribute || !rule.rule_values?.length) {
+      return false
+    }
+
+    const validRuleValues: string[] = []
+    for (const value of rule.rule_values) {
+      if (value.value && isString(value.value)) {
+        validRuleValues.push(value.value)
+      }
+    }
+
+    if (!validRuleValues.length) {
+      return false
+    }
+
+    // Get value from context based on rule attribute
+    // e.g. "inventory_level.stocked_quantity" or "inventory_item.sku"
+    const valuesToCheck = pickValueFromObject(rule.attribute, context)
+
+    return evaluateRuleValueCondition(
+      validRuleValues,
+      rule.operator,
+      valuesToCheck
+    )
+  })
+}
+
