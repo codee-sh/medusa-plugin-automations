@@ -20,12 +20,7 @@
     "./templates/emails/*": "./.medusa/server/src/templates/emails/*/index.js",
     "./templates/emails/types": "./.medusa/server/src/templates/emails/types.js",
     "./utils": "./.medusa/server/src/utils/index.js",
-    "./*": "./.medusa/server/src/*.js",
-    "./admin": {
-      "import": "./.medusa/server/src/admin/index.mjs",
-      "require": "./.medusa/server/src/admin/index.js",
-      "default": "./.medusa/server/src/admin/index.js"
-    }
+    "./*": "./.medusa/server/src/*.js"
   },
   "keywords": [
     "medusa",
