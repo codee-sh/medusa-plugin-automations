@@ -1,0 +1,1 @@
+export { AutomationsTriggersList } from "./automations-triggers-list"

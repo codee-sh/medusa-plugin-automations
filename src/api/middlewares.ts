@@ -11,10 +11,14 @@ export const AdminNotificationListParams = createFindParams().extend({
   resource_type: z.string().optional(),
 })
 
+export const AdminAutomationsListParams = createFindParams().extend({
+  id: z.string().optional(),
+})
+
 export default defineMiddlewares({
   routes: [
     {
-      matcher: "/admin/notification-plugin/notifications",
+      matcher: "/admin/mpn/notifications",
       methods: ["GET"],
       middlewares: [
         authenticate("user", ["session", "bearer"], {
@@ -35,6 +39,33 @@ export default defineMiddlewares({
             "original_notification_id",
             "external_id",
             "provider_id",
+          ],
+          isList: true,
+        }),
+      ],
+    },
+    {
+      matcher: "/admin/mpn/automations/list",
+      methods: ["GET"],
+      middlewares: [
+        authenticate("user", ["session", "bearer"], {
+          allowUnauthenticated: false,
+        }),
+        validateAndTransformQuery(AdminAutomationsListParams, {
+          defaults: [
+            "id",
+            "name",
+            "description",
+            "trigger_id",
+            "trigger_type",
+            "event_name",
+            "interval_minutes",
+            "last_run_at",
+            "channels",
+            "metadata",
+            "active",
+            "created_at",
+            "updated_at",
           ],
           isList: true,
         }),
