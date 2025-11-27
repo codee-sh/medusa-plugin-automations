@@ -45,7 +45,7 @@ export default defineMiddlewares({
       ],
     },
     {
-      matcher: "/admin/mpn/automations/list",
+      matcher: "/admin/mpn/automations",
       methods: ["GET"],
       middlewares: [
         authenticate("user", ["session", "bearer"], {

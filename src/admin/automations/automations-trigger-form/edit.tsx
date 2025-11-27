@@ -1,9 +1,10 @@
 import { Button, FocusModal, Input, Label, Select } from "@medusajs/ui"
-import { useState, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { Pencil } from "@medusajs/icons"
-import { useListAutomationsTriggers } from "../../../hooks/api/automations-triggers"
-import { useMemo } from "react"
+import { useListAutomations } from "../../../hooks/api/automations"
 import { TRIGGER_TYPES, ChannelType, TriggerType, ALL_EVENTS } from "../types"
+import { useEditAutomation } from "../../../hooks/api/automations"
+import { useQueryClient } from "@tanstack/react-query"
 
 export function AutomationsTriggerFormEdit({ id }: { id: string }) {
   const [open, setOpen] = useState(false)
@@ -17,16 +18,37 @@ export function AutomationsTriggerFormEdit({ id }: { id: string }) {
   const [active, setActive] = useState(false)
   const [channels, setChannels] = useState<ChannelType[]>([])
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setOpen(false)
-  }
-  
-  const { data: automationsTriggerData, isLoading: isAutomationsTriggerLoading } = useListAutomationsTriggers({
+  const queryClient = useQueryClient()
+
+  const { data: automationsTriggerData, isLoading: isAutomationsTriggerLoading } = useListAutomations({
     id: id,
     extraKey: [],
     enabled: open && !!id,
   })
+
+  const { mutateAsync: editAutomation, isPending: isEditAutomationPending } = useEditAutomation()
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    
+    handleEditAutomation()
+  }
+  
+  async function handleEditAutomation() {
+    const items = {
+      id: id,
+      name: name,
+    }
+    
+    const response = await editAutomation({
+      id: id,
+      items: [items],
+    })
+    queryClient.invalidateQueries({ queryKey: ["automations"] })  
+
+    
+    setOpen(false)
+  }
 
   useMemo(() => {
     if (automationsTriggerData) {
@@ -37,8 +59,6 @@ export function AutomationsTriggerFormEdit({ id }: { id: string }) {
       setIntervalMinutes(automationsTriggerData.triggers[0].interval_minutes)
       setActive(automationsTriggerData.triggers[0].active)
       setChannels(automationsTriggerData.triggers[0].channels)
-      // console.log('id', id)
-      // console.log('automationsTriggerData', automationsTriggerData)
     }
   }, [automationsTriggerData])
 

@@ -9,7 +9,7 @@ import {
   Tooltip,
   Badge
 } from "@medusajs/ui"
-import { useListAutomationsTriggers } from "../../../hooks/api/automations-triggers"
+import { useListAutomations } from "../../../hooks/api/automations"
 import { useState, useMemo } from "react"
 import { AutomationsTriggerFormEdit } from "../automations-trigger-form/edit"
 // import { AutomationsTriggerForm } from "../automations-trigger-form/automations-trigger-form"
@@ -25,7 +25,7 @@ export const AutomationsTriggersList = () => {
     return pagination.pageIndex * limit
   }, [pagination])
 
-  const { data: automationsTriggersData, isLoading: isAutomationsTriggersLoading } = useListAutomationsTriggers({
+  const { data: automationsTriggersData, isLoading: isAutomationsTriggersLoading } = useListAutomations({
     extraKey: [],
     limit: limit,
     offset: offset,
