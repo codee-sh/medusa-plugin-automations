@@ -11,10 +11,9 @@ import {
 } from "@medusajs/ui"
 import { useListAutomations } from "../../../hooks/api/automations"
 import { useState, useMemo } from "react"
-import { AutomationsTriggerFormEdit } from "../automations-trigger-form/edit"
-// import { AutomationsTriggerForm } from "../automations-trigger-form/automations-trigger-form"
+import { AutomationsFormEdit, AutomationsFormCreate } from "../automations-form"
 
-export const AutomationsTriggersList = () => {
+export const AutomationsList = () => {
   const [pagination, setPagination] = useState<DataTablePaginationState>({
     pageSize: 8,
     pageIndex: 0,
@@ -88,14 +87,21 @@ export const AutomationsTriggersList = () => {
     columnHelper.accessor("channels", {
       header: "Channels",
       cell: ({ row }) => {
-        const channels = row.original.channels ? row.original.channels : []
-        return channels.length > 0 ? (channels.map((channel: string, index: number) => {
-          return (
-            <Badge key={index} size="2xsmall" className="text-xs">
-              {channel}
-            </Badge>
-          )
-        })) : <span className="text-ui-fg-muted">No channels</span>
+        const channelObject = row.original.channels ? row.original.channels : {}
+        const activeChannels = Object.keys(channelObject).filter((channel: string) => channelObject[channel] === true)
+        return <>
+          <div className="flex items-center gap-1">
+            {activeChannels.length > 0 ? (
+              activeChannels.map((channel: string) => (
+                <Badge key={channel} size="2xsmall" className="text-xs">
+                  {channel}
+                </Badge>
+              ))
+            ) : (
+              <span className="text-ui-fg-muted">No channels</span>
+            )}
+          </div>
+        </>
       },
     }),
     columnHelper.accessor("created_at", {
@@ -114,7 +120,7 @@ export const AutomationsTriggersList = () => {
       header: "Actions",
       cell: ({ row }) => {
         return <>
-          <AutomationsTriggerFormEdit id={row?.original?.id} />
+          <AutomationsFormEdit id={row?.original?.id} />
         </>
       },
     }),
@@ -138,6 +144,7 @@ export const AutomationsTriggersList = () => {
           className="flex items-start justify-between gap-2 md:flex-row md:items-center"
         >
           <Heading level="h2">Automations - list</Heading>
+          <AutomationsFormCreate />
         </DataTable.Toolbar>
         <DataTable.Table />
         <DataTable.Pagination />

@@ -1,7 +1,7 @@
 import { defineRouteConfig } from "@medusajs/admin-sdk";
 import { ListBullet } from "@medusajs/icons";
 import { SingleColumnPage } from "../../../components/layout/pages";
-import { AutomationsTriggersList } from "../../../automations/automations-triggers-list";
+import { AutomationsList } from "../../../automations/automations-list";
 
 const ListPage = () => {
   return (
@@ -11,7 +11,7 @@ const ListPage = () => {
         after: [],
       }}
     >
-      <AutomationsTriggersList />
+      <AutomationsList />
     </SingleColumnPage>
   );
 };

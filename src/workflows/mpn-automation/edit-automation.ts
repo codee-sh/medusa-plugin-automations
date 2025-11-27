@@ -6,6 +6,12 @@ export type EditAutomationWorkflowInput = {
   items: {
     id: string
     name: string
+    description: string
+    trigger_type: "event" | "schedule" | "manual"
+    event_name: string
+    interval_minutes: number
+    active: boolean
+    channels: Record<string, boolean>
   }[]
 }
 

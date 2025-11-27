@@ -21,7 +21,7 @@ export async function POST(
     const { result: automation } = await editAutomationWorkflow(
       req.scope
     ).run({
-      input: req.body
+      input: req.body as EditAutomationWorkflowInput
     });
 
     res.json({
