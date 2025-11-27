@@ -42,9 +42,16 @@ export const validateNotificationTriggersByEventWorkflow = createWorkflow(
       event_name: input.event_name,
     })
 
+    console.log("triggersResult:", triggersResult);
+
+    // Extract triggers from step result using transform
+    const triggers = transform({ triggersResult }, (data) => {
+      return (data?.triggersResult as any)?.triggers || [];
+    })
+
     // Validate all triggers against context
     const validationResult = validateNotificationTriggersStep({
-      triggers: triggersResult.triggers,
+      triggers: triggers,
       context: input.context,
     })
 

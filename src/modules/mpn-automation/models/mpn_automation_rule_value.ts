@@ -1,15 +1,16 @@
 import { model } from "@medusajs/framework/utils";
-import { MpnNotificationRule } from "./mpn_notification_rule";
+import { MpnAutomationRule } from "./mpn_automation_rule";
 
-export const MpnNotificationRuleValue = model
-  .define("mpn_notification_rule_value", {
+export const MpnAutomationRuleValue = model
+  .define("mpn_automation_rule_value", {
     id: model.id().primaryKey(),
 
     value: model.text().nullable(),
 
     metadata: model.json().nullable(),
 
-    rule: model.belongsTo(() => MpnNotificationRule, {
+    rule: model.belongsTo(() => MpnAutomationRule, {
       mappedBy: "rule_values",
     })
   });
+

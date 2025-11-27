@@ -2,12 +2,13 @@ import { TemplateOptionsType, TemplateRenderOptionsType } from "./types";
 import { getContactFormHtml, getContactFormText } from "./contact-form/index";
 import { getOrderCreatedHtml, getOrderCreatedText } from "./order-placed/index";
 import { getOrderCompletedHtml, getOrderCompletedText } from "./order-completed/index";
+import { getInventoryLevelUpdatedHtml, getInventoryLevelUpdatedText } from "./inventory-level-updated/index";
 import { TEMPLATES_NAMES } from "./types";
 import { getTranslations } from "../shared/i18n";
 import { translations as contactFormTranslations } from "./contact-form/translations";
 import { translations as orderPlacedTranslations } from "./order-placed/translations";
 import { translations as orderCompletedTranslations } from "./order-completed/translations";
-
+import { translations as inventoryLevelUpdatedTranslations } from "./inventory-level-updated/translations";
 /**
  * Template names constants
  */
@@ -30,6 +31,7 @@ const templateTranslationsRegistry: Record<TemplateName, Record<string, any>> = 
   [TEMPLATES_NAMES.CONTACT_FORM]: contactFormTranslations,
   [TEMPLATES_NAMES.ORDER_PLACED]: orderPlacedTranslations,
   [TEMPLATES_NAMES.ORDER_COMPLETED]: orderCompletedTranslations,
+  [TEMPLATES_NAMES.INVENTORY_LEVEL_UPDATED]: inventoryLevelUpdatedTranslations,
 };
 
 /**
@@ -58,6 +60,14 @@ const templateRegistry: Record<TemplateName, TemplateRenderer> = {
     },
     getText: async (data: any, options?: TemplateOptionsType): Promise<string> => {
       return await getOrderCompletedText(data, options as any);
+    },
+  },
+  [TEMPLATES_NAMES.INVENTORY_LEVEL_UPDATED]: {
+    getHtml: async (data: any, options?: TemplateOptionsType): Promise<string> => {
+      return await getInventoryLevelUpdatedHtml(data, options as any);
+    },
+    getText: async (data: any, options?: TemplateOptionsType): Promise<string> => {
+      return await getInventoryLevelUpdatedText(data, options as any);
     },
   },
 };

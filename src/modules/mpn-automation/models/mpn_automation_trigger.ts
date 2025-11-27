@@ -1,8 +1,9 @@
 import { model } from "@medusajs/framework/utils";
-import { MpnNotificationRule } from "./mpn_notification_rule";
+import { MpnAutomationRule } from "./mpn_automation_rule";
+import { MpnAutomationState } from "./mpn_automation_state";
 
-export const MpnNotificationTrigger = model
-  .define("mpn_notification_trigger", {
+export const MpnAutomationTrigger = model
+  .define("mpn_automation_trigger", {
     id: model.id().primaryKey(),
 
     // Unique code identifying the trigger function
@@ -36,7 +37,11 @@ export const MpnNotificationTrigger = model
     // Additional metadata
     metadata: model.json().nullable(),
 
-    rules: model.hasMany(() => MpnNotificationRule, {
+    rules: model.hasMany(() => MpnAutomationRule, {
+      mappedBy: "trigger",
+    }),
+
+    states: model.hasMany(() => MpnAutomationState, {
       mappedBy: "trigger",
     }),
   })
@@ -52,3 +57,4 @@ export const MpnNotificationTrigger = model
       on: ["event_name"],
     }
   ]);
+

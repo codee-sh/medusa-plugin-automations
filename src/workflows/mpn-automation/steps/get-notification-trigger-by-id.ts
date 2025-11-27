@@ -1,13 +1,14 @@
 import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
-import { MPN_NOTIFICATION_TRIGGER_MODULE } from "../../../modules/mpn-notification"
-import type MpnNotificationService from "../../../modules/mpn-notification/services/service"
+import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
+import type MpnAutomationService from "../../../modules/mpn-automation/services/service"
+import { NotificationRule } from "../utils/evaluate-rules"
 
-export interface GetNotificationTriggersByEventStepInput {
-  event_name: string
+export interface GetNotificationTriggerByIdStepInput {
+  trigger_id: string
 }
 
-export interface GetNotificationTriggersByEventStepOutput {
-  triggers: Array<{
+export interface GetNotificationTriggerByIdStepOutput {
+  trigger: {
     id: string
     trigger_id: string
     name: string
@@ -19,46 +20,34 @@ export interface GetNotificationTriggersByEventStepOutput {
     active: boolean
     channels: Record<string, boolean> | null
     metadata: Record<string, any> | null
-    rules: Array<{
-      id: string
-      attribute: string
-      operator: string
-      description: string | null
-      metadata: Record<string, any> | null
-      rule_values: Array<{
-        id: string
-        value: string | null
-        metadata: Record<string, any> | null
-      }>
-    }>
-  }>
+    rules: NotificationRule[]
+  } | null
 }
 
-export const getNotificationTriggersByEventStepId = "get-notification-triggers-by-event"
+export const getNotificationTriggerByIdStepId = "get-notification-trigger-by-id"
 
 /**
- * This step retrieves notification triggers (scenarios) by event name.
+ * This step retrieves a notification trigger by its trigger_id.
  * 
  * @example
- * const data = getNotificationTriggersByEventStep({
- *   event_name: "inventory.inventory-level.updated"
+ * const data = getNotificationTriggerByIdStep({
+ *   trigger_id: "low-stock-alert"
  * })
  */
-export const getNotificationTriggersByEventStep = createStep(
-  getNotificationTriggersByEventStepId,
+export const getNotificationTriggerByIdStep = createStep(
+  getNotificationTriggerByIdStepId,
   async (
-    input: GetNotificationTriggersByEventStepInput,
+    input: GetNotificationTriggerByIdStepInput,
     { container }
-  ): Promise<StepResponse<GetNotificationTriggersByEventStepOutput>> => {
-    const notificationService = container.resolve<MpnNotificationService>(
-      MPN_NOTIFICATION_TRIGGER_MODULE
+  ): Promise<StepResponse<GetNotificationTriggerByIdStepOutput>> => {
+    const automationService = container.resolve<MpnAutomationService>(
+      MPN_AUTOMATION_MODULE
     )
 
-    // Retrieve triggers for the given event that are active and have type "event"
-    const triggers = await notificationService.listMpnNotificationTriggers(
+    // Retrieve trigger by trigger_id with relations
+    const triggers = await automationService.listMpnAutomationTriggers(
       {
-        event_name: input.event_name,
-        trigger_type: "event",
+        trigger_id: input.trigger_id,
         active: true,
       },
       {
@@ -69,8 +58,16 @@ export const getNotificationTriggersByEventStep = createStep(
       }
     )
 
+    const trigger = triggers[0] || null
+
+    if (!trigger) {
+      return new StepResponse({
+        trigger: null,
+      })
+    }
+
     return new StepResponse({
-      triggers: triggers.map((trigger) => ({
+      trigger: {
         id: trigger.id,
         trigger_id: trigger.trigger_id,
         name: trigger.name,
@@ -94,7 +91,7 @@ export const getNotificationTriggersByEventStep = createStep(
             metadata: value.metadata as Record<string, any> | null,
           })),
         })),
-      })),
+      },
     })
   }
 )

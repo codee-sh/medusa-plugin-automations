@@ -1,9 +1,9 @@
 import { model } from "@medusajs/framework/utils";
-import { MpnNotificationTrigger } from "./mpn_notification_trigger";
-import { MpnNotificationRuleValue } from "./mpn_notification_rule_value";
+import { MpnAutomationTrigger } from "./mpn_automation_trigger";
+import { MpnAutomationRuleValue } from "./mpn_automation_rule_value";
 
-export const MpnNotificationRule = model
-  .define("mpn_notification_rule", {
+export const MpnAutomationRule = model
+  .define("mpn_automation_rule", {
     id: model.id().primaryKey(),
 
     // E.g. "inventory_item.available_quantity"
@@ -17,11 +17,12 @@ export const MpnNotificationRule = model
 
     metadata: model.json().nullable(),
 
-    trigger: model.belongsTo(() => MpnNotificationTrigger, {
+    trigger: model.belongsTo(() => MpnAutomationTrigger, {
       mappedBy: "rules",
     }),
 
-    rule_values: model.hasMany(() => MpnNotificationRuleValue, {
+    rule_values: model.hasMany(() => MpnAutomationRuleValue, {
       mappedBy: "rule",
     }),
   });
+

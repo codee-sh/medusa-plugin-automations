@@ -1,2 +1,2 @@
 export * from "./inventory"
-export * from "./mpn-notification"
+export * from "./mpn-automation"

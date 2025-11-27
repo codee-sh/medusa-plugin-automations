@@ -145,47 +145,47 @@
           "mappedType": "datetime"
         }
       },
-      "name": "mpn_notification_trigger",
+      "name": "mpn_automation_trigger",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "IDX_mpn_notification_trigger_deleted_at",
+          "keyName": "IDX_mpn_automation_trigger_deleted_at",
           "columnNames": [],
           "composite": false,
           "constraint": false,
           "primary": false,
           "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_notification_trigger_deleted_at\" ON \"mpn_notification_trigger\" (deleted_at) WHERE deleted_at IS NULL"
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_trigger_deleted_at\" ON \"mpn_automation_trigger\" (deleted_at) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "IDX_mpn_notification_trigger_trigger_id_unique",
+          "keyName": "IDX_mpn_automation_trigger_trigger_id_unique",
           "columnNames": [],
           "composite": false,
           "constraint": false,
           "primary": false,
           "unique": false,
-          "expression": "CREATE UNIQUE INDEX IF NOT EXISTS \"IDX_mpn_notification_trigger_trigger_id_unique\" ON \"mpn_notification_trigger\" (trigger_id) WHERE deleted_at IS NULL"
+          "expression": "CREATE UNIQUE INDEX IF NOT EXISTS \"IDX_mpn_automation_trigger_trigger_id_unique\" ON \"mpn_automation_trigger\" (trigger_id) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "IDX_mpn_notification_trigger_trigger_type",
+          "keyName": "IDX_mpn_automation_trigger_trigger_type",
           "columnNames": [],
           "composite": false,
           "constraint": false,
           "primary": false,
           "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_notification_trigger_trigger_type\" ON \"mpn_notification_trigger\" (trigger_type) WHERE deleted_at IS NULL"
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_trigger_trigger_type\" ON \"mpn_automation_trigger\" (trigger_type) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "IDX_mpn_notification_trigger_event_name",
+          "keyName": "IDX_mpn_automation_trigger_event_name",
           "columnNames": [],
           "composite": false,
           "constraint": false,
           "primary": false,
           "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_notification_trigger_event_name\" ON \"mpn_notification_trigger\" (event_name) WHERE deleted_at IS NULL"
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_trigger_event_name\" ON \"mpn_automation_trigger\" (event_name) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "mpn_notification_trigger_pkey",
+          "keyName": "mpn_automation_trigger_pkey",
           "columnNames": [
             "id"
           ],
@@ -197,6 +197,136 @@
       ],
       "checks": [],
       "foreignKeys": {},
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "target_key": {
+          "name": "target_key",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "text"
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "json"
+        },
+        "last_triggered_at": {
+          "name": "last_triggered_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
+        },
+        "trigger_id": {
+          "name": "trigger_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
+        }
+      },
+      "name": "mpn_automation_state",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "IDX_mpn_automation_state_trigger_id",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_state_trigger_id\" ON \"mpn_automation_state\" (trigger_id) WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "IDX_mpn_automation_state_deleted_at",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_state_deleted_at\" ON \"mpn_automation_state\" (deleted_at) WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "mpn_automation_state_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "mpn_automation_state_trigger_id_foreign": {
+          "constraintName": "mpn_automation_state_trigger_id_foreign",
+          "columnNames": [
+            "trigger_id"
+          ],
+          "localTableName": "public.mpn_automation_state",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.mpn_automation_trigger",
+          "updateRule": "cascade"
+        }
+      },
       "nativeEnums": {}
     },
     {
@@ -288,29 +418,29 @@
           "mappedType": "datetime"
         }
       },
-      "name": "mpn_notification_rule",
+      "name": "mpn_automation_rule",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "IDX_mpn_notification_rule_trigger_id",
+          "keyName": "IDX_mpn_automation_rule_trigger_id",
           "columnNames": [],
           "composite": false,
           "constraint": false,
           "primary": false,
           "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_notification_rule_trigger_id\" ON \"mpn_notification_rule\" (trigger_id) WHERE deleted_at IS NULL"
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_rule_trigger_id\" ON \"mpn_automation_rule\" (trigger_id) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "IDX_mpn_notification_rule_deleted_at",
+          "keyName": "IDX_mpn_automation_rule_deleted_at",
           "columnNames": [],
           "composite": false,
           "constraint": false,
           "primary": false,
           "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_notification_rule_deleted_at\" ON \"mpn_notification_rule\" (deleted_at) WHERE deleted_at IS NULL"
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_rule_deleted_at\" ON \"mpn_automation_rule\" (deleted_at) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "mpn_notification_rule_pkey",
+          "keyName": "mpn_automation_rule_pkey",
           "columnNames": [
             "id"
           ],
@@ -322,16 +452,16 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "mpn_notification_rule_trigger_id_foreign": {
-          "constraintName": "mpn_notification_rule_trigger_id_foreign",
+        "mpn_automation_rule_trigger_id_foreign": {
+          "constraintName": "mpn_automation_rule_trigger_id_foreign",
           "columnNames": [
             "trigger_id"
           ],
-          "localTableName": "public.mpn_notification_rule",
+          "localTableName": "public.mpn_automation_rule",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "public.mpn_notification_trigger",
+          "referencedTableName": "public.mpn_automation_trigger",
           "updateRule": "cascade"
         }
       },
@@ -408,29 +538,29 @@
           "mappedType": "datetime"
         }
       },
-      "name": "mpn_notification_rule_value",
+      "name": "mpn_automation_rule_value",
       "schema": "public",
       "indexes": [
         {
-          "keyName": "IDX_mpn_notification_rule_value_rule_id",
+          "keyName": "IDX_mpn_automation_rule_value_rule_id",
           "columnNames": [],
           "composite": false,
           "constraint": false,
           "primary": false,
           "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_notification_rule_value_rule_id\" ON \"mpn_notification_rule_value\" (rule_id) WHERE deleted_at IS NULL"
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_rule_value_rule_id\" ON \"mpn_automation_rule_value\" (rule_id) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "IDX_mpn_notification_rule_value_deleted_at",
+          "keyName": "IDX_mpn_automation_rule_value_deleted_at",
           "columnNames": [],
           "composite": false,
           "constraint": false,
           "primary": false,
           "unique": false,
-          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_notification_rule_value_deleted_at\" ON \"mpn_notification_rule_value\" (deleted_at) WHERE deleted_at IS NULL"
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_rule_value_deleted_at\" ON \"mpn_automation_rule_value\" (deleted_at) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "mpn_notification_rule_value_pkey",
+          "keyName": "mpn_automation_rule_value_pkey",
           "columnNames": [
             "id"
           ],
@@ -442,16 +572,16 @@
       ],
       "checks": [],
       "foreignKeys": {
-        "mpn_notification_rule_value_rule_id_foreign": {
-          "constraintName": "mpn_notification_rule_value_rule_id_foreign",
+        "mpn_automation_rule_value_rule_id_foreign": {
+          "constraintName": "mpn_automation_rule_value_rule_id_foreign",
           "columnNames": [
             "rule_id"
           ],
-          "localTableName": "public.mpn_notification_rule_value",
+          "localTableName": "public.mpn_automation_rule_value",
           "referencedColumnNames": [
             "id"
           ],
-          "referencedTableName": "public.mpn_notification_rule",
+          "referencedTableName": "public.mpn_automation_rule",
           "updateRule": "cascade"
         }
       },

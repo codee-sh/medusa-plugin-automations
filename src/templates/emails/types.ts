@@ -1,4 +1,5 @@
 export const TEMPLATES_NAMES = {
+  INVENTORY_LEVEL_UPDATED: "inventory-level-updated",
   ORDER_PLACED: "order-placed",
   ORDER_COMPLETED: "order-completed",
   CONTACT_FORM: "contact-form",
