@@ -1,13 +1,11 @@
 import { model } from "@medusajs/framework/utils";
 import { MpnAutomationRule } from "./mpn_automation_rule";
 import { MpnAutomationState } from "./mpn_automation_state";
+import { MpnAutomationAction } from "./npm_automation_action";
 
 export const MpnAutomationTrigger = model
   .define("mpn_automation_trigger", {
     id: model.id().primaryKey(),
-
-    // Unique code identifying the trigger function
-    trigger_id: model.text(),
 
     // Human-readable name for admin
     name: model.text(),
@@ -44,10 +42,14 @@ export const MpnAutomationTrigger = model
     states: model.hasMany(() => MpnAutomationState, {
       mappedBy: "trigger",
     }),
+
+    actions: model.hasMany(() => MpnAutomationAction, {
+      mappedBy: "trigger",
+    }),
   })
   .indexes([
     {
-      on: ["trigger_id"],
+      on: ["id"],
       unique: true,
     },
     {

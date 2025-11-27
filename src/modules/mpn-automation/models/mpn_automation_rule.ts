@@ -6,6 +6,8 @@ export const MpnAutomationRule = model
   .define("mpn_automation_rule", {
     id: model.id().primaryKey(),
 
+    position: model.number().default(1).nullable(),
+
     // E.g. "inventory_item.available_quantity"
     attribute: model.text(),
 

@@ -9,7 +9,6 @@ export interface GetNotificationTriggersByEventStepInput {
 export interface GetNotificationTriggersByEventStepOutput {
   triggers: Array<{
     id: string
-    trigger_id: string
     name: string
     description: string | null
     trigger_type: "event" | "schedule" | "manual"
@@ -73,7 +72,6 @@ export const getNotificationTriggersByEventStep = createStep(
     return new StepResponse({
       triggers: triggers.map((trigger) => ({
         id: trigger.id,
-        trigger_id: trigger.trigger_id,
         name: trigger.name,
         description: trigger.description,
         trigger_type: trigger.trigger_type,

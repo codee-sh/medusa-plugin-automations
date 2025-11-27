@@ -15,15 +15,6 @@
           "nullable": false,
           "mappedType": "text"
         },
-        "trigger_id": {
-          "name": "trigger_id",
-          "type": "text",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": false,
-          "mappedType": "text"
-        },
         "name": {
           "name": "name",
           "type": "text",
@@ -158,13 +149,13 @@
           "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_trigger_deleted_at\" ON \"mpn_automation_trigger\" (deleted_at) WHERE deleted_at IS NULL"
         },
         {
-          "keyName": "IDX_mpn_automation_trigger_trigger_id_unique",
+          "keyName": "IDX_mpn_automation_trigger_id_unique",
           "columnNames": [],
           "composite": false,
           "constraint": false,
           "primary": false,
           "unique": false,
-          "expression": "CREATE UNIQUE INDEX IF NOT EXISTS \"IDX_mpn_automation_trigger_trigger_id_unique\" ON \"mpn_automation_trigger\" (trigger_id) WHERE deleted_at IS NULL"
+          "expression": "CREATE UNIQUE INDEX IF NOT EXISTS \"IDX_mpn_automation_trigger_id_unique\" ON \"mpn_automation_trigger\" (id) WHERE deleted_at IS NULL"
         },
         {
           "keyName": "IDX_mpn_automation_trigger_trigger_type",
@@ -339,6 +330,16 @@
           "primary": false,
           "nullable": false,
           "mappedType": "text"
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "default": "1",
+          "mappedType": "integer"
         },
         "attribute": {
           "name": "attribute",
@@ -582,6 +583,164 @@
             "id"
           ],
           "referencedTableName": "public.mpn_automation_rule",
+          "updateRule": "cascade"
+        }
+      },
+      "nativeEnums": {}
+    },
+    {
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "position": {
+          "name": "position",
+          "type": "integer",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "default": "1",
+          "mappedType": "integer"
+        },
+        "active": {
+          "name": "active",
+          "type": "boolean",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "default": "true",
+          "mappedType": "boolean"
+        },
+        "action_type": {
+          "name": "action_type",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "text"
+        },
+        "config": {
+          "name": "config",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "json"
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "jsonb",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "json"
+        },
+        "trigger_id": {
+          "name": "trigger_id",
+          "type": "text",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "mappedType": "text"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": false,
+          "length": 6,
+          "default": "now()",
+          "mappedType": "datetime"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamptz",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "length": 6,
+          "mappedType": "datetime"
+        }
+      },
+      "name": "mpn_automation_action",
+      "schema": "public",
+      "indexes": [
+        {
+          "keyName": "IDX_mpn_automation_action_trigger_id",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_action_trigger_id\" ON \"mpn_automation_action\" (trigger_id) WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "IDX_mpn_automation_action_deleted_at",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_action_deleted_at\" ON \"mpn_automation_action\" (deleted_at) WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "IDX_mpn_automation_action_position",
+          "columnNames": [],
+          "composite": false,
+          "constraint": false,
+          "primary": false,
+          "unique": false,
+          "expression": "CREATE INDEX IF NOT EXISTS \"IDX_mpn_automation_action_position\" ON \"mpn_automation_action\" (position) WHERE deleted_at IS NULL"
+        },
+        {
+          "keyName": "mpn_automation_action_pkey",
+          "columnNames": [
+            "id"
+          ],
+          "composite": false,
+          "constraint": true,
+          "primary": true,
+          "unique": true
+        }
+      ],
+      "checks": [],
+      "foreignKeys": {
+        "mpn_automation_action_trigger_id_foreign": {
+          "constraintName": "mpn_automation_action_trigger_id_foreign",
+          "columnNames": [
+            "trigger_id"
+          ],
+          "localTableName": "public.mpn_automation_action",
+          "referencedColumnNames": [
+            "id"
+          ],
+          "referencedTableName": "public.mpn_automation_trigger",
           "updateRule": "cascade"
         }
       },
