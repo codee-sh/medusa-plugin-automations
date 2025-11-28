@@ -1,4 +1,4 @@
-# @codee-sh/medusa-plugin-notification
+# Medusa plugin notification emails
 
 A comprehensive notification automation plugin for Medusa v2 that provides a flexible rule-based notification system with triggers, conditions, and actions. Create automated notifications based on events, schedules, or manual triggers with customizable rules.
 
