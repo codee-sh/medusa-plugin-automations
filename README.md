@@ -1,17 +1,16 @@
 # @codee-sh/medusa-plugin-notification
 
-A comprehensive notification plugin for Medusa v2 that provides a flexible email template system with internationalization support, custom translations, and seamless integration with Medusa's notification module.
+A comprehensive notification automation plugin for Medusa v2 that provides a flexible rule-based notification system with triggers, conditions, and actions. Create automated notifications based on events, schedules, or manual triggers with customizable rules.
 
 ## Features
 
-- **Email Templates**: Pre-built, customizable email templates built with [React Email](https://react.email) for common use cases
-- **React Email Integration**: Templates are built using React Email components, providing modern, responsive email design
-- **Internationalization**: Built-in support for multiple locales (Polish, English)
-- **Customizable**: Override translations and customize templates without modifying core files
-- **Integration**: Integrates with Medusa's notification module
-- **Admin Panel**: Preview and test templates directly from Medusa Admin
-- **Type-Safe**: Full TypeScript support with exported types
-- **HTML & Plain Text**: Automatically generates both HTML and plain text versions of emails
+- **Automation Triggers**: Create notification automations triggered by events, schedules, or manual actions
+- **Rule-Based Conditions**: Define complex conditions using rule attributes (e.g., inventory levels, order status)
+- **Event Subscribers**: Built-in subscribers for common Medusa events (inventory updates, order events, payment events)
+- **Admin Panel**: Manage automations directly from Medusa Admin
+- **Flexible Rules**: Support for multiple rule types and operators (equals, greater than, less than, contains, etc.)
+- **Type-Safe**: Full TypeScript support with exported types and workflows
+- **Extensible**: Add custom rule attributes and extend functionality via plugin options
 
 ## Compatibility
 
@@ -40,70 +39,61 @@ module.exports = defineConfig({
 })
 ```
 
-### 2. Configure Notification Provider
+### 2. Run Migrations
 
-Set up a notification provider - see [Configuration Documentation](./docs/configuration.md) for details.
+The plugin includes database migrations for automation models. Run migrations to set up the required tables:
 
-### 3. Use Templates
-
-The plugin includes built-in subscribers that automatically send email notifications for various events. You can also use templates directly in your code:
-
-```typescript
-import { renderTemplate, TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails"
-
-const { html, text, subject } = await renderTemplate(
-  TEMPLATES_NAMES.ORDER_PLACED,
-  templateData,
-  { locale: "pl" }
-)
+```bash
+medusa migrations run
 ```
 
-**Note**: `renderTemplate` is an async function that returns both HTML and plain text versions of the email, generated using React Email.
+### 3. Access Admin Panel
 
-See [Templates Documentation](./docs/templates.md) for detailed usage examples.
+Navigate to **Notifications > Automations** in your Medusa Admin dashboard, or directly access:
 
-## Available Templates
+```
+/app/notifications/automations
+```
 
-- **[Order Placed](./docs/templates/order-placed.md)** (`order-placed`) - Order confirmation email template
-- **[Order Completed](./docs/templates/order-completed.md)** (`order-completed`) - Order completion notification template
-- **[Contact Form](./docs/templates/contact-form.md)** (`contact-form`) - Contact form submission email template
+## How It Works
 
-See [Templates Documentation](./docs/templates.md) for general template information.
+### Automation Triggers
 
-## Built-in Subscribers
+Automations are triggered by:
+- **Events**: Medusa events (e.g., `inventory.inventory-level.updated`, `order.placed`)
+- **Schedule**: Time-based triggers with configurable intervals
+- **Manual**: Triggered manually from the admin panel
 
-The plugin includes automatic email notifications for the following events:
+### Rules and Conditions
 
-- **`order.placed`** - Sends order confirmation email when an order is placed
-- **`order.completed`** - Sends order completion notification when an order is completed
+Each automation can have multiple rules that define when notifications should be sent:
 
-These subscribers automatically:
-- Fetch order data from Medusa
-- Render email templates using React Email
-- Send notifications via Medusa's notification module
-- Respect custom translations configured in plugin options
+- **Rule Attributes**: Available attributes for conditions (e.g., `inventory_level.available_quantity`, `inventory_item.sku`)
+- **Operators**: Comparison operators (equals, greater than, less than, contains, in, etc.)
+- **Rule Values**: Values to compare against
 
-See [Configuration Documentation](./docs/configuration.md) for details on customizing subscriber behavior.
+See [Configuration Documentation](./docs/configuration.md) for details on built-in subscribers, available rule attributes, and extending functionality.
 
 ## Admin Panel
 
-Access the template preview in Medusa Admin at `/app/notifications/render`. See [Admin Panel Documentation](./docs/admin.md) for details.
+Access the automations management interface in Medusa Admin at `/app/notifications/automations`. See [Admin Panel Documentation](./docs/admin.md) for details.
 
 ## Documentation
 
-- [Templates](./docs/templates.md) - Using templates and creating custom subscribers
-- [Translations](./docs/translations.md) - Internationalization and custom translations
-- [Configuration](./docs/configuration.md) - Plugin configuration options
-- [Admin Panel](./docs/admin.md) - Admin interface usage
-- [Creating Custom Templates](./docs/contributing/creating-templates.md) - Guide for contributing new templates
+- [Configuration](./docs/configuration.md) - Plugin configuration options and extending functionality
+- [Admin Panel](./docs/admin.md) - Admin interface usage and automation management
 
 ## Exports
 
 The plugin exports the following:
 
-- `@codee-sh/medusa-plugin-notification/templates/emails` - Template rendering functions
-- `@codee-sh/medusa-plugin-notification/templates/emails/types` - Template types and constants
+- `@codee-sh/medusa-plugin-notification/workflows` - Workflow functions for automation management
+- `@codee-sh/medusa-plugin-notification/modules/mpn-automation` - Automation module service
 - `@codee-sh/medusa-plugin-notification/utils` - Utility functions
+
+## Related Plugins
+
+For email templates and rendering functionality, see [@codee-sh/medusa-plugin-notification-emails](https://github.com/codee-sh/medusa-plugin-notification-emails).
 
 ## License
 
