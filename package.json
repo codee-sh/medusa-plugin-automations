@@ -17,7 +17,12 @@
     "./modules/*": "./.medusa/server/src/modules/*/index.js",
     "./providers/*": "./.medusa/server/src/providers/*/index.js",
     "./utils": "./.medusa/server/src/utils/index.js",
-    "./*": "./.medusa/server/src/*.js"
+    "./*": "./.medusa/server/src/*.js",
+    "./admin": {
+      "import": "./.medusa/server/src/admin/index.mjs",
+      "require": "./.medusa/server/src/admin/index.js",
+      "default": "./.medusa/server/src/admin/index.js"
+    }
   },
   "keywords": [
     "medusa",
