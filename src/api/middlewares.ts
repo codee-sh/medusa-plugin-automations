@@ -18,33 +18,6 @@ export const AdminAutomationsListParams = createFindParams().extend({
 export default defineMiddlewares({
   routes: [
     {
-      matcher: "/admin/mpn/notifications",
-      methods: ["GET"],
-      middlewares: [
-        authenticate("user", ["session", "bearer"], {
-          allowUnauthenticated: false,
-        }),
-        validateAndTransformQuery(AdminNotificationListParams, {
-          defaults: [
-            "id",
-            "to",
-            "channel",
-            "created_at",
-            "status",
-            "template",
-            "trigger_type",
-            "resource_id",
-            "resource_type",
-            "receiver_id",
-            "original_notification_id",
-            "external_id",
-            "provider_id",
-          ],
-          isList: true,
-        }),
-      ],
-    },
-    {
       matcher: "/admin/mpn/automations",
       methods: ["GET"],
       middlewares: [

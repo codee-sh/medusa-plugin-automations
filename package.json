@@ -1,7 +1,7 @@
 {
   "name": "@codee-sh/medusa-plugin-notification",
-  "version": "1.0.4",
-  "description": "Medusa plugin for sending notifications.",
+  "version": "1.0.5",
+  "description": "Medusa plugin for notifications.",
   "author": "Codee Team (https://codee.dev)",
   "license": "MIT",
   "publishConfig": {
@@ -16,9 +16,6 @@
     "./.medusa/server/src/modules/*": "./.medusa/server/src/modules/*/index.js",
     "./modules/*": "./.medusa/server/src/modules/*/index.js",
     "./providers/*": "./.medusa/server/src/providers/*/index.js",
-    "./templates/emails": "./.medusa/server/src/templates/emails/index.js",
-    "./templates/emails/*": "./.medusa/server/src/templates/emails/*/index.js",
-    "./templates/emails/types": "./.medusa/server/src/templates/emails/types.js",
     "./utils": "./.medusa/server/src/utils/index.js",
     "./*": "./.medusa/server/src/*.js"
   },
@@ -34,15 +31,7 @@
     "dev": "medusa plugin:develop",
     "prepublishOnly": "medusa plugin:build",
     "publish-local": "npx medusa plugin:publish",
-    "publish-package": "dotenv npm publish --access public",
-    "email:dev": "email dev --dir emails-previews"
-  },
-  "dependencies": {
-    "@react-email/components": "^0.3.3",
-    "@react-email/preview-server": "^4.2.5",
-    "@react-email/render": "^1.1.4",
-    "react-email": "^4.2.5",
-    "i18next": "^23.7.11"
+    "publish-package": "dotenv npm publish --access public"
   },
   "devDependencies": {
     "@medusajs/admin-sdk": "2.8.8",
@@ -52,17 +41,19 @@
     "@medusajs/medusa": "2.8.8",
     "@medusajs/test-utils": "2.8.8",
     "@medusajs/ui": "^4.0.9",
-    "@react-email/components": "^0.3.3",
-    "@react-email/preview-server": "^4.2.5",
-    "@react-email/render": "^1.1.4",
+    "@mikro-orm/core": "6.4.3",
+    "@mikro-orm/knex": "6.4.3",
+    "@mikro-orm/migrations": "6.4.3",
+    "@mikro-orm/postgresql": "6.4.3",
     "@swc/core": "1.5.7",
     "@types/node": "^20.0.0",
     "@types/react": "^18.3.2",
     "@types/react-dom": "^18.2.25",
+    "awilix": "^8.0.1",
+    "dotenv": "^17.2.3",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-email": "^4.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
     "vite": "^5.2.11",
@@ -70,5 +61,6 @@
   },
   "engines": {
     "node": ">=20"
-  }
+  },
+  "packageManager": "yarn@3.2.3+sha512.f26f951f67de0c6a33ee381e5ff364709c87e70eb5e65c694e4facde3512f1fa80b8679e6ba31ce7d340fbb46f08dd683af9457e240f25a204be7427940d767e"
 }

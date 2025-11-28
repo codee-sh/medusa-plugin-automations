@@ -3,9 +3,9 @@ import {
   type SubscriberConfig,
 } from "@medusajs/medusa"
 import { Modules, ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
-import { renderTemplate } from "@codee-sh/medusa-plugin-notification/templates/emails"
-import { TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails/types"
-import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee-sh/medusa-plugin-notification/utils"
+// import { renderTemplate } from "@codee-sh/medusa-plugin-notification/templates/emails"
+// import { TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails/types"
+// import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee-sh/medusa-plugin-notification/utils"
 import { getPluginOptions } from "@codee-sh/medusa-plugin-notification/utils/plugins"
 import { getInventoryLevelByIdWorkflow } from "../workflows/inventory/get-inventory-level-by-id"
 import { validateNotificationTriggersByEventWorkflow } from "../workflows/mpn-automation/validate-notification-triggers-by-event"
