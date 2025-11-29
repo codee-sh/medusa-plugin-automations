@@ -11,7 +11,7 @@ import {
 } from "@medusajs/ui"
 import { useListAutomations } from "../../../hooks/api/automations"
 import { useState, useMemo } from "react"
-import { AutomationsFormEdit, AutomationsFormCreate } from "../automations-form"
+import { AutomationsFormEdit, AutomationsCreateForm } from "../automations-form"
 
 export const AutomationsList = () => {
   const [pagination, setPagination] = useState<DataTablePaginationState>({
@@ -144,7 +144,7 @@ export const AutomationsList = () => {
           className="flex items-start justify-between gap-2 md:flex-row md:items-center"
         >
           <Heading level="h2">Automations - list</Heading>
-          <AutomationsFormCreate />
+          <AutomationsCreateForm />
         </DataTable.Toolbar>
         <DataTable.Table />
         <DataTable.Pagination />

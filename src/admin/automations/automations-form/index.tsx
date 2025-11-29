@@ -1,2 +1,2 @@
 export { AutomationsFormEdit } from "./edit"
-export { AutomationsFormCreate } from "./create"
+export { AutomationsCreateForm } from "./automations-create-form"

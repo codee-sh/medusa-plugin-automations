@@ -1,5 +1,5 @@
 import { defineRouteConfig } from "@medusajs/admin-sdk"
-import { ChatBubbleLeftRight } from "@medusajs/icons"
+import { ListBullet } from "@medusajs/icons"
 
 const NotificationsPage = () => {
   return (
@@ -11,7 +11,7 @@ const NotificationsPage = () => {
 
 export const config = defineRouteConfig({
   label: "Notifications",
-  icon: ChatBubbleLeftRight,
+  icon: ListBullet,
 })
 
 export default NotificationsPage

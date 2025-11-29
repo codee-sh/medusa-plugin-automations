@@ -1,5 +1,4 @@
 import { defineRouteConfig } from "@medusajs/admin-sdk";
-import { ListBullet } from "@medusajs/icons";
 import { SingleColumnPage } from "../../../components/layout/pages";
 import { AutomationsList } from "../../../automations/automations-list";
 
@@ -17,8 +16,7 @@ const ListPage = () => {
 };
 
 export const config = defineRouteConfig({
-  label: "Automations",
-  icon: ListBullet,
+  label: "Automations"
 });
 
 export default ListPage;
