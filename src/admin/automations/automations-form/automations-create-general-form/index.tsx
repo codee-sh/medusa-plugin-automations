@@ -1,49 +1,8 @@
 import { Input, Label, Select, Checkbox } from "@medusajs/ui"
-import { useState } from "react"
-import { TRIGGER_TYPES, ChannelType, TriggerType, ALL_EVENTS, CHANNEL_TYPES } from "../../types"
-import { useCreateAutomation } from "../../../../hooks/api/automations"
-import { useQueryClient } from "@tanstack/react-query"
+import { TRIGGER_TYPES, ALL_EVENTS, CHANNEL_TYPES } from "../../types"
 import { Controller } from "react-hook-form"
   
 export function AutomationsCreateGeneralForm({ form }: { form: any }) {
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
-  const [triggerId, setTriggerId] = useState("")
-  const [triggerType, setTriggerType] = useState<TriggerType>(TriggerType.EVENT)
-  const [eventName, setEventName] = useState("")
-  const [intervalMinutes, setIntervalMinutes] = useState("")
-  const [active, setActive] = useState(false)
-  const [channels, setChannels] = useState<Record<string, boolean> | null>(null)
-
-  const queryClient = useQueryClient()
-
-  const { mutateAsync: createAutomation, isPending: isCreateAutomationPending } = useCreateAutomation()
-
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    
-    handleCreateAutomation()
-  }
-  
-  async function handleCreateAutomation() {
-    // const items = {
-    //   name: name,
-    //   description: description,
-    //   trigger_type: triggerType,
-    //   event_name: eventName,
-    //   interval_minutes: intervalMinutes,
-    //   active: active,
-    //   channels: channels,
-    // }
-    
-    // await createAutomation({
-    //   id: id,
-    //   items: [items],
-    // })
-
-    // queryClient.invalidateQueries({ queryKey: ["automations"] })
-  }
-
   return (
     <div className="w-full">
       <div className="p-6 max-w-2xl mx-auto">
@@ -100,28 +59,39 @@ export function AutomationsCreateGeneralForm({ form }: { form: any }) {
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="channels" className="block">Channels</Label>
-            <div className="flex flex-col gap-2">
-              {CHANNEL_TYPES.map((channel) => (
-                <div key={channel.value} className="flex items-center space-x-2">
-                  <Checkbox
-                    checked={channels?.[channel.value] === true}
-                    onCheckedChange={(checked) => {
-                      setChannels({
-                        ...(channels || {}),
-                        [channel.value]: checked === true
-                      })
-                    }}
-                    id={`channel-${channel.value}`}
-                  />
-                  <Label
-                    htmlFor={`channel-${channel.value}`}
-                    className="text-sm font-medium cursor-pointer"
-                  >
-                    {channel.label}
-                  </Label>
+            <Controller
+              name="general.channels"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <div className="flex flex-col gap-2">
+                  {CHANNEL_TYPES.map((channel) => (
+                    <div key={channel.value} className="flex items-center space-x-2">
+                      <Checkbox
+                        checked={field.value?.[channel.value] === true}
+                        onCheckedChange={(checked) => {
+                          field.onChange({
+                            ...(field.value || {}),
+                            [channel.value]: checked === true
+                          })
+                        }}
+                        id={`channel-${channel.value}`}
+                      />
+                      <Label
+                        htmlFor={`channel-${channel.value}`}
+                        className="text-sm font-medium cursor-pointer"
+                      >
+                        {channel.label}
+                      </Label>
+                    </div>
+                  ))}
+                  {fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {fieldState.error.message}
+                    </span>
+                  )}
                 </div>
-              ))}
-            </div>
+              )}
+            />
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="active" className="block">Active</Label>

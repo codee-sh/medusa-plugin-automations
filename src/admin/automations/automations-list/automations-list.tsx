@@ -11,7 +11,7 @@ import {
 } from "@medusajs/ui"
 import { useListAutomations } from "../../../hooks/api/automations"
 import { useState, useMemo } from "react"
-import { AutomationsFormEdit, AutomationsCreateForm } from "../automations-form"
+import { AutomationsEditForm, AutomationsCreateForm } from "../automations-form"
 
 export const AutomationsList = () => {
   const [pagination, setPagination] = useState<DataTablePaginationState>({
@@ -120,7 +120,7 @@ export const AutomationsList = () => {
       header: "Actions",
       cell: ({ row }) => {
         return <>
-          <AutomationsFormEdit id={row?.original?.id} />
+          <AutomationsEditForm id={row?.original?.id} />
         </>
       },
     }),

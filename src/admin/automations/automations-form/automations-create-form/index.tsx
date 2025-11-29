@@ -1,12 +1,13 @@
 import { Button, FocusModal, ProgressTabs, ProgressStatus } from "@medusajs/ui"
 import { Plus } from "@medusajs/icons"
-import { useState } from "react"
-import { FieldValues, useForm, UseFormProps, FieldErrors } from "react-hook-form"
+import { useState, useEffect } from "react"
+import { FieldValues, useForm, FieldErrors } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useCreateAutomation } from "../../../../hooks/api/automations"
 import { AutomationsCreateGeneralForm } from "../automations-create-general-form"
 import { AutomationFormValues } from "../types"
 import { automationFormSchema } from "../constants"
+import { ChannelType } from "../../types"
 
 enum Tab {
   GENERAL = "general",
@@ -25,6 +26,18 @@ export function AutomationsCreateForm() {
     [Tab.ACTIONS]: "not-started",
   })  
 
+  const [buttonText, setButtonText] = useState<string>("")
+
+  useEffect(() => {
+    if (Tab.GENERAL === tab) {
+      setButtonText("Save automation")
+    } else if (Tab.RULES === tab) {
+      setButtonText("Save rules")
+    } else if (Tab.ACTIONS === tab) {
+      setButtonText("Save actions")
+    }
+  }, [tab])
+
   const { isPending: isCreateAutomationPending } = useCreateAutomation()
 
   const form = useForm<AutomationFormValues>({
@@ -35,9 +48,12 @@ export function AutomationsCreateForm() {
         description: "",
         trigger_type: "event",
         event_name: "",
-        interval_minutes: "",
+        interval_minutes: null,
         active: false,
-        channels: {}
+        channels: {
+          [ChannelType.EMAIL]: false,
+          [ChannelType.SLACK]: false,
+        }
       },
     },
   })
@@ -98,8 +114,6 @@ export function AutomationsCreateForm() {
     const valid = await form.trigger(fieldsToValidate as any)
     
     if (!valid) {
-      // Możesz pokazać toast lub komunikat
-      console.log("Please complete all required fields")
       return
     }
     
@@ -126,15 +140,7 @@ export function AutomationsCreateForm() {
           <ProgressTabs
             dir="ltr"
             value={tab}
-            onValueChange={async (tab) => {
-              // const valid = await form.trigger()
-
-              // if (!valid) {
-              //   return
-              // }
-
-              // setTab(tab as Tab)
-            }}
+            onClick={() => handleTabChange(tab)}
             className="flex h-full flex-col overflow-hidden"
           >       
 
@@ -152,7 +158,7 @@ export function AutomationsCreateForm() {
             </form>
           </FocusModal.Body>
           <FocusModal.Footer>
-            <Button type="submit" onClick={form.handleSubmit(handleSubmit, handleError)}>Save</Button>
+            <Button type="submit" onClick={form.handleSubmit(handleSubmit, handleError)}>{buttonText}</Button>
           </FocusModal.Footer>
       </FocusModal.Content>
     </FocusModal>

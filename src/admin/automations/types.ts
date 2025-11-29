@@ -6,6 +6,9 @@ export enum TriggerType {
 
 export enum ChannelType {
   EMAIL = "email",
+  SMS = "sms",
+  PUSH = "push",
+  IN_APP = "in_app",
   SLACK = "slack",
   ADMIN = "admin"
 }
