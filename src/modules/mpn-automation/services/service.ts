@@ -1,12 +1,13 @@
 import { MedusaService, MedusaContext } from "@medusajs/framework/utils";
-import { MpnAutomationTrigger, MpnAutomationState, MpnAutomationRule, MpnAutomationRuleValue } from "../models";
+import { MpnAutomationTrigger, MpnAutomationState, MpnAutomationRule, MpnAutomationRuleValue, MpnAutomationAction } from "../models";
 import { ALL_EVENTS, ACTION_TYPES, TRIGGER_TYPES, ModuleOptions, CustomEvent, CustomAction } from "../types";
 
 class MpnAutomationService extends MedusaService({
   MpnAutomationTrigger,
   MpnAutomationState,
   MpnAutomationRule,
-  MpnAutomationRuleValue
+  MpnAutomationRuleValue,
+  MpnAutomationAction
   }) {
   private options_: ModuleOptions
   private events_: CustomEvent[]

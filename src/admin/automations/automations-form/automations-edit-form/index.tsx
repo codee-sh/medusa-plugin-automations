@@ -6,10 +6,12 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEditAutomation, useListAutomations } from "../../../../hooks/api/automations"
 import { useListAutomationsRules, useEditAutomationRule } from "../../../../hooks/api/automations-rules"
+import { useListAutomationsActions, useEditAutomationAction } from "../../../../hooks/api/automations-actions"
 import { AutomationsGeneralForm } from "../automations-general-form"
 import { AutomationsRulesForm } from "../automations-rules-form"
 import { AutomationFormValues, Tab, TabState } from "../types"
 import { automationFormSchema } from "../constants"
+import { AutomationsActionsForm } from "../automations-actions-form"
 
 export function AutomationsEditForm({ id }: { id: string }) {
   const [open, setOpen] = useState(false)
@@ -45,8 +47,15 @@ export function AutomationsEditForm({ id }: { id: string }) {
     enabled: open && !!id,
   })
 
+  const { data: automationsActionsData, isLoading: isAutomationsActionsLoading } = useListAutomationsActions({
+    trigger_id: id,
+    extraKey: [id],
+    enabled: open && !!id,
+  })
+
   const { mutateAsync: editAutomation, isPending: isEditAutomationPending } = useEditAutomation()
   const { mutateAsync: editAutomationRule, isPending: isEditAutomationRulePending } = useEditAutomationRule()
+  const { mutateAsync: editAutomationAction, isPending: isEditAutomationActionPending } = useEditAutomationAction()
 
   const form = useForm<AutomationFormValues>({
     resolver: zodResolver(automationFormSchema),
@@ -74,6 +83,7 @@ export function AutomationsEditForm({ id }: { id: string }) {
     if (automationsTriggerData && automationsTriggerData.triggers?.[0]) {
       const trigger = automationsTriggerData.triggers[0]
       const rules = automationsRulesData?.rules || []
+      const actions = automationsActionsData?.actions || []
       
       form.reset({
         general: {
@@ -99,9 +109,38 @@ export function AutomationsEditForm({ id }: { id: string }) {
             })),
           })),
         },
+        actions: {
+          items: actions.map((action: any) => ({
+            id: action.id,
+            action_type: action.action_type,
+            config: action.config,
+          })),
+        },
       })
     }
   }, [open, automationsTriggerData, automationsRulesData])
+
+  useEffect(() => {
+    if (open === false) {
+      form.reset({
+        general: {
+          name: "",
+          description: "",
+          trigger_type: "event",
+          event_name: "",
+          interval_minutes: null,
+          active: false,
+          channels: {},
+        },
+        rules: {
+          items: automationsRulesData?.rules || [],
+        },
+        actions: {
+          items: [],
+        },
+      })
+    }
+  }, [open])
 
   async function handleSubmit(data: AutomationFormValues) {
     if (Tab.GENERAL === tab) {
@@ -151,10 +190,24 @@ export function AutomationsEditForm({ id }: { id: string }) {
         duration: 3000,
       })
     }
-  }
 
-  function handleError(errors: FieldErrors<AutomationFormValues>) {
-    console.log("Validation errors:", errors)
+    if (Tab.ACTIONS === tab) {
+      const items = {
+        trigger_id: id,
+        actions: data.actions?.items || []
+      }
+
+      console.log("items", items)
+
+      await editAutomationAction(items)
+
+      queryClient.invalidateQueries({ queryKey: ["automations-actions", id] })
+
+      toast.success("Automation actions added/updated successfully", {
+        position: "top-right",
+        duration: 3000,
+      })
+    }
   }
 
   const getFieldsForTab = (tab: Tab): string[] => {
@@ -225,18 +278,24 @@ export function AutomationsEditForm({ id }: { id: string }) {
           {isAutomationsTriggerLoading ? (
             <div className="p-6">Loading...</div>
           ) : (
-            <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
+            <form onSubmit={form.handleSubmit(handleSubmit)}>
               {tab === Tab.GENERAL && <AutomationsGeneralForm form={form} isOpen={open} />}
               {tab === Tab.RULES && <AutomationsRulesForm form={form} isOpen={open} />}
+              {tab === Tab.ACTIONS && <AutomationsActionsForm form={form} isOpen={open} />}
             </form>
           )}
         </FocusModal.Body>
         <FocusModal.Footer>
+          <FocusModal.Close asChild>
+            <Button size="small" variant="secondary">
+              Cancel
+            </Button>
+          </FocusModal.Close>          
           <Button 
             type="submit" 
-            onClick={form.handleSubmit(handleSubmit, handleError)}
-            disabled={isEditAutomationPending || isAutomationsTriggerLoading || isEditAutomationRulePending}
-            isLoading={isEditAutomationPending || isEditAutomationRulePending || isAutomationsRulesLoading}
+            onClick={form.handleSubmit(handleSubmit)}
+            disabled={isEditAutomationPending || isAutomationsTriggerLoading || isEditAutomationRulePending || isEditAutomationActionPending}
+            isLoading={isEditAutomationPending || isEditAutomationRulePending || isAutomationsRulesLoading || isAutomationsActionsLoading}
           >
             {buttonText}
           </Button>

@@ -17,6 +17,7 @@ export const AdminAutomationsRulesListParams = createFindParams().extend({
 
 export const AdminAutomationsActionsListParams = createFindParams().extend({
   id: z.string().optional(),
+  trigger_id: z.string().optional(),
 })  
 
 export default defineMiddlewares({
@@ -70,6 +71,29 @@ export default defineMiddlewares({
           ],
           isList: true,
         }),        
+      ],
+    },
+    {
+      matcher: "/admin/mpn/automations/actions",
+      methods: ["GET"],
+      middlewares: [
+        authenticate("user", ["session", "bearer"], {
+          allowUnauthenticated: false,
+        }),
+        validateAndTransformQuery(AdminAutomationsActionsListParams, {
+          defaults: [
+            "id",
+            "trigger_id",
+            "action_type",
+            "config",
+            "position",
+            "metadata",
+            "active",
+            "created_at",
+            "updated_at",
+          ],
+          isList: true,
+        }),
       ],
     },
     {

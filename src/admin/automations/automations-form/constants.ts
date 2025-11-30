@@ -42,7 +42,9 @@ export const automationFormSchema = z.object({
       items: z
         .array(
           z.object({
-            // ... definicje dla actions
+            id: z.string().optional(),
+            action_type: z.string().min(1, "Action type is required"),
+            config: z.record(z.any()).nullable().optional(),
           })
         )
         .optional(),
