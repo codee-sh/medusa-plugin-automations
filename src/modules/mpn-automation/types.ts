@@ -1,3 +1,24 @@
+export type CustomEvent = {
+  id?: string
+  value?: string
+  label?: string
+  field_type?: string
+  group?: string
+}
+
+export type CustomAction = {
+  value?: string
+  label?: string
+}
+
+export type ModuleOptions = {
+  automations?: {
+    enabled?: boolean
+    customEvents?: CustomEvent[]
+    customActions?: CustomAction[]
+  }
+}
+
 export enum TriggerType {
   EVENT = "event",
   SCHEDULE = "schedule",
@@ -5,6 +26,15 @@ export enum TriggerType {
 }
 
 export enum ChannelType {
+  EMAIL = "email",
+  SMS = "sms",
+  PUSH = "push",
+  IN_APP = "in_app",
+  SLACK = "slack",
+  ADMIN = "admin"
+}
+
+export enum ActionType {
   EMAIL = "email",
   SMS = "sms",
   PUSH = "push",
@@ -36,6 +66,33 @@ export const CHANNEL_TYPES = [
   {
     value: ChannelType.SLACK,
     label: "Slack"
+  },
+]
+
+export const ACTION_TYPES = [
+  {
+    value: ActionType.EMAIL,
+    label: "Email"
+  },
+  {
+    value: ActionType.SMS,
+    label: "SMS"
+  },
+  {
+    value: ActionType.PUSH,
+    label: "Push"
+  },
+  {
+    value: ActionType.IN_APP,
+    label: "In App"
+  },
+  {
+    value: ActionType.SLACK,
+    label: "Slack"
+  },
+  {
+    value: ActionType.ADMIN,
+    label: "Admin"
   },
 ]
 

@@ -8,7 +8,6 @@ import { useCreateAutomation } from "../../../../hooks/api/automations"
 import { AutomationsGeneralForm } from "../automations-general-form"
 import { AutomationFormValues, Tab, TabState } from "../types"
 import { automationFormSchema } from "../constants"
-import { ChannelType } from "../../types"
 
 export function AutomationsCreateForm() {
   const [open, setOpen] = useState(false) 
@@ -44,10 +43,7 @@ export function AutomationsCreateForm() {
         event_name: "",
         interval_minutes: null,
         active: false,
-        channels: {
-          [ChannelType.EMAIL]: false,
-          [ChannelType.SLACK]: false,
-        }
+        channels: {}
       },
     },
   })
@@ -165,7 +161,7 @@ export function AutomationsCreateForm() {
         </FocusModal.Header>
           <FocusModal.Body className="w-full overflow-y-auto">
             <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-              <AutomationsGeneralForm form={form} />
+              <AutomationsGeneralForm form={form} isOpen={open} />
             </form>
           </FocusModal.Body>
           <FocusModal.Footer>

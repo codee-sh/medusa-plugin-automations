@@ -9,7 +9,6 @@ import { useListAutomations } from "../../../../hooks/api/automations"
 import { AutomationsGeneralForm } from "../automations-general-form"
 import { AutomationFormValues, Tab, TabState } from "../types"
 import { automationFormSchema } from "../constants"
-import { ChannelType } from "../../types"
 
 export function AutomationsEditForm({ id }: { id: string }) {
   const [open, setOpen] = useState(false)
@@ -51,16 +50,14 @@ export function AutomationsEditForm({ id }: { id: string }) {
         event_name: "",
         interval_minutes: null,
         active: false,
-        channels: {
-          [ChannelType.EMAIL]: false,
-          [ChannelType.SLACK]: false,
-        }
+        channels: {}
       },
     },
   })
 
+  // Reset form when data is loaded and modal is open
   useEffect(() => {
-    if (automationsTriggerData && automationsTriggerData.triggers?.[0]) {
+    if (open && automationsTriggerData && automationsTriggerData.triggers?.[0]) {
       const trigger = automationsTriggerData.triggers[0]
       form.reset({
         general: {
@@ -70,14 +67,11 @@ export function AutomationsEditForm({ id }: { id: string }) {
           event_name: trigger.event_name || "",
           interval_minutes: trigger.interval_minutes || null,
           active: trigger.active || false,
-          channels: (trigger.channels as Record<string, boolean>) || {
-            [ChannelType.EMAIL]: false,
-            [ChannelType.SLACK]: false,
-          }
+          channels: (trigger.channels as Record<string, boolean>) || {}
         },
       })
     }
-  }, [automationsTriggerData, form])
+  }, [open, automationsTriggerData, form])
 
   async function handleSubmit(data: AutomationFormValues) {
     if (Tab.GENERAL === tab) {
@@ -175,7 +169,7 @@ export function AutomationsEditForm({ id }: { id: string }) {
             <div className="p-6">Loading...</div>
           ) : (
             <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-              {tab === Tab.GENERAL && <AutomationsGeneralForm form={form} />}
+              {tab === Tab.GENERAL && <AutomationsGeneralForm form={form} isOpen={open} />}
             </form>
           )}
         </FocusModal.Body>

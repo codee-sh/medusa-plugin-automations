@@ -1,8 +1,35 @@
 import { Input, Label, Select, Checkbox } from "@medusajs/ui"
-import { TRIGGER_TYPES, ALL_EVENTS, CHANNEL_TYPES } from "../../types"
+import { useAvailableEvents } from "../../../../hooks/api/available-events"
+import { useAvailableTriggers } from "../../../../hooks/api/available-triggers"
+import { useAvailableActions } from "../../../../hooks/api/available-actions"
 import { Controller } from "react-hook-form"
+import { useMemo } from "react"
   
-export function AutomationsGeneralForm({ form }: { form: any }) {
+export function AutomationsGeneralForm({ form, isOpen }: { form: any; isOpen?: boolean }) {
+  const { data: availableEventsData, isLoading: isAvailableEventsLoading } = useAvailableEvents({
+    enabled: isOpen !== false,
+  })
+
+  const { data: availableTriggersData, isLoading: isAvailableTriggersLoading } = useAvailableTriggers({
+    enabled: isOpen !== false,
+  })
+
+  const { data: availableActionsData, isLoading: isAvailableActionsLoading } = useAvailableActions({
+    enabled: isOpen !== false,
+  })
+
+  const availableEvents = useMemo(() => {
+    return availableEventsData?.events || []
+  }, [availableEventsData])
+
+  const availableTriggers = useMemo(() => {
+    return availableTriggersData?.triggers || []
+  }, [availableTriggersData])
+
+  const availableActions = useMemo(() => {
+    return availableActionsData?.actions || []
+  }, [availableActionsData])
+
   return (
     <div className="w-full">
       <div className="p-6 max-w-2xl mx-auto">
@@ -45,14 +72,17 @@ export function AutomationsGeneralForm({ form }: { form: any }) {
               render={({ field, fieldState }) => (
                 <>
                   <Select 
-                    value={field.value || ""} 
-                    onValueChange={(value) => field.onChange(value || undefined)}
+                    key={`trigger-type-${availableTriggers.length}-${field.value}`}
+                    value={field.value ?? ""} 
+                    onValueChange={(value) => {
+                      field.onChange(value)
+                    }}
                   >
                     <Select.Trigger>
                       <Select.Value placeholder="Select the trigger type" />
                     </Select.Trigger>
                     <Select.Content>
-                      {TRIGGER_TYPES.map((type) => (
+                      {availableTriggers.map((type) => (
                         <Select.Item key={type.value} value={type.value}>
                           {type.label}
                         </Select.Item>
@@ -72,8 +102,8 @@ export function AutomationsGeneralForm({ form }: { form: any }) {
               name="general.channels"
               control={form.control}
               render={({ field, fieldState }) => (
-                <div className="flex flex-col gap-2">
-                  {CHANNEL_TYPES.map((channel) => (
+                <div className="grid grid-cols-6 gap-2">
+                  {availableActions.map((channel) => (
                     <div key={channel.value} className="flex items-center space-x-2">
                       <Checkbox
                         checked={field.value?.[channel.value] === true}
@@ -137,14 +167,17 @@ export function AutomationsGeneralForm({ form }: { form: any }) {
               render={({ field, fieldState }) => (
                 <>
                   <Select 
-                    value={field.value || ""} 
-                    onValueChange={(value) => field.onChange(value || undefined)}
+                    key={`event-name-${availableEvents.length}-${field.value}`}
+                    value={field.value ?? ""} 
+                    onValueChange={(value) => {
+                      field.onChange(value)
+                    }}
                   >
                     <Select.Trigger>
                       <Select.Value placeholder="Select the event name" />
                     </Select.Trigger>
                     <Select.Content>
-                      {ALL_EVENTS.map((event) => (
+                      {availableEvents?.map((event) => (
                         <Select.Group key={event.name}>
                           <Select.Label>{event.name}</Select.Label>
                           {event.events.map((eventItem) => (

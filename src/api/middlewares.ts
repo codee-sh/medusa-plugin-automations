@@ -18,6 +18,33 @@ export const AdminAutomationsListParams = createFindParams().extend({
 export default defineMiddlewares({
   routes: [
     {
+      matcher: "/admin/mpn/automations/events",
+      methods: ["GET"],
+      middlewares: [
+        authenticate("user", ["session", "bearer"], {
+          allowUnauthenticated: false,
+        }),
+      ],
+    },
+    {
+      matcher: "/admin/mpn/automations/actions",
+      methods: ["GET"],
+      middlewares: [
+        authenticate("user", ["session", "bearer"], {
+          allowUnauthenticated: false,
+        }),
+      ],
+    },
+    {
+      matcher: "/admin/mpn/automations/triggers",
+      methods: ["GET"],
+      middlewares: [
+        authenticate("user", ["session", "bearer"], {
+          allowUnauthenticated: false,
+        }),
+      ],
+    },
+    {
       matcher: "/admin/mpn/automations",
       methods: ["GET"],
       middlewares: [

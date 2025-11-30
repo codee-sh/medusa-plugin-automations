@@ -1,23 +1,44 @@
 import { MedusaService, MedusaContext } from "@medusajs/framework/utils";
 import { MpnAutomationTrigger, MpnAutomationState, MpnAutomationRule, MpnAutomationRuleValue } from "../models";
+import { ALL_EVENTS, ACTION_TYPES, TRIGGER_TYPES, ModuleOptions, CustomEvent, CustomAction } from "../types";
 
 class MpnAutomationService extends MedusaService({
   MpnAutomationTrigger,
   MpnAutomationState,
   MpnAutomationRule,
   MpnAutomationRuleValue
-}) {
+  }) {
+  private options_: ModuleOptions
+  private events_: CustomEvent[]
+  private actions_: CustomAction[]
 
-  // Override listMpnAutomations to use internal service's list method
-  // @ts-ignore
-  // async listMpnAutomations(
-  //   filters?: any,
-  //   config?: FindConfig<any> | undefined,
-  //   @MedusaContext() sharedContext?: Context | undefined
-  // ) {
-  //   // Use the internal service's list method
-  //   return await this.mpnAutomationService_.list(filters, config, sharedContext);
-  // }
+  constructor({}, options?: ModuleOptions) {
+    super(...arguments)
+
+    this.options_ = options || {}
+    this.events_ = this.options_.automations?.customEvents || []
+    this.actions_ = this.options_.automations?.customActions || []
+  }
+
+  getAvailableEvents() {
+    return [
+      ...ALL_EVENTS,
+      ...this.events_
+    ]
+  }
+
+  getAvailableActions() {
+    return [
+      ...ACTION_TYPES,
+      ...this.actions_
+    ]
+  }
+
+  getAvailableTriggers() {
+    return [
+      ...TRIGGER_TYPES
+    ]
+  }
 }
 
 export default MpnAutomationService;
