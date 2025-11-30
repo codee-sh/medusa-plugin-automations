@@ -50,23 +50,23 @@ export const editAutomationRulesStep = createStep(
     // Update or create rules
     const updatedRules = await Promise.all(
       rules.map(async (rule) => {
-        const ruleData: any = {
-          trigger_id: trigger_id,
-          attribute: rule.attribute,
-          operator: rule.operator
-        }
-
         if (rule?.id) {
+          // Check if rule exists
+          const existingRule = existingRules.find((r: any) => r.id === rule.id)
+          if (!existingRule) {
+            throw new Error(`Rule with id ${rule.id} does not exist`)
+          }
+
           // Update existing rule
           const updatedRule = await mpnAutomationService.updateMpnAutomationRules([
             {
               id: rule.id,
-              ...ruleData,
+              attribute: rule.attribute,
+              operator: rule.operator,
             },
           ])
 
-          // Find existing rule with values
-          const existingRule = existingRules.find((r: any) => r.id === rule.id)
+          // Get existing rule values
           const existingValueIds = existingRule?.rule_values?.map((v: any) => v.id) || []
           const incomingValueIds = (rule.rule_values || [])
             .filter((v) => v.id)
@@ -76,6 +76,7 @@ export const editAutomationRulesStep = createStep(
           const valuesToDelete = existingValueIds.filter(
             (id: string) => !incomingValueIds.includes(id)
           )
+          
           if (valuesToDelete.length > 0) {
             await mpnAutomationService.deleteMpnAutomationRuleValues(valuesToDelete)
           }
@@ -89,7 +90,6 @@ export const editAutomationRulesStep = createStep(
               await mpnAutomationService.updateMpnAutomationRuleValues(
                 valuesToUpdate.map((value) => ({
                   id: value.id!,
-                  rule_id: rule.id!,
                   value: value.value
                 }))
               )
@@ -108,6 +108,11 @@ export const editAutomationRulesStep = createStep(
           return updatedRule[0]
         } else {
           // Create new rule
+          const ruleData = {
+            trigger_id: trigger_id,
+            attribute: rule.attribute,
+            operator: rule.operator,
+          }
           const newRule = await mpnAutomationService.createMpnAutomationRules([ruleData])
 
           // Create rule values if they exist

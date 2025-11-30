@@ -26,5 +26,6 @@ export const MpnAutomationRule = model
     rule_values: model.hasMany(() => MpnAutomationRuleValue, {
       mappedBy: "rule",
     }),
-  });
-
+  }).cascades({
+    delete: ["rule_values"],
+  })

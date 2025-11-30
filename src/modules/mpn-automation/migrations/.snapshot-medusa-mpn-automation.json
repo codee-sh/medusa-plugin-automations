@@ -583,6 +583,7 @@
             "id"
           ],
           "referencedTableName": "public.mpn_automation_rule",
+          "deleteRule": "cascade",
           "updateRule": "cascade"
         }
       },

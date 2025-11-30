@@ -22,20 +22,19 @@ export const automationFormSchema = z.object({
         .array(
           z.object({
             id: z.string().optional(),
-            attribute: z.string().optional(),
-            operator: z.string().optional(),
+            attribute: z.string().min(1, "Attribute is required"),
+            operator: z.string().min(1, "Operator is required"),
             description: z.string().nullable().optional(),
             metadata: z.record(z.any()).nullable().optional(),
             rule_values: z.array(
               z.object({
                 id: z.string().optional(),
-                value: z.string().nullable().optional(),
+                value: z.string().min(1, "Value is required"),
                 metadata: z.record(z.any()).nullable().optional(),
               })
             ).optional(),
           })
         )
-        .optional(),
     })
     .optional(),
   actions: z

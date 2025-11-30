@@ -1,4 +1,4 @@
-import { Button, FocusModal, ProgressTabs, ProgressStatus } from "@medusajs/ui"
+import { Button, FocusModal, ProgressTabs, ProgressStatus, toast } from "@medusajs/ui"
 import { Pencil } from "@medusajs/icons"
 import { useState, useEffect } from "react"
 import { useForm, FieldErrors } from "react-hook-form"
@@ -41,12 +41,11 @@ export function AutomationsEditForm({ id }: { id: string }) {
 
   const { data: automationsRulesData, isLoading: isAutomationsRulesLoading } = useListAutomationsRules({
     trigger_id: id,
-    extraKey: [],
+    extraKey: [id],
     enabled: open && !!id,
   })
 
   const { mutateAsync: editAutomation, isPending: isEditAutomationPending } = useEditAutomation()
-
   const { mutateAsync: editAutomationRule, isPending: isEditAutomationRulePending } = useEditAutomationRule()
 
   const form = useForm<AutomationFormValues>({
@@ -102,7 +101,7 @@ export function AutomationsEditForm({ id }: { id: string }) {
         },
       })
     }
-  }, [open, automationsTriggerData, automationsRulesData, form])
+  }, [open, automationsTriggerData, automationsRulesData])
 
   async function handleSubmit(data: AutomationFormValues) {
     if (Tab.GENERAL === tab) {
@@ -123,21 +122,34 @@ export function AutomationsEditForm({ id }: { id: string }) {
       })
 
       queryClient.invalidateQueries({ queryKey: ["automations"] })
-      setOpen(false)
+
+      toast.success("Automation updated successfully", {
+        position: "top-right",
+        duration: 3000,
+      })
     }
+
     if (Tab.RULES === tab) {
-      const formValues = form.getValues()
       const items = {
         trigger_id: id,
         rules: data.rules?.items || []
       }
 
-      console.log("Items", items)
+      const fieldsToValidate = getFieldsForTab(tab)
+      const valid = await form.trigger(fieldsToValidate as any)
+
+      if (!valid) {
+        return
+      }      
 
       await editAutomationRule(items)
 
-      // queryClient.invalidateQueries({ queryKey: ["automations"] })
-      // setOpen(false)
+      queryClient.invalidateQueries({ queryKey: ["automations-rules", id] })
+
+      toast.success("Automation rules added/updated successfully", {
+        position: "top-right",
+        duration: 3000,
+      })
     }
   }
 
@@ -223,8 +235,8 @@ export function AutomationsEditForm({ id }: { id: string }) {
           <Button 
             type="submit" 
             onClick={form.handleSubmit(handleSubmit, handleError)}
-            disabled={isEditAutomationPending || isAutomationsTriggerLoading}
-            isLoading={isEditAutomationPending}
+            disabled={isEditAutomationPending || isAutomationsTriggerLoading || isEditAutomationRulePending}
+            isLoading={isEditAutomationPending || isEditAutomationRulePending || isAutomationsRulesLoading}
           >
             {buttonText}
           </Button>

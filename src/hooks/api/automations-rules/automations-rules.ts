@@ -42,9 +42,7 @@ export const useListAutomationsRules = (
   const { limit = 100, offset = 0, extraKey = [], enabled, fields, order = "created_at", id, trigger_id } = params;
 
   const queryKey: QueryKey = [
-    "automations-rules", 
-    id,
-    trigger_id,
+    "automations-rules",
     limit,
     offset,
     ...extraKey
