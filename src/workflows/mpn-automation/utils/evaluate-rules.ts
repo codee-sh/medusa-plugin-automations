@@ -25,7 +25,19 @@ export function evaluateRuleValueCondition(
     ? ruleValuesToCheck
     : [ruleValuesToCheck]
 
+  // Strict validation: if no values to check or any value is undefined/null, return false
   if (!valuesToCheck.length) {
+    return false
+  }
+
+  // Check if any value is undefined or null - this prevents bugs where attribute path is wrong
+  const hasInvalidValues = valuesToCheck.some((val) => val === undefined || val === null)
+  if (hasInvalidValues) {
+    console.warn("Rule evaluation failed: valuesToCheck contains undefined or null values", {
+      valuesToCheck,
+      ruleValues,
+      operator,
+    })
     return false
   }
 
@@ -91,8 +103,16 @@ export function areRulesValidForContext(
     }
 
     // Get value from context based on rule attribute
-    // e.g. "inventory_level.stocked_quantity" or "inventory_item.sku"
+    // e.g. "inventory_level.stocked_quantity" or "inventory_item.stocked_quantity"
     const valuesToCheck = pickValueFromObject(rule.attribute, context)
+    
+    console.log("Rule evaluation:", {
+      attribute: rule.attribute,
+      operator: rule.operator,
+      ruleValues: validRuleValues,
+      valuesToCheck: valuesToCheck,
+      contextKeys: Object.keys(context),
+    })
 
     return evaluateRuleValueCondition(
       validRuleValues,

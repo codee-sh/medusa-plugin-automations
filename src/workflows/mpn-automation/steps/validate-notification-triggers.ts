@@ -54,8 +54,6 @@ export const validateNotificationTriggersStep = createStep(
     const results = triggers.map((trigger) => {
       // Check if all rules are satisfied
       const is_valid = areRulesValidForContext(trigger.rules || [], context)
-      console.log("trigger:", trigger);
-      console.log("context:", context);
 
       return {
         passed: is_valid,

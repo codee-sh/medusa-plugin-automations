@@ -55,41 +55,41 @@ export default async function inventoryLevelUpdatedHandler({
 
     // If validation passed, emit action event
     if (result.passed) {
-      // result.actions.forEach((action: any) => {
-      //   if (action.action_type === "email") { 
-      //     eventBusService.emit({
-      //       name: "mpn.automation.action.email.executed",
-      //       data: {
-      //         action: action,
-      //         context: contextData,
-      //       },
-      //     })
-      //   } else if (action.action_type === "sms") {
-      //     eventBusService.emit({
-      //       name: "mpn.automation.action.sms.executed",
-      //       data: {
-      //         action: action,
-      //         context: contextData,
-      //       },
-      //     })
-      //   } else if (action.action_type === "push") {
-      //     eventBusService.emit({
-      //       name: "mpn.automation.action.push.executed",
-      //       data: {
-      //         action: action,
-      //         context: contextData,
-      //       },
-      //     })
-      //   } else if (action.action_type === "in_app") {
-      //     eventBusService.emit({
-      //       name: "mpn.automation.action.in_app.executed",
-      //       data: {
-      //         action: action,
-      //         context: contextData,
-      //       },
-      //     })
-      //   }
-      // }) 
+      result.actions.forEach((action: any) => {
+        if (action.action_type === "email") { 
+          eventBusService.emit({
+            name: "mpn.automation.action.email.executed",
+            data: {
+              action: action,
+              context: contextData,
+            },
+          })
+        } else if (action.action_type === "sms") {
+          eventBusService.emit({
+            name: "mpn.automation.action.sms.executed",
+            data: {
+              action: action,
+              context: contextData,
+            },
+          })
+        } else if (action.action_type === "push") {
+          eventBusService.emit({
+            name: "mpn.automation.action.push.executed",
+            data: {
+              action: action,
+              context: contextData,
+            },
+          })
+        } else if (action.action_type === "in_app") {
+          eventBusService.emit({
+            name: "mpn.automation.action.in_app.executed",
+            data: {
+              action: action,
+              context: contextData,
+            },
+          })
+        }
+      }) 
     }
   }
 }
