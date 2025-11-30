@@ -21,7 +21,18 @@ export const automationFormSchema = z.object({
       items: z
         .array(
           z.object({
-            // ... definicje dla rules
+            id: z.string().optional(),
+            attribute: z.string().optional(),
+            operator: z.string().optional(),
+            description: z.string().nullable().optional(),
+            metadata: z.record(z.any()).nullable().optional(),
+            rule_values: z.array(
+              z.object({
+                id: z.string().optional(),
+                value: z.string().nullable().optional(),
+                metadata: z.record(z.any()).nullable().optional(),
+              })
+            ).optional(),
           })
         )
         .optional(),

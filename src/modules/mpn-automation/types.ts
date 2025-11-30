@@ -11,6 +11,11 @@ export type CustomAction = {
   label?: string
 }
 
+export type Attribute = {
+  value?: string
+  label?: string
+}
+
 export type ModuleOptions = {
   automations?: {
     enabled?: boolean
@@ -42,6 +47,42 @@ export enum ActionType {
   SLACK = "slack",
   ADMIN = "admin"
 }
+
+export enum OperatorType {
+  EQUAL = "eq",
+  NOT_EQUAL = "neq",
+  GREATER_THAN = "gt",
+  LESS_THAN = "lt",
+  GREATER_THAN_OR_EQUAL = "gte",
+  LESS_THAN_OR_EQUAL = "lte",
+}
+
+export const OPERATOR_TYPES = [
+  {
+    value: OperatorType.EQUAL,
+    label: "Equal"
+  },
+  {
+    value: OperatorType.NOT_EQUAL,
+    label: "Not Equal"
+  },
+  {
+    value: OperatorType.GREATER_THAN,
+    label: "Greater Than"
+  },
+  {
+    value: OperatorType.LESS_THAN,
+    label: "Less Than"
+  },
+  {
+    value: OperatorType.GREATER_THAN_OR_EQUAL,
+    label: "Greater Than or Equal"
+  },
+  {
+    value: OperatorType.LESS_THAN_OR_EQUAL,
+    label: "Less Than or Equal"
+  },
+]
 
 export const TRIGGER_TYPES = [
   {
@@ -96,18 +137,44 @@ export const ACTION_TYPES = [
   },
 ]
 
+export const INVENTORY_ITEM_ATTRIBUTES = [
+  {
+    value: "inventory_item.stocked_quantity",
+    label: "Stocked Quantity"
+  },
+  {
+    value: "inventory_item.reserved_quantity",
+    label: "Reserved Quantity"
+  },
+  {
+    value: "inventory_item.available_quantity",
+    label: "Available Quantity"
+  },
+  {
+    value: "inventory_item.incoming_quantity",
+    label: "Incoming Quantity"
+  },
+  {
+    value: "inventory_item.location_id",
+    label: "Location ID"
+  },
+]
+
 export const EVENT_INVENTORY_TYPES = [
   {
     value: "inventory.inventory-level.created",
-    label: "Inventory Level Created"
+    label: "Inventory Level Created",
+    attributes: INVENTORY_ITEM_ATTRIBUTES
   },
   {
     value: "inventory.inventory-level.updated",
-    label: "Inventory Level Updated"
+    label: "Inventory Level Updated",
+    attributes: INVENTORY_ITEM_ATTRIBUTES
   },
   {
     value: "inventory.inventory-level.deleted",
-    label: "Inventory Level Deleted"
+    label: "Inventory Level Deleted",
+    attributes: INVENTORY_ITEM_ATTRIBUTES
   }
 ]
 

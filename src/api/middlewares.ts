@@ -6,19 +6,23 @@ import {
 import { createFindParams } from "@medusajs/medusa/api/utils/validators"
 import { z } from "zod"
 
-export const AdminNotificationListParams = createFindParams().extend({
-  resource_id: z.string().optional(),
-  resource_type: z.string().optional(),
-})
-
 export const AdminAutomationsListParams = createFindParams().extend({
   id: z.string().optional(),
 })
 
+export const AdminAutomationsRulesListParams = createFindParams().extend({
+  id: z.string().optional(),
+  trigger_id: z.string().optional(),
+})
+
+export const AdminAutomationsActionsListParams = createFindParams().extend({
+  id: z.string().optional(),
+})  
+
 export default defineMiddlewares({
   routes: [
     {
-      matcher: "/admin/mpn/automations/events",
+      matcher: "/admin/mpn/automations/available-events",
       methods: ["GET"],
       middlewares: [
         authenticate("user", ["session", "bearer"], {
@@ -27,7 +31,7 @@ export default defineMiddlewares({
       ],
     },
     {
-      matcher: "/admin/mpn/automations/actions",
+      matcher: "/admin/mpn/automations/available-actions",
       methods: ["GET"],
       middlewares: [
         authenticate("user", ["session", "bearer"], {
@@ -36,12 +40,36 @@ export default defineMiddlewares({
       ],
     },
     {
-      matcher: "/admin/mpn/automations/triggers",
+      matcher: "/admin/mpn/automations/available-triggers",
       methods: ["GET"],
       middlewares: [
         authenticate("user", ["session", "bearer"], {
           allowUnauthenticated: false,
         }),
+      ],
+    },
+    {
+      matcher: "/admin/mpn/automations/rules",
+      methods: ["GET"],
+      middlewares: [
+        authenticate("user", ["session", "bearer"], {
+          allowUnauthenticated: false,
+        }),
+        validateAndTransformQuery(AdminAutomationsRulesListParams, {
+          defaults: [
+            "id",
+            "trigger_id",
+            "attribute",
+            "operator",
+            "description",
+            "position",
+            "metadata",
+            "created_at",
+            "updated_at",
+            "rule_values.*"
+          ],
+          isList: true,
+        }),        
       ],
     },
     {
@@ -66,6 +94,8 @@ export default defineMiddlewares({
             "active",
             "created_at",
             "updated_at",
+            "rules.*",
+            "rules.rule_values.*"
           ],
           isList: true,
         }),

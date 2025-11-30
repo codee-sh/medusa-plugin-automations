@@ -4,9 +4,10 @@ import { useState, useEffect } from "react"
 import { useForm, FieldErrors } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQueryClient } from "@tanstack/react-query"
-import { useEditAutomation } from "../../../../hooks/api/automations"
-import { useListAutomations } from "../../../../hooks/api/automations"
+import { useEditAutomation, useListAutomations } from "../../../../hooks/api/automations"
+import { useListAutomationsRules, useEditAutomationRule } from "../../../../hooks/api/automations-rules"
 import { AutomationsGeneralForm } from "../automations-general-form"
+import { AutomationsRulesForm } from "../automations-rules-form"
 import { AutomationFormValues, Tab, TabState } from "../types"
 import { automationFormSchema } from "../constants"
 
@@ -38,7 +39,15 @@ export function AutomationsEditForm({ id }: { id: string }) {
     enabled: open && !!id,
   })
 
+  const { data: automationsRulesData, isLoading: isAutomationsRulesLoading } = useListAutomationsRules({
+    trigger_id: id,
+    extraKey: [],
+    enabled: open && !!id,
+  })
+
   const { mutateAsync: editAutomation, isPending: isEditAutomationPending } = useEditAutomation()
+
+  const { mutateAsync: editAutomationRule, isPending: isEditAutomationRulePending } = useEditAutomationRule()
 
   const form = useForm<AutomationFormValues>({
     resolver: zodResolver(automationFormSchema),
@@ -52,13 +61,21 @@ export function AutomationsEditForm({ id }: { id: string }) {
         active: false,
         channels: {}
       },
+      rules: {
+        items: [],
+      },
+      actions: {
+        items: [],
+      },
     },
   })
 
   // Reset form when data is loaded and modal is open
   useEffect(() => {
-    if (open && automationsTriggerData && automationsTriggerData.triggers?.[0]) {
+    if (automationsTriggerData && automationsTriggerData.triggers?.[0]) {
       const trigger = automationsTriggerData.triggers[0]
+      const rules = automationsRulesData?.rules || []
+      
       form.reset({
         general: {
           name: trigger.name || "",
@@ -69,9 +86,23 @@ export function AutomationsEditForm({ id }: { id: string }) {
           active: trigger.active || false,
           channels: (trigger.channels as Record<string, boolean>) || {}
         },
+        rules: {
+          items: rules.map((rule: any) => ({
+            id: rule.id,
+            attribute: rule.attribute,
+            operator: rule.operator,
+            description: rule.description,
+            metadata: rule.metadata,
+            rule_values: rule.rule_values.map((value: any) => ({
+              id: value.id,
+              value: value.value,
+              metadata: value.metadata,
+            })),
+          })),
+        },
       })
     }
-  }, [open, automationsTriggerData, form])
+  }, [open, automationsTriggerData, automationsRulesData, form])
 
   async function handleSubmit(data: AutomationFormValues) {
     if (Tab.GENERAL === tab) {
@@ -93,6 +124,20 @@ export function AutomationsEditForm({ id }: { id: string }) {
 
       queryClient.invalidateQueries({ queryKey: ["automations"] })
       setOpen(false)
+    }
+    if (Tab.RULES === tab) {
+      const formValues = form.getValues()
+      const items = {
+        trigger_id: id,
+        rules: data.rules?.items || []
+      }
+
+      console.log("Items", items)
+
+      await editAutomationRule(items)
+
+      // queryClient.invalidateQueries({ queryKey: ["automations"] })
+      // setOpen(false)
     }
   }
 
@@ -170,6 +215,7 @@ export function AutomationsEditForm({ id }: { id: string }) {
           ) : (
             <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
               {tab === Tab.GENERAL && <AutomationsGeneralForm form={form} isOpen={open} />}
+              {tab === Tab.RULES && <AutomationsRulesForm form={form} isOpen={open} />}
             </form>
           )}
         </FocusModal.Body>
