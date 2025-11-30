@@ -16,6 +16,7 @@ export interface ValidateNotificationTriggersByEventWorkflowOutput {
     rules_count: number
   }>
   triggers_found: number
+  actions_found: any
   has_triggers: boolean
 }
 
@@ -42,8 +43,6 @@ export const validateNotificationTriggersByEventWorkflow = createWorkflow(
       event_name: input.event_name,
     })
 
-    console.log("triggersResult:", triggersResult);
-
     // Extract triggers from step result using transform
     const triggers = transform({ triggersResult }, (data) => {
       return (data?.triggersResult as any)?.triggers || [];
@@ -58,7 +57,7 @@ export const validateNotificationTriggersByEventWorkflow = createWorkflow(
     // Add metadata about triggers found
     const finalResult = transform({ triggersResult, validationResult }, (data) => {
       const triggersFound = data.triggersResult.triggers.length
-      
+
       return {
         ...data.validationResult,
         triggers_found: triggersFound,

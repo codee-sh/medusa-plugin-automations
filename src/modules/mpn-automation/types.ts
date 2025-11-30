@@ -99,17 +99,6 @@ export const TRIGGER_TYPES = [
   }
 ]
 
-export const CHANNEL_TYPES = [
-  {
-    value: ChannelType.EMAIL,
-    label: "Email"
-  },
-  {
-    value: ChannelType.SLACK,
-    label: "Slack"
-  },
-]
-
 export const ACTION_TYPES = [
   {
     value: ActionType.EMAIL,

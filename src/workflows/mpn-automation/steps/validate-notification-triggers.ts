@@ -1,5 +1,5 @@
 import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
-import { areRulesValidForContext, NotificationRule } from "../utils/evaluate-rules"
+import { areRulesValidForContext, NotificationRule, NotificationAction } from "../utils/evaluate-rules"
 
 export interface ValidateNotificationTriggersStepInput {
   triggers: Array<{
@@ -15,6 +15,7 @@ export interface ValidateNotificationTriggersStepInput {
     channels: Record<string, boolean> | null
     metadata: Record<string, any> | null
     rules: NotificationRule[]
+    actions: NotificationAction[]
   }>
   context: Record<string, any>
 }
@@ -26,6 +27,8 @@ export interface ValidateNotificationTriggersStepOutput {
     trigger_id: string
     trigger_name: string
     rules_count: number
+    actions: NotificationAction[]
+    rules: NotificationRule[]
   }>
 }
 
@@ -51,6 +54,8 @@ export const validateNotificationTriggersStep = createStep(
     const results = triggers.map((trigger) => {
       // Check if all rules are satisfied
       const is_valid = areRulesValidForContext(trigger.rules || [], context)
+      console.log("trigger:", trigger);
+      console.log("context:", context);
 
       return {
         passed: is_valid,
@@ -58,6 +63,8 @@ export const validateNotificationTriggersStep = createStep(
         trigger_id: trigger.trigger_id,
         trigger_name: trigger.name,
         rules_count: trigger.rules?.length || 0,
+        actions: trigger.actions || [],
+        rules: trigger.rules || [],
       }
     })
 

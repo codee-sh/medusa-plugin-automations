@@ -30,6 +30,12 @@ export interface GetNotificationTriggersByEventStepOutput {
         metadata: Record<string, any> | null
       }>
     }>
+    actions: Array<{
+      id: string
+      action_type: string | null
+      config: Record<string, any> | null
+      metadata: Record<string, any> | null
+    }>
   }>
 }
 
@@ -65,6 +71,7 @@ export const getNotificationTriggersByEventStep = createStep(
         relations: [
           "rules",
           "rules.rule_values",
+          "actions",
         ],
       }
     )
@@ -93,6 +100,7 @@ export const getNotificationTriggersByEventStep = createStep(
             metadata: value.metadata as Record<string, any> | null,
           })),
         })),
+        actions: trigger.actions || [],
       })),
     })
   }
