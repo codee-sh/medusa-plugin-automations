@@ -3,21 +3,13 @@ import { Pencil } from "@medusajs/icons"
 import { useState, useEffect } from "react"
 import { useForm, FieldErrors } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useQueryClient } from "@tanstack/react-query"
 import { useEditAutomation } from "../../../../hooks/api/automations"
 import { useListAutomations } from "../../../../hooks/api/automations"
-import { useQueryClient } from "@tanstack/react-query"
-import { AutomationsEditGeneralForm } from "../automations-edit-general-form"
-import { AutomationFormValues } from "../types"
+import { AutomationsGeneralForm } from "../automations-general-form"
+import { AutomationFormValues, Tab, TabState } from "../types"
 import { automationFormSchema } from "../constants"
 import { ChannelType } from "../../types"
-
-enum Tab {
-  GENERAL = "general",
-  RULES = "rules",
-  ACTIONS = "actions",
-}
-
-type TabState = Record<Tab, ProgressStatus>
 
 export function AutomationsEditForm({ id }: { id: string }) {
   const [open, setOpen] = useState(false)
@@ -27,7 +19,6 @@ export function AutomationsEditForm({ id }: { id: string }) {
     [Tab.RULES]: "not-started",
     [Tab.ACTIONS]: "not-started",
   })
-
   const [buttonText, setButtonText] = useState<string>("")
 
   useEffect(() => {
@@ -184,7 +175,7 @@ export function AutomationsEditForm({ id }: { id: string }) {
             <div className="p-6">Loading...</div>
           ) : (
             <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-              {tab === Tab.GENERAL && <AutomationsEditGeneralForm form={form} />}
+              {tab === Tab.GENERAL && <AutomationsGeneralForm form={form} />}
             </form>
           )}
         </FocusModal.Body>

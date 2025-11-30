@@ -3,19 +3,12 @@ import { Plus } from "@medusajs/icons"
 import { useState, useEffect } from "react"
 import { FieldValues, useForm, FieldErrors } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useQueryClient } from "@tanstack/react-query"
 import { useCreateAutomation } from "../../../../hooks/api/automations"
-import { AutomationsCreateGeneralForm } from "../automations-create-general-form"
-import { AutomationFormValues } from "../types"
+import { AutomationsGeneralForm } from "../automations-general-form"
+import { AutomationFormValues, Tab, TabState } from "../types"
 import { automationFormSchema } from "../constants"
 import { ChannelType } from "../../types"
-
-enum Tab {
-  GENERAL = "general",
-  RULES = "rules",
-  ACTIONS = "actions",
-}
-
-type TabState = Record<Tab, ProgressStatus>
 
 export function AutomationsCreateForm() {
   const [open, setOpen] = useState(false) 
@@ -25,7 +18,6 @@ export function AutomationsCreateForm() {
     [Tab.RULES]: "not-started",
     [Tab.ACTIONS]: "not-started",
   })  
-
   const [buttonText, setButtonText] = useState<string>("")
 
   useEffect(() => {
@@ -38,7 +30,9 @@ export function AutomationsCreateForm() {
     }
   }, [tab])
 
-  const { isPending: isCreateAutomationPending } = useCreateAutomation()
+  const queryClient = useQueryClient()
+
+  const { mutateAsync: createAutomation, isPending: isCreateAutomationPending } = useCreateAutomation()
 
   const form = useForm<AutomationFormValues>({
     resolver: zodResolver(automationFormSchema),
@@ -58,8 +52,25 @@ export function AutomationsCreateForm() {
     },
   })
 
-  function handleSubmit(data: FieldValues) {
-    console.log(data)
+  async function handleSubmit(data: FieldValues) {
+    if (Tab.GENERAL === tab) {
+      const items = {
+        name: data.general.name,
+        description: data.general.description,
+        trigger_type: data.general.trigger_type,
+        event_name: data.general.event_name,
+        interval_minutes: data.general.interval_minutes,
+        active: data.general.active,
+        channels: data.general.channels,
+      }
+
+      await createAutomation({
+        items: [items],
+      })
+
+      queryClient.invalidateQueries({ queryKey: ["automations"] })
+      setOpen(false)
+    }
   }
 
   const handleError = async (errors: FieldErrors) => {
@@ -145,16 +156,16 @@ export function AutomationsCreateForm() {
           >       
 
             <ProgressTabs.List className="justify-start-start flex w-full items-center">
-              <ProgressTabs.Trigger value="general" status={tabState[Tab.GENERAL]}>General</ProgressTabs.Trigger>
-              <ProgressTabs.Trigger value="rules" status={tabState[Tab.RULES]}>Rules</ProgressTabs.Trigger>
-              <ProgressTabs.Trigger value="actions" status={tabState[Tab.ACTIONS]}>Actions</ProgressTabs.Trigger>
+              <ProgressTabs.Trigger value="general" status={tabState[Tab.GENERAL]} onClick={() => handleTabChange(Tab.GENERAL)}>General</ProgressTabs.Trigger>
+              <ProgressTabs.Trigger value="rules" status={tabState[Tab.RULES]} onClick={() => handleTabChange(Tab.RULES)}>Rules</ProgressTabs.Trigger>
+              <ProgressTabs.Trigger value="actions" status={tabState[Tab.ACTIONS]} onClick={() => handleTabChange(Tab.ACTIONS)}>Actions</ProgressTabs.Trigger>
             </ProgressTabs.List>
           </ProgressTabs>
           </div>
         </FocusModal.Header>
           <FocusModal.Body className="w-full overflow-y-auto">
             <form onSubmit={form.handleSubmit(handleSubmit, handleError)}>
-              <AutomationsCreateGeneralForm form={form} />
+              <AutomationsGeneralForm form={form} />
             </form>
           </FocusModal.Body>
           <FocusModal.Footer>

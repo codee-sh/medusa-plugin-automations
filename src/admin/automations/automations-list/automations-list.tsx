@@ -7,7 +7,8 @@ import {
   createDataTableColumnHelper,
   DataTablePaginationState,
   Tooltip,
-  Badge
+  Badge,
+  Divider
 } from "@medusajs/ui"
 import { useListAutomations } from "../../../hooks/api/automations"
 import { useState, useMemo } from "react"
@@ -35,15 +36,20 @@ export const AutomationsList = () => {
 
   const columns = [
     columnHelper.accessor("to", {
-      header: "Name",
+      header: "Name and description",
       cell: ({ row }) => {
         const tooltip = `Device (DB) ID: \n ${row?.original?.id}`
         return <>
-          <div className="flex items-center gap-2">
-            <span>{row?.original?.name}</span>
-            <Tooltip content={<div dangerouslySetInnerHTML={{ __html: tooltip }} />} maxWidth={400}>
-              <InformationCircleSolid />
-            </Tooltip>
+          <div className="py-2">
+            <div className="flex items-center gap-2 mb-2">
+              <span>{row?.original?.name}</span>
+              <Tooltip content={<div dangerouslySetInnerHTML={{ __html: tooltip }} />} maxWidth={400}>
+                <InformationCircleSolid />
+              </Tooltip>
+            </div>
+            <div className="min-w-[180px] whitespace-normal text-xs">
+              <span>{row?.original?.description}</span>
+            </div>
           </div>
         </>
       },

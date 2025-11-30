@@ -1,12 +1,12 @@
 import { MedusaStoreRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
 import { z } from "zod"
-import { editAutomationWorkflow, EditAutomationWorkflowInput } from "../../../../workflows/mpn-automation"
+import { editAutomationWorkflow, CreateAutomationWorkflowInput, EditAutomationWorkflowInput, createAutomationWorkflow } from "../../../../workflows/mpn-automation"
 
 export const PostAutomationSchema = z.object({
-  id: z.string(),
+  id: z.string().optional(),
   items: z.array(z.object({
-    id: z.string(),
+    id: z.string().optional(),
     name: z.string(),
   })),
 });
@@ -28,17 +28,15 @@ export async function POST(
       automation: automation,
     });
   } else {
-    // const { result: device } = await createDeviceWorkflow(
-    //   req.scope
-    // ).run({
-    //   input: {
-    //     device: req.body,
-    //   },
-    // });
+    const { result: automation } = await createAutomationWorkflow(
+      req.scope
+    ).run({
+      input: req.body as CreateAutomationWorkflowInput
+    });
 
-    // res.json({
-    //   device: device,
-    // });
+    res.json({
+      automation: automation,
+    });
   }
 }
 

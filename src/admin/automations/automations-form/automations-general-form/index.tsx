@@ -2,7 +2,7 @@ import { Input, Label, Select, Checkbox } from "@medusajs/ui"
 import { TRIGGER_TYPES, ALL_EVENTS, CHANNEL_TYPES } from "../../types"
 import { Controller } from "react-hook-form"
   
-export function AutomationsEditGeneralForm({ form }: { form: any }) {
+export function AutomationsGeneralForm({ form }: { form: any }) {
   return (
     <div className="w-full">
       <div className="p-6 max-w-2xl mx-auto">
