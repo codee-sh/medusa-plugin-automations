@@ -3,15 +3,15 @@ import { editAutomationActionsStep } from "./steps/edit-automation-actions"
 import { NotificationAction } from "../../modules/mpn-automation/interfaces"
 
 export type EditAutomationActionsWorkflowInput = {
-  trigger_id: string
+  triggerId: string
   actions: NotificationAction[]
 }
 
 export const editAutomationActionsWorkflow = createWorkflow(
   "edit-automation-actions",
-  ({ trigger_id, actions }: EditAutomationActionsWorkflowInput) => {
+  ({ triggerId, actions }: EditAutomationActionsWorkflowInput) => {
     const automationActions = editAutomationActionsStep({
-      trigger_id: trigger_id,
+      trigger_id: triggerId,
       actions: actions,
     })
 

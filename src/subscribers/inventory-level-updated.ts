@@ -3,7 +3,7 @@ import {
   type SubscriberConfig,
 } from "@medusajs/medusa"
 import { getInventoryLevelByIdWorkflow } from "../workflows/inventory/get-inventory-level-by-id"
-import { executeAutomationWorkflow } from "../workflows/mpn-automation"
+import { runAutomationWorkflow } from "../workflows/mpn-automation/run-automation"
 import { TriggerType } from "../utils/types"
   
 const eventName = "inventory.inventory-level.updated"
@@ -23,29 +23,29 @@ export default async function inventoryLevelUpdatedHandler({
     inventory_level: inventory_level,
   }
 
-  // Execute automation workflow - this will:
+  // Run automation workflow - this will:
   // 1. Retrieve triggers for the event
   // 2. Validate triggers against context
   // 3. Execute actions for validated triggers
-  const { result } = await executeAutomationWorkflow(container).run({
+  const { result } = await runAutomationWorkflow(container).run({
     input: {
-      event_name: eventName,
-      event_type: TriggerType.EVENT,
+      eventName: eventName,
+      eventType: TriggerType.EVENT,
       context: contextData,
     }
   })
 
-  console.log("Automation execution results:", {
-    triggers_found: result.triggers_found,
-    triggers_validated: result.triggers_validated,
-    triggers_executed: result.triggers_executed,
-    total_actions_executed: result.total_actions_executed,
+  console.log("[Automation] Execution results:", {
+    triggersFound: result.triggersFound,
+    triggersValidated: result.triggersValidated,
+    triggersExecuted: result.triggersExecuted,
+    totalActionsExecuted: result.totalActionsExecuted,
   })
 
   // Log details for each trigger
-  result.results.forEach((triggerResult) => {
-    if (triggerResult.is_valid && triggerResult.actions_executed > 0) {
-      console.log(`Trigger "${triggerResult.trigger_name}" executed ${triggerResult.actions_executed} actions`)
+  result.actionsExecuted.forEach((actionResult) => {
+    if (actionResult.isValid && actionResult.actionsExecuted > 0) {
+      console.log(`[Automation] Trigger "${actionResult.triggerId}" executed ${actionResult.actionsExecuted} actions`)
     }
   })
 }

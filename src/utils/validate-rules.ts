@@ -2,9 +2,9 @@ import { pickValueFromObject, MathBN, isString } from "@medusajs/framework/utils
 import { NotificationRule } from '../modules/mpn-automation/interfaces'
 
 /**
- * Evaluates a single rule value condition based on operator
+ * Validates a single rule value condition based on operator
  */
-export function evaluateRuleValueCondition(
+export function validateRuleValueCondition(
   ruleValues: string[],
   operator: string,
   ruleValuesToCheck: (string | number)[] | (string | number)
@@ -21,7 +21,7 @@ export function evaluateRuleValueCondition(
   // Check if any value is undefined or null - this prevents bugs where attribute path is wrong
   const hasInvalidValues = valuesToCheck.some((val) => val === undefined || val === null)
   if (hasInvalidValues) {
-    console.warn("Rule evaluation failed: valuesToCheck contains undefined or null values", {
+    console.warn("Rule validation failed: valuesToCheck contains undefined or null values", {
       valuesToCheck,
       ruleValues,
       operator,
@@ -64,9 +64,9 @@ export function evaluateRuleValueCondition(
 }
 
 /**
- * Checks if rules are valid for the given context (inventory level data)
+ * Validates rules for the given context.
  */
-export function areRulesValidForContext(
+export function validateRulesForContext(
   rules: NotificationRule[],
   context: Record<string, any>
 ): boolean {
@@ -102,7 +102,7 @@ export function areRulesValidForContext(
       contextKeys: Object.keys(context),
     })
 
-    return evaluateRuleValueCondition(
+    return validateRuleValueCondition(
       validRuleValues,
       rule.operator,
       valuesToCheck

@@ -1,3 +1,3 @@
 export * from "./plugins";
-export * from "./evaluate-rules";
+export * from "./validate-rules";
 export * from "./types";

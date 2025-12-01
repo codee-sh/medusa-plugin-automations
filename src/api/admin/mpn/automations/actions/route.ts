@@ -22,7 +22,10 @@ export async function POST(
     const { result } = await editAutomationActionsWorkflow(
       req.scope
     ).run({
-      input: req.body as any
+      input: {
+        triggerId: req.body.trigger_id,
+        actions: req.body.actions || [],
+      }
     });
 
     res.json({

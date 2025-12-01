@@ -13,8 +13,6 @@ export const editAutomationRulesStep = createStep(
   async ({ trigger_id, rules }: EditAutomationRulesStepInput, { container }) => {
     const mpnAutomationService: MpnAutomationService = container.resolve(MPN_AUTOMATION_MODULE)
 
-    // console.log("editAutomationRulesStep", { trigger_id, rules })
-
     // Get existing rules for this trigger
     const existingRules = await mpnAutomationService.listMpnAutomationRules(
       {

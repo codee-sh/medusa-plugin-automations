@@ -12,8 +12,6 @@ export const editAutomationStep = createStep(
   async ({ items }: EditAutomationStepInput, { container }) => {
     const mpnAutomationService: MpnAutomationService = container.resolve(MPN_AUTOMATION_MODULE)
 
-    // console.log("editAutomationStep", items)
-
     const automation = await mpnAutomationService.updateMpnAutomationTriggers(
       items.map((item) => ({
         id: item.id,

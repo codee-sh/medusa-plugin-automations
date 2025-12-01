@@ -13,8 +13,6 @@ export const editAutomationActionsStep = createStep(
   async ({ trigger_id, actions }: EditAutomationActionsStepInput, { container }) => {
     const mpnAutomationService: MpnAutomationService = container.resolve(MPN_AUTOMATION_MODULE)
 
-    // console.log("editAutomationActionsStep", { trigger_id, actions })
-    
     // Get existing actions for this trigger
     const existingActions = await mpnAutomationService.listMpnAutomationActions(
       {
