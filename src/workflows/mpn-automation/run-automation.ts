@@ -2,6 +2,7 @@ import { createWorkflow, WorkflowData, WorkflowResponse, transform } from "@medu
 import { validateAutomationTriggersByEventWorkflow } from "./validate-automation-triggers-by-event"
 import { runAutomationActionsStep } from "./steps/run-automation-actions"
 import { TriggerType } from "../../utils/types"
+import { logStep } from "../../workflows/steps/log-step"
 
 export interface RunAutomationWorkflowInput {
   eventName: string
@@ -100,6 +101,8 @@ export const runAutomationWorkflow = createWorkflow(
         actionsExecuted: actionsExecuted,
       }
     })
+
+    logStep(finalResult)
 
     return new WorkflowResponse(finalResult)
   }

@@ -34,20 +34,6 @@ export default async function inventoryLevelUpdatedHandler({
       context: contextData,
     }
   })
-
-  console.log("[Automation] Execution results:", {
-    triggersFound: result.triggersFound,
-    triggersValidated: result.triggersValidated,
-    triggersExecuted: result.triggersExecuted,
-    totalActionsExecuted: result.totalActionsExecuted,
-  })
-
-  // Log details for each trigger
-  result.actionsExecuted.forEach((actionResult) => {
-    if (actionResult.isValid && actionResult.actionsExecuted > 0) {
-      console.log(`[Automation] Trigger "${actionResult.triggerId}" executed ${actionResult.actionsExecuted} actions`)
-    }
-  })
 }
 
 export const config: SubscriberConfig = {
