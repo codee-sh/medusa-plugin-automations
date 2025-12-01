@@ -1,32 +1,16 @@
 import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
-import { areRulesValidForContext, NotificationRule, NotificationAction } from "../utils/evaluate-rules"
+import { areRulesValidForContext } from "../../../utils/evaluate-rules"
+import { NotificationRule, NotificationAction, NotificationTrigger } from '../../../modules/mpn-automation/interfaces'
 
 export interface ValidateNotificationTriggersStepInput {
-  triggers: Array<{
-    id: string
-    trigger_id: string
-    name: string
-    description: string | null
-    trigger_type: "event" | "schedule" | "manual"
-    event_name: string | null
-    interval_minutes: number | null
-    last_run_at: Date | null
-    active: boolean
-    channels: Record<string, boolean> | null
-    metadata: Record<string, any> | null
-    rules: NotificationRule[]
-    actions: NotificationAction[]
-  }>
+  triggers: NotificationTrigger[]
   context: Record<string, any>
 }
 
 export interface ValidateNotificationTriggersStepOutput {
   results: Array<{
-    passed: boolean
     is_valid: boolean
-    trigger_id: string
-    trigger_name: string
-    rules_count: number
+    trigger: NotificationTrigger
     actions: NotificationAction[]
     rules: NotificationRule[]
   }>
@@ -56,11 +40,8 @@ export const validateNotificationTriggersStep = createStep(
       const is_valid = areRulesValidForContext(trigger.rules || [], context)
 
       return {
-        passed: is_valid,
         is_valid,
-        trigger_id: trigger.trigger_id,
-        trigger_name: trigger.name,
-        rules_count: trigger.rules?.length || 0,
+        trigger: trigger,
         actions: trigger.actions || [],
         rules: trigger.rules || [],
       }

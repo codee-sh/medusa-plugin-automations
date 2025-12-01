@@ -30,15 +30,6 @@ export enum TriggerType {
   MANUAL = "manual"
 }
 
-export enum ChannelType {
-  EMAIL = "email",
-  SMS = "sms",
-  PUSH = "push",
-  IN_APP = "in_app",
-  SLACK = "slack",
-  ADMIN = "admin"
-}
-
 export enum ActionType {
   EMAIL = "email",
   SMS = "sms",

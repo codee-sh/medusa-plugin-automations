@@ -1,23 +1,9 @@
 import { createWorkflow, WorkflowData, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
-import type { InventoryTypes } from "@medusajs/framework/types"
 import { evaluateNotificationRulesStep } from "./steps/evaluate-notification-rules"
-import { NotificationRule } from "./utils/evaluate-rules"
+import { NotificationTrigger } from "../../modules/mpn-automation/interfaces"
 
 export interface EvaluateNotificationRulesWorkflowInput {
-  trigger: {
-    id: string
-    trigger_id: string
-    name: string
-    description: string | null
-    trigger_type: "event" | "schedule" | "manual"
-    event_name: string | null
-    interval_minutes: number | null
-    last_run_at: Date | null
-    active: boolean
-    channels: Record<string, boolean> | null
-    metadata: Record<string, any> | null
-    rules: NotificationRule[]
-  }
+  trigger: NotificationTrigger
   context: Record<string, any>
 }
 

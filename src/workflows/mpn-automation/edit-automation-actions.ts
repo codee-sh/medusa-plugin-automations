@@ -1,13 +1,10 @@
 import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
 import { editAutomationActionsStep } from "./steps/edit-automation-actions"
+import { NotificationAction } from "../../modules/mpn-automation/interfaces"
 
 export type EditAutomationActionsWorkflowInput = {
   trigger_id: string
-  actions: {
-    id?: string
-    action_type?: string
-    config?: Record<string, any> | null
-  }[]
+  actions: NotificationAction[]
 }
 
 export const editAutomationActionsWorkflow = createWorkflow(

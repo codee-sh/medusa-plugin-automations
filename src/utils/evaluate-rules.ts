@@ -1,17 +1,5 @@
 import { pickValueFromObject, MathBN, isString } from "@medusajs/framework/utils"
-
-export interface NotificationRule {
-  id: string
-  attribute: string
-  operator: string
-  description: string | null
-  metadata: Record<string, any> | null
-  rule_values: Array<{
-    id: string
-    value: string | null
-    metadata: Record<string, any> | null
-  }>
-}
+import { NotificationRule } from '../modules/mpn-automation/interfaces'
 
 /**
  * Evaluates a single rule value condition based on operator

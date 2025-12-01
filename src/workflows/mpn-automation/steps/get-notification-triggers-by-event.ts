@@ -1,42 +1,19 @@
 import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
 import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
 import type MpnAutomationService from "../../../modules/mpn-automation/services/service"
+import { NotificationTrigger, TriggerType } from "../../../utils/types"
 
 export interface GetNotificationTriggersByEventStepInput {
   event_name: string
+  event_type: TriggerType
+}
+
+export interface GetNotificationTriggerResponse {
+  trigger: NotificationTrigger
 }
 
 export interface GetNotificationTriggersByEventStepOutput {
-  triggers: Array<{
-    id: string
-    name: string
-    description: string | null
-    trigger_type: "event" | "schedule" | "manual"
-    event_name: string | null
-    interval_minutes: number | null
-    last_run_at: Date | null
-    active: boolean
-    channels: Record<string, boolean> | null
-    metadata: Record<string, any> | null
-    rules: Array<{
-      id: string
-      attribute: string
-      operator: string
-      description: string | null
-      metadata: Record<string, any> | null
-      rule_values: Array<{
-        id: string
-        value: string | null
-        metadata: Record<string, any> | null
-      }>
-    }>
-    actions: Array<{
-      id: string
-      action_type: string | null
-      config: Record<string, any> | null
-      metadata: Record<string, any> | null
-    }>
-  }>
+  triggers: NotificationTrigger[]
 }
 
 export const getNotificationTriggersByEventStepId = "get-notification-triggers-by-event"
@@ -46,7 +23,8 @@ export const getNotificationTriggersByEventStepId = "get-notification-triggers-b
  * 
  * @example
  * const data = getNotificationTriggersByEventStep({
- *   event_name: "inventory.inventory-level.updated"
+ *   event_name: "inventory.inventory-level.updated",
+ *   event_type: TriggerType.EVENT
  * })
  */
 export const getNotificationTriggersByEventStep = createStep(
@@ -60,11 +38,11 @@ export const getNotificationTriggersByEventStep = createStep(
       MPN_AUTOMATION_MODULE
     )
 
-    // Retrieve triggers for the given event that are active and have type "event"
+    // Retrieve triggers for the given event that are active and have the specified type
     const triggers = await automationService.listMpnAutomationTriggers(
       {
         event_name: input.event_name,
-        trigger_type: "event",
+        trigger_type: input.event_type,
         active: true,
       },
       {
@@ -81,7 +59,7 @@ export const getNotificationTriggersByEventStep = createStep(
         id: trigger.id,
         name: trigger.name,
         description: trigger.description,
-        trigger_type: trigger.trigger_type,
+        trigger_type: trigger.trigger_type as TriggerType,
         event_name: trigger.event_name,
         interval_minutes: trigger.interval_minutes,
         last_run_at: trigger.last_run_at,
@@ -100,7 +78,11 @@ export const getNotificationTriggersByEventStep = createStep(
             metadata: value.metadata as Record<string, any> | null,
           })),
         })),
-        actions: trigger.actions || [],
+        actions: (trigger.actions || []).map((action) => ({
+          id: action.id,
+          action_type: action.action_type,
+          config: action.config
+        })),
       })),
     })
   }

@@ -1,16 +1,9 @@
 import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
 import { createAutomationStep } from "./steps/create-automation"
+import { NotificationTrigger } from "../../modules/mpn-automation/interfaces"
 
 export type CreateAutomationWorkflowInput = {
-  items: {
-    name: string
-    description: string
-    trigger_type: "event" | "schedule" | "manual"
-    event_name: string
-    interval_minutes: number
-    active: boolean
-    channels: Record<string, boolean>
-  }[]
+  items: NotificationTrigger[]
 }
 
 export const createAutomationWorkflow = createWorkflow(

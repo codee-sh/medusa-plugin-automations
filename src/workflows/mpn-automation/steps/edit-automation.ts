@@ -1,18 +1,10 @@
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
 import MpnAutomationService from "../../../modules/mpn-automation/services/service"
 import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
+import { NotificationTrigger } from '../../../modules/mpn-automation/interfaces'
 
 type EditAutomationStepInput = {
-  items: {
-    id: string
-    name: string
-    description: string
-    trigger_type: "event" | "schedule" | "manual"
-    event_name: string
-    interval_minutes: number
-    active: boolean
-    channels: Record<string, boolean>
-  }[]
+  items: NotificationTrigger[]
 }
 
 export const editAutomationStep = createStep(
@@ -20,7 +12,7 @@ export const editAutomationStep = createStep(
   async ({ items }: EditAutomationStepInput, { container }) => {
     const mpnAutomationService: MpnAutomationService = container.resolve(MPN_AUTOMATION_MODULE)
 
-    console.log("editAutomationStep", items)
+    // console.log("editAutomationStep", items)
 
     const automation = await mpnAutomationService.updateMpnAutomationTriggers(
       items.map((item) => ({
