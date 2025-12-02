@@ -1,6 +1,6 @@
 # Configuration Documentation
 
-Complete guide to configuring the `@codee-sh/medusa-plugin-notification` plugin.
+Complete guide to configuring the `@codee-sh/medusa-plugin-automations` plugin.
 
 ## Plugin Registration
 
@@ -10,7 +10,7 @@ Register the plugin in your `medusa-config.ts`:
 module.exports = defineConfig({
   plugins: [
     {
-      resolve: "@codee-sh/medusa-plugin-notification",
+      resolve: "@codee-sh/medusa-plugin-automations",
       options: {
         // Plugin options here
         ruleAttributes: [
@@ -33,12 +33,12 @@ Add custom rule attributes to extend the available conditions for automation rul
 **Example**:
 
 ```typescript
-import type { RuleAttribute } from "@codee-sh/medusa-plugin-notification/modules/mpn-automation/rules/types"
+import type { RuleAttribute } from "@codee-sh/medusa-plugin-automations/modules/mpn-automation/rules/types"
 
 module.exports = defineConfig({
   plugins: [
     {
-      resolve: "@codee-sh/medusa-plugin-notification",
+      resolve: "@codee-sh/medusa-plugin-automations",
       options: {
         ruleAttributes: [
           {
@@ -150,7 +150,7 @@ import {
   SubscriberArgs,
   type SubscriberConfig,
 } from "@medusajs/medusa"
-import { validateNotificationTriggersByEventWorkflow } from "@codee-sh/medusa-plugin-notification/workflows/mpn-automation/validate-notification-triggers-by-event"
+import { validateNotificationTriggersByEventWorkflow } from "@codee-sh/medusa-plugin-automations/workflows/mpn-automation/validate-notification-triggers-by-event"
 
 export default async function customEventHandler({
   event: { data },
@@ -211,7 +211,7 @@ Rule attributes define what data can be used in automation conditions. The plugi
 Add custom rule attributes via plugin options:
 
 ```typescript
-import type { RuleAttribute } from "@codee-sh/medusa-plugin-notification/modules/mpn-automation/rules/types"
+import type { RuleAttribute } from "@codee-sh/medusa-plugin-automations/modules/mpn-automation/rules/types"
 
 const customAttributes: RuleAttribute[] = [
   {
@@ -227,7 +227,7 @@ const customAttributes: RuleAttribute[] = [
 module.exports = defineConfig({
   plugins: [
     {
-      resolve: "@codee-sh/medusa-plugin-notification",
+      resolve: "@codee-sh/medusa-plugin-automations",
       options: {
         ruleAttributes: customAttributes
       }
@@ -245,7 +245,7 @@ The plugin exports workflows for managing automations:
 Creates or updates an automation.
 
 ```typescript
-import { editAutomationWorkflow } from "@codee-sh/medusa-plugin-notification/workflows/mpn-automation/edit-automation"
+import { editAutomationWorkflow } from "@codee-sh/medusa-plugin-automations/workflows/mpn-automation/edit-automation"
 
 const { result } = await editAutomationWorkflow(container).run({
   input: {
@@ -263,7 +263,7 @@ const { result } = await editAutomationWorkflow(container).run({
 ## Complete Configuration Example
 
 ```typescript
-import type { RuleAttribute } from "@codee-sh/medusa-plugin-notification/modules/mpn-automation/rules/types"
+import type { RuleAttribute } from "@codee-sh/medusa-plugin-automations/modules/mpn-automation/rules/types"
 
 const customRuleAttributes: RuleAttribute[] = [
   {
@@ -279,7 +279,7 @@ const customRuleAttributes: RuleAttribute[] = [
 module.exports = defineConfig({
   plugins: [
     {
-      resolve: "@codee-sh/medusa-plugin-notification",
+      resolve: "@codee-sh/medusa-plugin-automations",
       options: {
         ruleAttributes: customRuleAttributes
       }

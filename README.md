@@ -87,13 +87,13 @@ Access the automations management interface in Medusa Admin at `/app/notificatio
 
 The plugin exports the following:
 
-- `@codee-sh/medusa-plugin-notification/workflows` - Workflow functions for automation management
-- `@codee-sh/medusa-plugin-notification/modules/mpn-automation` - Automation module service
-- `@codee-sh/medusa-plugin-notification/utils` - Utility functions
+- `@codee-sh/medusa-plugin-automations/workflows` - Workflow functions for automation management
+- `@codee-sh/medusa-plugin-automations/modules/mpn-automation` - Automation module service
+- `@codee-sh/medusa-plugin-automations/utils` - Utility functions
 
 ## Related Plugins
 
-For email templates and rendering functionality, see [@codee-sh/medusa-plugin-notification-emails](https://github.com/codee-sh/medusa-plugin-notification-emails).
+For email templates and rendering functionality, see [@codee-sh/medusa-plugin-automations-emails](https://github.com/codee-sh/medusa-plugin-notification-emails).
 
 ## License
 
