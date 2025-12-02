@@ -2,7 +2,7 @@ import React from "react"
 import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
 import { renderTemplate } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
-import { getPluginOptions } from "@codee-sh/medusa-plugin-notification/utils/plugins"
+import { getPluginOptions } from "@codee-sh/medusa-plugin-automations/utils/plugins"
 import type { TemplateData, TemplateOptionsType } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
 
 export interface SendEmailConfig {
