@@ -8,6 +8,15 @@ import { TriggerType } from "../utils/types"
   
 const eventName = "inventory.inventory-level.updated"
 
+/**
+ * Subscriber that runs the automation workflow for the inventory level updated event.
+ *
+ * This subscriber is triggered when an inventory level is updated.
+ * It runs the automation workflow.
+ *
+ * @param event - The event data containing the inventory level ID.
+ * @param container - The container instance.
+ */
 export default async function inventoryLevelUpdatedHandler({
   event: { data: { id } },
   container,

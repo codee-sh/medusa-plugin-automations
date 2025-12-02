@@ -1,77 +1,49 @@
-import {
-    SubscriberArgs,
-    type SubscriberConfig,
-  } from "@medusajs/medusa"
-  import { Modules, ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
-  import { getPluginOptions } from "@codee-sh/medusa-plugin-notification/utils/plugins"
-  import { renderTemplate } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
-  import { TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification-emails/templates/emails/types"
+import { SubscriberArgs, type SubscriberConfig } from "@medusajs/medusa";
+import { sendEmailActionWorkflow } from "../workflows/mpn-automation/send-email-action";
 
-  export default async function mpnAutomationActionEmailExecutedHandler({
-    event: { data: data },
-    container,
-  }: SubscriberArgs<any>) {
-    const pluginOptions = getPluginOptions(container, "@codee-sh/medusa-plugin-notification-emails")
-  
-    const notificationModuleService = container.resolve(
-      Modules.NOTIFICATION
-    )
-    const query = container.resolve(ContainerRegistrationKeys.QUERY)
-    const triggerType = 'system'
+/**
+ * Event name for the MPN automation action email executed event.
+ */
+const eventName = "mpn.automation.action.email.executed"
 
-    const { action, context } = data
-    const { inventory_level } = context
+/**
+ * Subscriber that runs the email action workflow for the MPN automation system.
+ *
+ * This subscriber is triggered when an email action is executed by the MPN automation system.
+ * It runs the email action workflow to send an email notification.
+ *
+ * @param event - The event data containing the action and context.
+ * @param container - The container instance.
+ */
+export default async function mpnAutomationActionEmailExecutedHandler({
+  event: { data },
+  container,
+}: SubscriberArgs<any>) {
+  const { action, context, eventName } = data;
 
-    if (inventory_level) {
-      const templateName = TEMPLATES_NAMES.INVENTORY_LEVEL
-
-      const templateData = {
-        inventory_level: {
-          id: inventory_level.id,
-          location_id: inventory_level.location_id,
-          stocked_quantity: inventory_level.stocked_quantity,
-          reserved_quantity: inventory_level.reserved_quantity,
-          available_quantity: inventory_level.available_quantity,
+  // Execute email action workflow
+  const { result } = await sendEmailActionWorkflow(container).run({
+    input: {
+      action: {
+        ...action,
+        config: {
+          ...action.config,
+          templateName: action?.config?.templateName ?? "inventory-level",
+          to: action?.config?.to ?? "chris@iamcodee.co",
+          locale: action?.config?.locale ?? "pl",
+          subject: action?.config?.subject ?? "Inventory Level Updated",
         },
-        location: {
-          id: inventory_level.location_id,
-          name: 'Test Location',
-        },
-        inventory_item: {
-          id: inventory_level.inventory_item?.id,
-          title: inventory_level.inventory_item?.title,
-          sku: inventory_level.inventory_item?.sku,
-          origin_country: inventory_level.inventory_item?.origin_country,
-        },
-      }
+      },
+      context: context,
+      eventName: eventName,
+    },
+  });
 
-      const { html, text, subject } = await renderTemplate(
-        templateName,
-        templateData,
-        { 
-          locale: "pl",
-          customTranslations: pluginOptions?.customTranslations?.[templateName]
-        }
-      )
-
-      const notificationResult = await notificationModuleService.createNotifications({
-        to: 'chris@iamcodee.co',
-        channel: "email",
-        template: "inventory-level-updated",
-        trigger_type: triggerType,
-        resource_id: 'action_id',
-        resource_type: "mpn.automation.action.email",
-        data: context,
-        content: {
-          subject: 'Low stock alert',
-          html: html,
-          text: text,
-        },
-      })   
-    } 
+  if (!result.success) {
+    console.error(`Failed to send email action ${action?.id}:`, result.error);
   }
-  
-  export const config: SubscriberConfig = {
-    event: "mpn.automation.action.email.executed",
-  }
-  
+}
+
+export const config: SubscriberConfig = {
+  event: eventName,
+};

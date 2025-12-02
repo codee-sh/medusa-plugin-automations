@@ -91,6 +91,7 @@ export const runAutomationActionsStep = createStep(
               await eventBusService.emit({
                 name: eventName,
                 data: {
+                  eventName: eventName,
                   action: action,
                   triggerId: result.trigger.id || result.trigger.trigger_id,
                   context: context,
