@@ -1,4 +1,4 @@
-# Medusa plugin notification
+# Medusa plugin automations
 
 A comprehensive notification automation plugin for Medusa v2 that provides a flexible rule-based notification system with triggers, conditions, and actions. Create automated notifications based on events, schedules, or manual triggers with customizable rules.
 
@@ -20,9 +20,9 @@ A comprehensive notification automation plugin for Medusa v2 that provides a fle
 ## Installation
 
 ```bash
-npm install @codee-sh/medusa-plugin-notification
+npm install @codee-sh/medusa-plugin-automations
 # or
-yarn add @codee-sh/medusa-plugin-notification
+yarn add @codee-sh/medusa-plugin-automations
 ```
 
 ## Quick Start
@@ -34,7 +34,7 @@ Add to your `medusa-config.ts`:
 ```typescript
 module.exports = defineConfig({
   plugins: [
-    "@codee-sh/medusa-plugin-notification"
+    "@codee-sh/medusa-plugin-automations"
   ]
 })
 ```

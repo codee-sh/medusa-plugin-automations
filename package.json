@@ -1,8 +1,8 @@
 {
-  "name": "@codee-sh/medusa-plugin-notification",
-  "version": "1.0.6",
-  "description": "Medusa plugin for notifications.",
-  "author": "Codee Team (https://codee.dev)",
+  "name": "@codee-sh/medusa-plugin-automations",
+  "version": "1.0.0",
+  "description": "Medusa plugin for automations.",
+  "author": "Codee (https://codee.dev)",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -17,6 +17,7 @@
     "./modules/*": "./.medusa/server/src/modules/*/index.js",
     "./providers/*": "./.medusa/server/src/providers/*/index.js",
     "./utils": "./.medusa/server/src/utils/index.js",
+    "./utils/types": "./.medusa/server/src/types/index.js",
     "./*": "./.medusa/server/src/*.js",
     "./admin": {
       "import": "./.medusa/server/src/admin/index.mjs",
@@ -27,7 +28,7 @@
   "keywords": [
     "medusa",
     "plugin",
-    "medusa-plugin-notification",
+    "medusa-plugin-automations",
     "medusa-plugin",
     "medusa-v2"
   ],
