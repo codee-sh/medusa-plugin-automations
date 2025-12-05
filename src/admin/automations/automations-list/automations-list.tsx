@@ -54,12 +54,6 @@ export const AutomationsList = () => {
         </>
       },
     }),
-    // columnHelper.accessor("description", {
-    //   header: "Description",
-    //   cell: ({ row }) => {
-    //     return <span>{row?.original?.description}</span>
-    //   },
-    // }),
     columnHelper.accessor("trigger_type", {
       header: "Trigger Type",
       cell: ({ row }) => {
@@ -149,7 +143,7 @@ export const AutomationsList = () => {
         <DataTable.Toolbar 
           className="flex items-start justify-between gap-2 md:flex-row md:items-center"
         >
-          <Heading level="h2">Automations - list</Heading>
+          <Heading level="h2">List of automations</Heading>
           <AutomationsCreateForm />
         </DataTable.Toolbar>
         <DataTable.Table />

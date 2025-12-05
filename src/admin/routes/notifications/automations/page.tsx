@@ -16,7 +16,7 @@ const ListPage = () => {
 };
 
 export const config = defineRouteConfig({
-  label: "Automations"
+  label: "List of automations"
 });
 
 export default ListPage;

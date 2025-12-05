@@ -10,7 +10,7 @@ const NotificationsPage = () => {
 }
 
 export const config = defineRouteConfig({
-  label: "Notifications",
+  label: "Automations",
   icon: ListBullet,
 })
 
