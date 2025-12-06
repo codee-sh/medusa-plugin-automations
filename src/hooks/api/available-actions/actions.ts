@@ -12,6 +12,14 @@ export type AvailableActionsQueryData = {
     description?: string
     metadata?: any
     configComponentPath?: string
+    fields?: Array<{
+      name: string
+      key: string
+      label: string
+      type: string
+      required?: boolean
+      placeholder?: string
+    }>
   }[];
 };
 

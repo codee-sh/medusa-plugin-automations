@@ -1,5 +1,5 @@
 import { pickValueFromObject, MathBN, isString } from "@medusajs/framework/utils"
-import { NotificationRule } from '../modules/mpn-automation/interfaces'
+import { NotificationRule } from '../modules/mpn-automation/types/interfaces'
 
 /**
  * Validates a single rule value condition based on operator

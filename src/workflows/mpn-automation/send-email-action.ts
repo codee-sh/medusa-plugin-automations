@@ -1,6 +1,6 @@
 import { createWorkflow, WorkflowData, WorkflowResponse, transform } from "@medusajs/framework/workflows-sdk"
 import { sendEmailWorkflow } from "../notifications/send-email"
-import { NotificationAction } from "../../modules/mpn-automation/interfaces"
+import { NotificationAction } from "../../modules/mpn-automation/types/interfaces"
 
 export interface SendEmailActionWorkflowInput {
   action: NotificationAction

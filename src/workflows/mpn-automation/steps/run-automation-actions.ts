@@ -1,6 +1,6 @@
 import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
-import { NotificationAction, NotificationTrigger } from "../../../modules/mpn-automation/interfaces"
+import { NotificationAction, NotificationTrigger } from "../../../modules/mpn-automation/types/interfaces"
 
 export interface RunAutomationActionsStepInput {
   validated: Array<{

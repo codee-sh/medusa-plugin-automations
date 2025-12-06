@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-export const automationFormSchema = z.object({
+// Base schema without dynamic validation
+export const baseAutomationFormSchema = z.object({
   general: z.object({
     name: z
       .string()

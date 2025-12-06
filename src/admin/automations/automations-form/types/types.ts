@@ -1,8 +1,8 @@
 import { z } from "zod"
 import { ProgressStatus } from "@medusajs/ui"
-import { automationFormSchema } from "./constants"
+import { baseAutomationFormSchema } from "./schema"
 
-export type AutomationFormValues = z.infer<typeof automationFormSchema>
+export type AutomationFormValues = z.infer<typeof baseAutomationFormSchema>
 
 export enum Tab {
   GENERAL = "general",

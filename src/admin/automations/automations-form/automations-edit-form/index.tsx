@@ -1,16 +1,17 @@
 import { Button, FocusModal, ProgressTabs, ProgressStatus, toast } from "@medusajs/ui"
 import { Pencil } from "@medusajs/icons"
-import { useState, useEffect } from "react"
-import { useForm, FieldErrors } from "react-hook-form"
+import { useState, useEffect, useMemo } from "react"
+import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQueryClient } from "@tanstack/react-query"
 import { useEditAutomation, useListAutomations } from "../../../../hooks/api/automations"
 import { useListAutomationsRules, useEditAutomationRule } from "../../../../hooks/api/automations-rules"
 import { useListAutomationsActions, useEditAutomationAction } from "../../../../hooks/api/automations-actions"
+import { useAvailableActions } from "../../../../hooks/api/available-actions"
 import { AutomationsGeneralForm } from "../automations-general-form"
 import { AutomationsRulesForm } from "../automations-rules-form"
 import { AutomationFormValues, Tab, TabState } from "../types"
-import { automationFormSchema } from "../constants"
+import { createAutomationFormSchema } from "../utils/automation-form-schema"
 import { AutomationsActionsForm } from "../automations-actions-form"
 
 export function AutomationsEditForm({ id }: { id: string }) {
@@ -53,11 +54,18 @@ export function AutomationsEditForm({ id }: { id: string }) {
     enabled: open && !!id,
   })
 
-  console.log(automationsActionsData)
+  const { data: availableActionsData } = useAvailableActions({
+    enabled: open,
+  })
 
   const { mutateAsync: editAutomation, isPending: isEditAutomationPending } = useEditAutomation()
   const { mutateAsync: editAutomationRule, isPending: isEditAutomationRulePending } = useEditAutomationRule()
   const { mutateAsync: editAutomationAction, isPending: isEditAutomationActionPending } = useEditAutomationAction()
+
+  // Create dynamic schema with superRefine based on availableActions
+  const automationFormSchema = useMemo(() => {
+    return createAutomationFormSchema(availableActionsData?.actions)
+  }, [availableActionsData?.actions])
 
   const form = useForm<AutomationFormValues>({
     resolver: zodResolver(automationFormSchema),
@@ -198,8 +206,6 @@ export function AutomationsEditForm({ id }: { id: string }) {
         trigger_id: id,
         actions: data.actions?.items || []
       }
-
-      console.log("items", items)
 
       await editAutomationAction(items)
 

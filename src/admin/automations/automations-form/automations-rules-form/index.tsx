@@ -1,6 +1,6 @@
 import { Input, Label, Select, Button } from "@medusajs/ui"
 import { useAvailableEvents } from "../../../../hooks/api/available-events"
-import { OPERATOR_TYPES } from "../../../../modules/mpn-automation/types"
+import { OPERATOR_TYPES } from "../../../../modules/mpn-automation/types/types"
 import { Controller, useFieldArray } from "react-hook-form"
 import { useMemo } from "react"
 import { Trash, Plus } from "@medusajs/icons"

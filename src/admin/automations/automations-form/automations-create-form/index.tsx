@@ -1,13 +1,14 @@
 import { Button, FocusModal, ProgressTabs, ProgressStatus } from "@medusajs/ui";
 import { Plus } from "@medusajs/icons";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { FieldValues, useForm, FieldErrors } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateAutomation } from "../../../../hooks/api/automations";
+import { useAvailableActions } from "../../../../hooks/api/available-actions";
 import { AutomationsGeneralForm } from "../automations-general-form";
 import { AutomationFormValues, Tab, TabState } from "../types";
-import { automationFormSchema } from "../constants";
+import { createAutomationFormSchema } from "../utils/automation-form-schema";
 
 export function AutomationsCreateForm() {
   const [open, setOpen] = useState(false);
@@ -35,6 +36,15 @@ export function AutomationsCreateForm() {
     mutateAsync: createAutomation,
     isPending: isCreateAutomationPending,
   } = useCreateAutomation();
+
+  const { data: availableActionsData } = useAvailableActions({
+    enabled: open,
+  });
+
+  // Create dynamic schema with superRefine based on availableActions
+  const automationFormSchema = useMemo(() => {
+    return createAutomationFormSchema(availableActionsData?.actions);
+  }, [availableActionsData?.actions]);
 
   const form = useForm<AutomationFormValues>({
     resolver: zodResolver(automationFormSchema),

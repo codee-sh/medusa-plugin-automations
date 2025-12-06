@@ -16,7 +16,7 @@ export type Attribute = {
   label?: string
 }
 
-import { ActionHandler } from "./types/action-handler"
+import { ActionHandler } from "./action-handler"
 
 export interface FieldConfig {
   name: string;

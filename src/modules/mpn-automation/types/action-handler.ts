@@ -1,6 +1,6 @@
 import { ComponentType } from "react"
-import { NotificationTrigger, NotificationAction } from "../interfaces"
-import { FieldConfig } from "../types"
+import { NotificationTrigger, NotificationAction } from "./interfaces"
+import { FieldConfig } from "./types"
 /**
  * Extension point constant for registering actions in the container
  */

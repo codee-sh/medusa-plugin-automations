@@ -26,17 +26,31 @@ function BaseConfigComponent({
                 field.onChange(newValue)
               }
               
+              const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+                const newValue = e.target.value
+                field.onChange(newValue)
+              }
+
               return (
                 <div>
                   <Label>
                     {group.label}
                     {isRequired && <span className="text-red-500 ml-1">*</span>}
                   </Label>
-                  <Input
-                    value={field.value ?? ""}
-                    onChange={handleChange}
-                    placeholder={group.placeholder}
-                  />
+                  {group.type === "textarea" ? (
+                    <Textarea
+                      value={field.value ?? ""}
+                      onChange={handleTextareaChange}
+                      placeholder={group.placeholder}
+                      rows={4}
+                    />
+                  ) : (
+                    <Input
+                      value={field.value ?? ""}
+                      onChange={handleChange}
+                      placeholder={group.placeholder}
+                    />
+                  )}
                   {fieldState.error && (
                     <span className="text-red-500 text-sm">
                       {fieldState.error.message}

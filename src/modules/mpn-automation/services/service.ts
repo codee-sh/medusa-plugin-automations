@@ -7,18 +7,16 @@ import {
   MpnAutomationAction,
 } from "../models"
 import {
-  ALL_EVENTS,
-  TRIGGER_TYPES,
-  ModuleOptions,
-  CustomEvent,
-} from "../types"
-import {
   ActionHandler,
   ActionExecuteParams,
-} from "../types/action-handler"
+  ModuleOptions,
+  CustomEvent,
+  ALL_EVENTS,
+  TRIGGER_TYPES,
+} from "../types"
 import {
   EmailActionHandler
-} from "../actions"
+} from "../actions-handlers"
 
 class MpnAutomationService extends MedusaService({
   MpnAutomationTrigger,

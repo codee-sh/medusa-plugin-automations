@@ -2,7 +2,7 @@ import { createWorkflow, WorkflowData, WorkflowResponse, transform } from "@medu
 import { getAutomationTriggersByEventStep } from "./steps/retrieve-automation-triggers-by-event"
 import { validateAutomationTriggersStep } from "./steps/validate-automation-triggers"
 import { TriggerType } from "../../utils/types"
-import { NotificationTrigger, NotificationAction } from "../../modules/mpn-automation/interfaces"
+import { NotificationTrigger, NotificationAction } from "../../modules/mpn-automation/types/interfaces"
 
 export interface ValidateAutomationTriggersByEventWorkflowInput {
   eventName: string

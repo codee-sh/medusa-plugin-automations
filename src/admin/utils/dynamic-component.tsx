@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ActionConfigComponentProps } from "../../../../modules/mpn-automation/types/action-handler";
+import { ActionConfigComponentProps } from "../../modules/mpn-automation/types/action-handler";
 import { loadTemplateComponent } from "./template";
 
 export default function LoadActionComponent({

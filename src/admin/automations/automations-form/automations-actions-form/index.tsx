@@ -1,8 +1,8 @@
 import { Label, Select, Button } from "@medusajs/ui"
-import { useAvailableActions } from "../../../../hooks/api/available-actions"
 import { Controller, useFieldArray, useWatch } from "react-hook-form"
 import { Trash, Plus } from "@medusajs/icons"
-import LoadActionComponent from "../../../components/actions/utils/dynamic-component"
+import LoadActionComponent from "../../../utils/dynamic-component"
+import { useAvailableActions } from "../../../../hooks/api/available-actions"
 
 export function AutomationsActionsForm({
   form,
@@ -47,7 +47,6 @@ export function AutomationsActionsForm({
               No actions added yet. Click "Add Item" to create a new action.
             </div>
           )}
-          {JSON.stringify(watchedActions)}
           {fields.map((field, index) => {
             return (
               <Controller

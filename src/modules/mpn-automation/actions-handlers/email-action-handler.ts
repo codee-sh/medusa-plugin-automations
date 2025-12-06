@@ -2,7 +2,7 @@ import {
   ActionHandler,
   ActionExecuteParams,
   ActionExecuteResult,
-} from "../types/action-handler";
+} from "../types";
 import { FieldConfig } from "../types";
 
 export class EmailActionHandler implements ActionHandler {

@@ -1,6 +1,6 @@
 import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
 import { validateRulesForContext } from "../../../utils/validate-rules"
-import { NotificationTrigger } from '../../../modules/mpn-automation/interfaces'
+import { NotificationTrigger } from '../../../modules/mpn-automation/types/interfaces'
 
 export interface ValidateAutomationTriggersStepInput {
   triggers: NotificationTrigger[]

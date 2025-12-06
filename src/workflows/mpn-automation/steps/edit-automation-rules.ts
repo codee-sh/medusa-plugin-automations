@@ -1,7 +1,7 @@
 import { createStep, StepResponse } from "@medusajs/framework/workflows-sdk"
 import MpnAutomationService from "../../../modules/mpn-automation/services/service"
 import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
-import { NotificationRule } from '../../../modules/mpn-automation/interfaces'
+import { NotificationRule } from '../../../modules/mpn-automation/types/interfaces'
 
 type EditAutomationRulesStepInput = {
   trigger_id: string

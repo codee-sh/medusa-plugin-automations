@@ -1,4 +1,4 @@
-import { templateLoaders } from "../index"
+import { templateLoaders } from "../automations/actions"
 
 export type TemplateKey = keyof typeof templateLoaders
 
