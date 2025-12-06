@@ -11,7 +11,7 @@ export type AvailableActionsQueryData = {
     label: string
     description?: string
     metadata?: any
-    configComponentPath?: string
+    configComponentKey?: string
     fields?: Array<{
       name: string
       key: string

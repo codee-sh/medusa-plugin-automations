@@ -59,7 +59,7 @@ export function AutomationsActionsForm({
                   const actionData: any = availableActionsData?.actions?.find(
                     (a) => a.value === actionType
                   )
-                  const configComponentPath = actionData?.configComponentPath
+                  const configComponentKey = actionData?.configComponentKey
                   const fields = actionData?.fields
 
                   return (
@@ -117,11 +117,11 @@ export function AutomationsActionsForm({
                       </div>
 
                       {/* Dynamic configuration component */}
-                      {actionType && configComponentPath && (
+                      {actionType && configComponentKey && (
                         <div className="mt-4 pt-4 border-t">
                           <LoadActionComponent
                             actionType={actionType}
-                            configComponentPath={configComponentPath}
+                            configComponentKey={configComponentKey}
                             form={form}
                             name={`actions.items.${index}.config` as any}
                             errors={

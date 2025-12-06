@@ -4,14 +4,14 @@ import { loadTemplateComponent } from "./template";
 
 export default function LoadActionComponent({
   actionType,
-  configComponentPath,
+  configComponentKey,
   form,
   name,
   errors,
   fields,
 }: {
   actionType: string;
-  configComponentPath?: string;
+  configComponentKey?: string;
   form: any;
   name: any;
   errors?: Record<string, string>;
@@ -23,7 +23,7 @@ export default function LoadActionComponent({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!actionType || !configComponentPath) {
+    if (!actionType || !configComponentKey) {
       setComponent(null);
       return;
     }
@@ -31,19 +31,19 @@ export default function LoadActionComponent({
     setLoading(true);
     setError(null);
 
-    loadTemplateComponent(configComponentPath as any)
+    loadTemplateComponent(configComponentKey as any)
       .then((module) => {
         const Component = module;
         console.log("Component", Component);
         if (Component) {
           setComponent(() => Component as any);
         } else {
-          setError(`Component not found in ${configComponentPath}`);
+          setError(`Component not found in ${configComponentKey}`);
         }
       })
       .catch((err) => {
         console.error(
-          `Failed to load component from ${configComponentPath}:`,
+          `Failed to load component from ${configComponentKey}:`,
           err
         );
         setError(`Failed to load component: ${err.message}`);
@@ -51,7 +51,7 @@ export default function LoadActionComponent({
       .finally(() => {
         setLoading(false);
       });
-  }, [actionType, configComponentPath]);
+  }, [actionType, configComponentKey]);
 
   if (loading) {
     return (

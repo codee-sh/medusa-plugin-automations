@@ -4,6 +4,7 @@ import {
   ActionExecuteResult,
 } from "../types";
 import { FieldConfig } from "../types";
+import { Modules } from "@medusajs/framework/utils";
 
 export class EmailActionHandler implements ActionHandler {
   identifier = "EmailActionHandler";
@@ -11,7 +12,7 @@ export class EmailActionHandler implements ActionHandler {
   label = "Email";
   description = "Send email notification";
 
-  configComponentPath = "BaseConfigComponent";
+  configComponentKey = "BaseConfigComponent";
 
   fields: FieldConfig[] = [
     {
@@ -37,41 +38,37 @@ export class EmailActionHandler implements ActionHandler {
     },
   ];
 
-  validateConfig(config: Record<string, any>): boolean | string {
-    for (const field of this.fields) {
-      if (field.required && !config[field.key]) {
-        return `${field.label} is required`;
-      }
-    }
-    
-    return true;
-  }
+  async executeAction({
+    action,
+    context,
+    result,
+    container,
+    eventName,
+    triggerId,
+  }: {
+    action: Record<string, any>;
+    context: any;
+    result: any;
+    container: any;
+    eventName: string;
+    triggerId: string;
+  }) {
+    const eventBusService = container.resolve(Modules.EVENT_BUS);
 
-  async execute(params: ActionExecuteParams): Promise<ActionExecuteResult> {
-    const { config, context } = params;
+    await eventBusService.emit({
+      name: eventName,
+      data: {
+        eventName: eventName,
+        action: action,
+        triggerId: triggerId,
+        context: context,
+      },
+    });
 
-    try {
-      // TODO: Implement actual email sending logic
-      // This could use Medusa's notification service or external email provider
-      console.log("Executing email action:", {
-        to: config.to,
-        subject: config.subject,
-        body: config.body,
-        context: context.trigger.name,
-      });
-
-      // Simulate async operation
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      return {
-        success: true,
-        message: "Email sent successfully",
-      };
-    } catch (error: any) {
-      return {
-        success: false,
-        message: error.message || "Failed to send email",
-      };
-    }
+    return {
+      actionId: action.id,
+      actionType: action.action_type,
+      success: true,
+    };
   }
 }
