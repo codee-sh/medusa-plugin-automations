@@ -6,7 +6,13 @@ import {
 import { sdk } from "../../../admin/lib/sdk"
 
 export type AvailableActionsQueryData = {
-  actions: { value: string; label: string }[];
+  actions: { 
+    value: string
+    label: string
+    description?: string
+    metadata?: any
+    configComponentPath?: string
+  }[];
 };
 
 export const useAvailableActions = (

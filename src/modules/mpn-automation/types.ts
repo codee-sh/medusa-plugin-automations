@@ -16,11 +16,15 @@ export type Attribute = {
   label?: string
 }
 
+import { ActionHandler } from "./types/action-handler"
+
 export type ModuleOptions = {
   automations?: {
     enabled?: boolean
     customEvents?: CustomEvent[]
     customActions?: CustomAction[]
+    // Allow passing ActionHandler instances directly
+    actionHandlers?: ActionHandler[]
   }
 }
 

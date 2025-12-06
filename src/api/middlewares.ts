@@ -119,7 +119,9 @@ export default defineMiddlewares({
             "created_at",
             "updated_at",
             "rules.*",
-            "rules.rule_values.*"
+            "rules.rule_values.*",
+            "actions.*",
+            "actions.config.*"
           ],
           isList: true,
         }),

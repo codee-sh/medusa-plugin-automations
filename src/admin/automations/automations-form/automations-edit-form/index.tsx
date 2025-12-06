@@ -53,6 +53,8 @@ export function AutomationsEditForm({ id }: { id: string }) {
     enabled: open && !!id,
   })
 
+  console.log(automationsActionsData)
+
   const { mutateAsync: editAutomation, isPending: isEditAutomationPending } = useEditAutomation()
   const { mutateAsync: editAutomationRule, isPending: isEditAutomationRulePending } = useEditAutomationRule()
   const { mutateAsync: editAutomationAction, isPending: isEditAutomationActionPending } = useEditAutomationAction()
