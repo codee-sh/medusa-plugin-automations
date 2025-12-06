@@ -30,7 +30,7 @@ export const automationFormSchema = z.object({
               z.object({
                 id: z.string().optional(),
                 value: z.string().min(1, "Value is required"),
-                metadata: z.record(z.any()).nullable().optional(),
+                metadata: z.record(z.any()).nullable(),
               })
             ).optional(),
           })
@@ -44,7 +44,7 @@ export const automationFormSchema = z.object({
           z.object({
             id: z.string().optional(),
             action_type: z.string().min(1, "Action type is required"),
-            config: z.record(z.any()).nullable().optional(),
+            config: z.record(z.any()),
           })
         )
         .optional(),

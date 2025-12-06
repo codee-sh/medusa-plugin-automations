@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react"
 import { Button } from "@medusajs/ui"
 import { TextField, TextAreaField, NumberField, SelectField, CheckboxField } from "./components"
-import { ChipInput } from "../../../components/inputs/chip-input" 
+import { ChipInput } from "../inputs/chip-input" 
 import { FieldConfig } from "./types"
 import { FormField } from "./components/form-field"
-import { Input } from "@medusajs/ui"
 
 interface DeclarativeFieldManagerProps {
   fields: FieldConfig[]

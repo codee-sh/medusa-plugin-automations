@@ -18,6 +18,18 @@ export type Attribute = {
 
 import { ActionHandler } from "./types/action-handler"
 
+export interface FieldConfig {
+  name: string;
+  key: string;
+  label: string;
+  description?: string;
+  type: "text" | "textarea" | "number" | "select" | "checkbox" | "date" | "chip-input" | "email" | "password" | "file";
+  placeholder?: string;
+  required?: boolean;
+  defaultValue?: any;
+  options?: Array<{ value: string; label: string }>;
+}
+
 export type ModuleOptions = {
   automations?: {
     enabled?: boolean

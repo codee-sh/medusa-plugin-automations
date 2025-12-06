@@ -79,12 +79,13 @@ class MpnAutomationService extends MedusaService({
     // Return actions from actionHandlers_ map
     const handlers = this.getActionHandlers()
     return Array.from(handlers.values()).map((handler) => ({
+      identifier: handler.identifier,
       value: handler.id,
       label: handler.label,
       description: handler.description,
-      metadata: handler.metadata,
       configComponentPath: handler.configComponentPath,
       templateLoaders: handler.templateLoaders,
+      fields: handler.fields,
     }))
   }
 

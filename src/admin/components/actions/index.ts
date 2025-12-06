@@ -1,3 +1,3 @@
 export const templateLoaders = {
-  "EmailConfigComponent": () => import("./email-config.js"),
+  "BaseConfigComponent": () => import("./base-config.js"),
 } as const

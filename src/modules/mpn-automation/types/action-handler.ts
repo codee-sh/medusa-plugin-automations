@@ -1,6 +1,6 @@
 import { ComponentType } from "react"
 import { NotificationTrigger, NotificationAction } from "../interfaces"
-
+import { FieldConfig } from "../types"
 /**
  * Extension point constant for registering actions in the container
  */
@@ -33,9 +33,10 @@ import { Control, FieldPath, FieldValues } from "react-hook-form"
  * Props for action configuration component
  */
 export interface ActionConfigComponentProps<TFieldValues extends FieldValues = FieldValues> {
-  control: Control<TFieldValues>
+  form: any
   name: FieldPath<TFieldValues>
   errors?: Record<string, string>
+  fields?: any
 }
 
 /**
@@ -50,6 +51,7 @@ export interface ActionDisplayComponentProps {
  * Action handler interface - implement this to create custom actions
  */
 export interface ActionHandler {
+  identifier: string
   /**
    * Unique identifier for the action (e.g., "email", "sms", "custom_email")
    */
@@ -66,6 +68,11 @@ export interface ActionHandler {
   description?: string
 
   /**
+   * Fields for the action configuration
+   */
+  fields?: FieldConfig[]
+
+  /**
    * Function that executes the action
    */
   execute: (
@@ -79,8 +86,6 @@ export interface ActionHandler {
 
   /**
    * Optional path to config component for dynamic import
-   * Can be a module path (e.g., "@codee-sh/medusa-plugin-automations/admin/components/actions/email-config")
-   * or a relative path resolved at runtime
    */
   configComponentPath?: string
 

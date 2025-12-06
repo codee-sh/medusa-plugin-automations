@@ -61,6 +61,7 @@ export function AutomationsActionsForm({
                     (a) => a.value === actionType
                   )
                   const configComponentPath = actionData?.configComponentPath
+                  const fields = actionData?.fields
 
                   return (
                     <div className="flex flex-col gap-4 p-4 border rounded-lg">
@@ -122,12 +123,13 @@ export function AutomationsActionsForm({
                           <LoadActionComponent
                             actionType={actionType}
                             configComponentPath={configComponentPath}
-                            control={form.control}
+                            form={form}
                             name={`actions.items.${index}.config` as any}
                             errors={
                               form.formState.errors?.actions?.items?.[index]
                                 ?.config as Record<string, string> | undefined
                             }
+                            fields={fields}
                           />
                         </div>
                       )}

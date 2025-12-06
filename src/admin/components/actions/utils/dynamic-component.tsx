@@ -5,15 +5,17 @@ import { loadTemplateComponent } from "./template";
 export default function LoadActionComponent({
   actionType,
   configComponentPath,
-  control,
+  form,
   name,
   errors,
+  fields,
 }: {
   actionType: string;
   configComponentPath?: string;
-  control: any;
+  form: any;
   name: any;
   errors?: Record<string, string>;
+  fields?: any;
 }) {
   const [Component, setComponent] =
     useState<React.ComponentType<ActionConfigComponentProps> | null>(null);
@@ -65,5 +67,5 @@ export default function LoadActionComponent({
     return null;
   }
 
-  return <Component control={control} name={name} errors={errors} />;
+  return <Component form={form} name={name} errors={errors} fields={fields} />;
 }
