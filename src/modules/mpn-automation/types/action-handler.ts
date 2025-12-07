@@ -1,5 +1,4 @@
-import { ComponentType } from "react"
-import { NotificationTrigger, NotificationAction } from "./interfaces"
+import { NotificationTrigger } from "./interfaces"
 import { FieldConfig } from "./types"
 import { FieldPath, FieldValues } from "react-hook-form"
 
@@ -14,31 +13,9 @@ export interface ActionConfigComponentProps<TFieldValues extends FieldValues = F
 }
 
 /**
- * Parameters passed to action execution
- */
-export interface ActionExecuteParams {
-  config: Record<string, any>
-  context: {
-    trigger: NotificationTrigger
-    eventData?: any
-    [key: string]: any
-  }
-}
-
-/**
- * Result returned from action execution
- */
-export interface ActionExecuteResult {
-  success: boolean
-  message?: string
-  data?: any
-}
-
-/**
  * Action handler interface - implement this to create custom actions
  */
 export interface ActionHandler {
-  identifier: string
   /**
    * Unique identifier for the action (e.g., "email", "sms", "custom_email")
    */
@@ -71,7 +48,11 @@ export interface ActionHandler {
       eventName: string
       triggerId: string
     }
-  ) => Promise<ActionExecuteResult>
+  ) => Promise<{
+    success: boolean
+    message?: string
+    data?: any
+  }>
 
   /**
    * Optional path to config component for dynamic import

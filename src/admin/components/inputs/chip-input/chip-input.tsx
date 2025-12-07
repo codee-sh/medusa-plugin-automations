@@ -1,6 +1,6 @@
-import { XMarkMini } from "@medusajs/icons"
-import { Badge, clx } from "@medusajs/ui"
-import { AnimatePresence, motion } from "motion/react"
+import { XMarkMini } from "@medusajs/icons";
+import { Badge, clx } from "@medusajs/ui";
+import { AnimatePresence, motion } from "motion/react";
 import {
   FocusEvent,
   KeyboardEvent,
@@ -8,20 +8,20 @@ import {
   useImperativeHandle,
   useRef,
   useState,
-} from "react"
+} from "react";
 
 type ChipInputProps = {
-  value?: string[]
-  onChange?: (value: string[]) => void
-  onBlur?: () => void
-  name?: string
-  disabled?: boolean
-  allowDuplicates?: boolean
-  showRemove?: boolean
-  variant?: "base" | "contrast"
-  placeholder?: string
-  className?: string
-}
+  value?: string[];
+  onChange?: (value: string[]) => void;
+  onBlur?: () => void;
+  name?: string;
+  disabled?: boolean;
+  allowDuplicates?: boolean;
+  showRemove?: boolean;
+  variant?: "base" | "contrast";
+  placeholder?: string;
+  className?: string;
+};
 
 export const ChipInput = forwardRef<HTMLInputElement, ChipInputProps>(
   (
@@ -39,86 +39,86 @@ export const ChipInput = forwardRef<HTMLInputElement, ChipInputProps>(
     },
     ref
   ) => {
-    const innerRef = useRef<HTMLInputElement>(null)
+    const innerRef = useRef<HTMLInputElement>(null);
 
-    const isControlledRef = useRef(typeof value !== "undefined")
-    const isControlled = isControlledRef.current
+    const isControlledRef = useRef(typeof value !== "undefined");
+    const isControlled = isControlledRef.current;
 
-    const [uncontrolledValue, setUncontrolledValue] = useState<string[]>([])
+    const [uncontrolledValue, setUncontrolledValue] = useState<string[]>([]);
 
     useImperativeHandle<HTMLInputElement | null, HTMLInputElement | null>(
       ref,
       () => innerRef.current
-    )
+    );
 
-    const [duplicateIndex, setDuplicateIndex] = useState<number | null>(null)
+    const [duplicateIndex, setDuplicateIndex] = useState<number | null>(null);
 
-    const chips = isControlled ? (value as string[]) : uncontrolledValue
+    const chips = isControlled ? (value as string[]) : uncontrolledValue;
 
     const handleAddChip = (chip: string) => {
-      const cleanValue = chip.trim()
+      const cleanValue = chip.trim();
 
       if (!cleanValue) {
-        return
+        return;
       }
 
       if (!allowDuplicates && chips.includes(cleanValue)) {
-        setDuplicateIndex(chips.indexOf(cleanValue))
+        setDuplicateIndex(chips.indexOf(cleanValue));
 
         setTimeout(() => {
-          setDuplicateIndex(null)
-        }, 300)
+          setDuplicateIndex(null);
+        }, 300);
 
-        return
+        return;
       }
 
-      onChange?.([...chips, cleanValue])
+      onChange?.([...chips, cleanValue]);
 
       if (!isControlled) {
-        setUncontrolledValue([...chips, cleanValue])
+        setUncontrolledValue([...chips, cleanValue]);
       }
-    }
+    };
 
     const handleRemoveChip = (chip: string) => {
-      onChange?.(chips.filter((v) => v !== chip))
+      onChange?.(chips.filter((v) => v !== chip));
 
       if (!isControlled) {
-        setUncontrolledValue(chips.filter((v) => v !== chip))
+        setUncontrolledValue(chips.filter((v) => v !== chip));
       }
-    }
+    };
 
     const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
-      onBlur?.()
+      onBlur?.();
 
       if (e.target.value) {
-        handleAddChip(e.target.value)
-        e.target.value = ""
+        handleAddChip(e.target.value);
+        e.target.value = "";
       }
-    }
+    };
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter" || e.key === ",") {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!innerRef.current?.value) {
-          return
+          return;
         }
 
-        handleAddChip(innerRef.current?.value ?? "")
-        innerRef.current.value = ""
-        innerRef.current?.focus()
+        handleAddChip(innerRef.current?.value ?? "");
+        innerRef.current.value = "";
+        innerRef.current?.focus();
       }
 
       if (e.key === "Backspace" && innerRef.current?.value === "") {
-        handleRemoveChip(chips[chips.length - 1])
+        handleRemoveChip(chips[chips.length - 1]);
       }
-    }
+    };
 
     // create a shake animation using framer motion
     const shake = {
       x: [0, -2, 2, -2, 2, 0],
       transition: { duration: 0.3 },
-    }
+    };
 
     return (
       <div
@@ -166,7 +166,7 @@ export const ChipInput = forwardRef<HTMLInputElement, ChipInputProps>(
                 </motion.div>
               </Badge>
             </AnimatePresence>
-          )
+          );
         })}
         <input
           className={clx(
@@ -184,8 +184,8 @@ export const ChipInput = forwardRef<HTMLInputElement, ChipInputProps>(
           autoComplete="off"
         />
       </div>
-    )
+    );
   }
-)
+);
 
-ChipInput.displayName = "ChipInput"
+ChipInput.displayName = "ChipInput";

@@ -1,18 +1,9 @@
-import {
-  ActionHandler,
-  ActionExecuteParams,
-  ActionExecuteResult,
-} from "../types";
 import { FieldConfig } from "../types";
-import { Modules } from "@medusajs/framework/utils";
+import { BaseActionHandler } from "./base-action-handler";
 
-export class EmailActionHandler implements ActionHandler {
-  identifier = "EmailActionHandler";
+export class EmailActionHandler extends BaseActionHandler {
   id = "email";
   label = "Email";
-  description = "Send email notification";
-
-  configComponentKey = "BaseConfigComponent";
 
   fields: FieldConfig[] = [
     {
@@ -36,39 +27,40 @@ export class EmailActionHandler implements ActionHandler {
       type: "textarea" as const,
       required: true,
     },
+    {
+      name: "bcc",
+      key: "bcc",
+      label: "BCC",
+      type: "email" as const,
+      required: false,
+    },
+    {
+      name: "cc",
+      key: "cc",
+      label: "CC",
+      type: "email" as const,
+      required: false,
+    },
+    {
+      name: "replyTo",
+      key: "replyTo",
+      label: "Reply To",
+      type: "email" as const,
+      required: false,
+    },
+    {
+      name: "templateName",
+      key: "templateName",
+      label: "Template Name",
+      type: "select" as const,
+      required: true,
+      options: [
+        {
+          label: "Inventory Level",
+          value: "inventory-level",
+        },
+      ],
+      defaultValue: "inventory-level",
+    },
   ];
-
-  async executeAction({
-    action,
-    context,
-    result,
-    container,
-    eventName,
-    triggerId,
-  }: {
-    action: Record<string, any>;
-    context: any;
-    result: any;
-    container: any;
-    eventName: string;
-    triggerId: string;
-  }) {
-    const eventBusService = container.resolve(Modules.EVENT_BUS);
-
-    await eventBusService.emit({
-      name: eventName,
-      data: {
-        eventName: eventName,
-        action: action,
-        triggerId: triggerId,
-        context: context,
-      },
-    });
-
-    return {
-      actionId: action.id,
-      actionType: action.action_type,
-      success: true,
-    };
-  }
 }

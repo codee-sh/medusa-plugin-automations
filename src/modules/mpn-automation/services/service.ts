@@ -10,14 +10,13 @@ import {
 } from "../models";
 import {
   ActionHandler,
-  ActionExecuteParams,
   ModuleOptions,
   CustomEvent,
   ALL_EVENTS,
   TRIGGER_TYPES,
 } from "../types";
 import { EmailActionHandler } from "../actions-handlers";
-import { Logger, MedusaContainer } from "@medusajs/framework/types"
+import { Logger } from "@medusajs/framework/types"
 
 type InjectedDependencies = {
   logger: Logger
@@ -31,12 +30,14 @@ class MpnAutomationService extends MedusaService({
   MpnAutomationAction,
 }) {
   private options_: ModuleOptions;
+  private logger_: Logger;
   private events_: CustomEvent[];
   private actionHandlers_: Map<string, ActionHandler> = new Map();
 
   constructor({ logger }: InjectedDependencies, options?: ModuleOptions) {
     super(...arguments);
 
+    this.logger_ = logger;  
     this.options_ = options || {};
     this.events_ = this.options_.automations?.customEvents || [];
     
@@ -86,7 +87,6 @@ class MpnAutomationService extends MedusaService({
     // Return actions from actionHandlers_ map
     const handlers = this.getActionHandlers();
     return Array.from(handlers.values()).map((handler) => ({
-      identifier: handler.identifier,
       value: handler.id,
       label: handler.label,
       description: handler.description,

@@ -21,6 +21,8 @@ export default async function mpnAutomationActionEmailExecutedHandler({
 }: SubscriberArgs<any>) {
   const { action, context, eventName } = data;
 
+  console.log("mpnAutomationActionEmailExecutedHandler", data);
+
   // Execute email action workflow
   const { result } = await sendEmailActionWorkflow(container).run({
     input: {
@@ -28,10 +30,10 @@ export default async function mpnAutomationActionEmailExecutedHandler({
         ...action,
         config: {
           ...action.config,
-          templateName: action?.config?.templateName ?? "inventory-level",
-          to: action?.config?.to ?? "chris@iamcodee.co",
+          to: action?.config?.to,
+          subject: action?.config?.subject,
           locale: action?.config?.locale ?? "pl",
-          subject: action?.config?.subject ?? "Inventory Level Updated",
+          templateName: action?.config?.templateName ?? "inventory-level",
         },
       },
       context: context,

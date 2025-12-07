@@ -7,9 +7,9 @@ interface NumberFieldProps {
   placeholder?: string
   required?: boolean
   disabled?: boolean
-  min?: number
-  max?: number
-  step?: number
+  min?: number | null
+  max?: number | null
+  step?: number | null
 }
 
 export const NumberField = ({ 
@@ -21,7 +21,7 @@ export const NumberField = ({
   disabled = false,
   min,
   max,
-  step = 1
+  step = null
 }: NumberFieldProps) => {
   return (
     <Input
@@ -30,9 +30,9 @@ export const NumberField = ({
       onChange={(e) => onChange(Number(e.target.value))}
       placeholder={placeholder}
       disabled={disabled}
-      min={min}
-      max={max}
-      step={step}
+      min={min || undefined}
+      max={max || undefined}
+      step={step || undefined}
     />
   )
 } 

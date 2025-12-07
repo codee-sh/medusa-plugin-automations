@@ -1,185 +1,291 @@
-import { useState, useEffect } from "react"
-import { Button } from "@medusajs/ui"
-import { TextField, TextAreaField, NumberField, SelectField, CheckboxField } from "./components"
-import { ChipInput } from "../inputs/chip-input" 
-import { FieldConfig } from "./types"
-import { FormField } from "./components/form-field"
+import { Controller } from "react-hook-form";
+import {
+  FormField,
+  TextField,
+  TextAreaField,
+  NumberField,
+  SelectField,
+  CheckboxField,
+} from "./components";
+import { ChipInput } from "../inputs/chip-input";
+import { FieldConfig } from "../../../modules/mpn-automation/types/types";
+import { DeclarativeFieldManagerProps } from "./types/interfaces";
 
-interface DeclarativeFieldManagerProps {
-  fields: FieldConfig[]
-  onSave: (values: Record<string, any>) => void
-  title?: string | null
-  className?: string
-  initialValues?: Record<string, any> | null
-}
-
-export const ManagerFields = ({ 
-  fields, 
-  onSave,
-  title = "Fields",
-  className = "",
-  initialValues = {}
+export const ManagerFields = ({
+  fields,
+  name,
+  form,
+  errors,
 }: DeclarativeFieldManagerProps) => {
-  const [values, setValues] = useState<Record<string, any>>(initialValues || {})
-
-  useEffect(() => {
-    // Initialize values with defaults
-    const defaultValues: Record<string, any> = {}
-    const safeInitialValues = initialValues || {}
-    
-    fields.forEach(field => {
-      if (safeInitialValues[field.key] !== undefined) {
-        defaultValues[field.key] = safeInitialValues[field.key]
-      } else if (field.defaultValue !== undefined) {
-        defaultValues[field.key] = field.defaultValue
-      } else {
-        // Set appropriate default based on type
-        switch (field.type) {
-          case 'text':
-          case 'textarea':
-            defaultValues[field.key] = ""
-            break
-          case 'number':
-            defaultValues[field.key] = 0
-            break
-          case 'checkbox':
-            defaultValues[field.key] = false
-            break
-          case 'select':
-            defaultValues[field.key] = field.options?.[0]?.value || ""
-            break
-        }
-      }
-    })
-    setValues(defaultValues)
-  }, [fields, initialValues])
-
-  const handleFieldChange = (key: string, value: any) => {
-    setValues(prev => ({
-      ...prev,
-      [key]: value
-    }))
-  }
-
-  const handleSave = () => {
-    onSave(values)
-  }
-
-  const renderField = (field: FieldConfig) => {
-    const value = values[field.key]
-
-    switch (field.type) {
-      case 'text':
+  console.log("fields", fields);
+  const renderField = (groupField: FieldConfig) => {
+    switch (groupField.type) {
+      case "text":
         return (
-          <FormField
-            label={field.label}
-            required={field.required}
-          >
-            <TextField
-              label={field.label}
-              value={value || ""}
-              onChange={(value) => handleFieldChange(field.key, value)}
-              placeholder={field.placeholder}
-              required={field.required}
-            />
-          </FormField>
-        )
-      case 'textarea':
-        return (
-          <FormField
-            label={field.label}
-            required={field.required}
-          >
-            <TextAreaField
-              label={field.label}
-              value={value || ""}
-              onChange={(value) => handleFieldChange(field.key, value)}
-              placeholder={field.placeholder}
-              required={field.required}
-            />
-          </FormField>
-        )
-      case 'number':
-        return (
-          <FormField
-            label={field.label}
-            required={field.required}
-          >
-            <NumberField
-              label={field.label}
-              value={value || 0}
-              onChange={(value) => handleFieldChange(field.key, value)}
-              placeholder={field.placeholder}
-              required={field.required}
-            />
-          </FormField>
-        )
-      case 'select':
-        return (
-          <FormField
-            label={field.label}
-            required={field.required}
-          >
-            <SelectField
-              label={field.label}
-              value={value || ""}
-              onChange={(value) => handleFieldChange(field.key, value)}
-              options={field.options || []}
-              required={field.required}
-            />
-          </FormField>
-        )
-      case 'chip-input':
-        return (
-          <FormField
-            label={field.label}
-            required={field.required}
-          >
-            <ChipInput
-              value={value || []} 
-              onChange={(value) => handleFieldChange(field.key, value)}
-              placeholder={field.placeholder}
-              allowDuplicates={false}
-              showRemove={true}
-              variant="base"
-            />
-          </FormField>
-        )
-      case 'checkbox':
-        return (
-          <CheckboxField
-            label={field.label}
-            checked={value || false}
-            onChange={(checked) => handleFieldChange(field.key, checked)}
-            required={field.required}
+          <Controller
+            key={groupField.name || groupField.key}
+            name={`${name}.${groupField.name}` as any}
+            control={form.control}
+            defaultValue={groupField.defaultValue || ""}
+            shouldUnregister={false}
+            render={({ field, fieldState }) => {
+              return (
+                <FormField
+                  label={groupField.label}
+                  required={groupField.required}
+                >
+                  <TextField
+                    label={groupField.label}
+                    value={field.value || ""}
+                    onChange={(value) => field.onChange(value)}
+                    placeholder={groupField.placeholder}
+                    required={groupField.required}
+                  />
+                  {fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {fieldState.error.message}
+                    </span>
+                  )}
+                  {errors?.[groupField.name] && !fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {errors[groupField.name]}
+                    </span>
+                  )}
+                </FormField>
+              );
+            }}
           />
-        )
+        );
+      case "email":
+        return (
+          <Controller
+            key={groupField.name || groupField.key}
+            name={`${name}.${groupField.name}` as any}
+            control={form.control}
+            defaultValue={groupField.defaultValue || ""}
+            shouldUnregister={false}
+            render={({ field, fieldState }) => {
+              return (
+                <FormField
+                  label={groupField.label}
+                  required={groupField.required}
+                >
+                  <TextField
+                    label={groupField.label}
+                    value={field.value || ""}
+                    onChange={(value) => field.onChange(value)}
+                    placeholder={groupField.placeholder}
+                    required={groupField.required}
+                  />
+                  {fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {fieldState.error.message}
+                    </span>
+                  )}
+                  {errors?.[groupField.name] && !fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {errors[groupField.name]}
+                    </span>
+                  )}
+                </FormField>
+              );
+            }}
+          />
+        );
+      case "textarea":
+        return (
+          <Controller
+            key={groupField.name || groupField.key}
+            name={`${name}.${groupField.name}` as any}
+            control={form.control}
+            defaultValue=""
+            shouldUnregister={false}
+            render={({ field, fieldState }) => {
+              return (
+                <FormField
+                  label={groupField.label}
+                  required={groupField.required}
+                >
+                  <TextAreaField
+                    label={groupField.label}
+                    value={field.value || ""}
+                    onChange={(value) => field.onChange(value)}
+                    placeholder={groupField.placeholder}
+                    required={groupField.required}
+                  />
+                  {fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {fieldState.error.message}
+                    </span>
+                  )}
+                  {errors?.[groupField.name] && !fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {errors[groupField.name]}
+                    </span>
+                  )}
+                </FormField>
+              );
+            }}
+          />
+        );
+      case "number":
+        return (
+          <Controller
+            key={groupField.name || groupField.key}
+            name={`${name}.${groupField.name}` as any}
+            control={form.control}
+            defaultValue={groupField.defaultValue || 0}
+            shouldUnregister={false}
+            render={({ field, fieldState }) => {
+              return (
+                <FormField
+                  label={groupField.label}
+                  required={groupField.required}
+                >
+                  <NumberField
+                    label={groupField.label}
+                    value={field.value || 0}
+                    onChange={(value) => field.onChange(value)}
+                    placeholder={groupField.placeholder}
+                    required={groupField.required}
+                    min={groupField.min || null}
+                    max={groupField.max || null}
+                    step={groupField.step || null}
+                  />
+                  {fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {fieldState.error.message}
+                    </span>
+                  )}
+                  {errors?.[groupField.name] && !fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {errors[groupField.name]}
+                    </span>
+                  )}
+                </FormField>
+              );
+            }}
+          />
+        );
+      case "select":
+        return (
+          <Controller
+            key={groupField.name || groupField.key}
+            name={`${name}.${groupField.name}` as any}
+            control={form.control}
+            defaultValue={groupField.defaultValue || ""}
+            shouldUnregister={false}
+            render={({ field, fieldState }) => {
+              return (
+                <FormField
+                  label={groupField.label}
+                  required={groupField.required}
+                >
+                  <SelectField
+                    label={groupField.label}
+                    value={field.value || ""}
+                    onChange={(value) => field.onChange(value)}
+                    options={groupField.options || []}
+                    required={groupField.required}
+                  />
+                  {fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {fieldState.error.message}
+                    </span>
+                  )}
+                  {errors?.[groupField.name] && !fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {errors[groupField.name]}
+                    </span>
+                  )}
+                </FormField>
+              );
+            }}
+          />
+        );
+      case "chip-input": // The component copied from Medusa.js Core.
+        return (
+          <Controller
+            key={groupField.name || groupField.key}
+            name={`${name}.${groupField.name}` as any}
+            control={form.control}
+            defaultValue={groupField.defaultValue || false}
+            shouldUnregister={false}
+            render={({ field, fieldState }) => {
+              return (
+                <FormField
+                  label={groupField.label}
+                  required={groupField.required}
+                >
+                  <ChipInput
+                    name={groupField.name}
+                    value={(field.value as string[]) || []}
+                    onChange={(value) => field.onChange(value as string[])}
+                    placeholder={groupField.placeholder}
+                    allowDuplicates={false}
+                    showRemove={true}
+                    variant="base"
+                  />
+                  {fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {fieldState.error.message}
+                    </span>
+                  )}
+                  {errors?.[groupField.name] && !fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {errors[groupField.name]}
+                    </span>
+                  )}
+                </FormField>
+              );
+            }}
+          />
+        );
+      case "checkbox":
+        return (
+          <Controller
+            key={groupField.name || groupField.key}
+            name={`${name}.${groupField.name}` as any}
+            control={form.control}
+            defaultValue={groupField.defaultValue || false}
+            shouldUnregister={false}
+            render={({ field, fieldState }) => {
+              return (
+                <FormField
+                  label={groupField.label}
+                  required={groupField.required}
+                >
+                  <CheckboxField
+                    label={groupField.label}
+                    checked={field.value || false}
+                    onChange={(checked) => field.onChange(checked)}
+                    required={groupField.required}
+                  />
+                  {fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {fieldState.error.message}
+                    </span>
+                  )}
+                  {errors?.[groupField.name] && !fieldState.error && (
+                    <span className="text-red-500 text-sm">
+                      {errors[groupField.name]}
+                    </span>
+                  )}
+                </FormField>
+              );
+            }}
+          />
+        );
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
-    <div className={className}>
-      {title && <h3 className="text-lg font-semibold mb-4">{title}</h3>}
-      
-      <div className="space-y-4">
-        {fields.map((field) => (
-          <div key={field.key}>
-            {renderField(field)}
-          </div>
-        ))}
-      </div>
-      
-      <div className="mt-6">
-        <Button
-          onClick={handleSave}
-          variant="primary"
-          size="small"
-        >
-          Zapisz zmiany
-        </Button>
-      </div>
+    <div className="space-y-2">
+      {fields.map((field) => (
+        <div key={field.key}>{renderField(field)}</div>
+      ))}
     </div>
-  )
-} 
+  );
+};
