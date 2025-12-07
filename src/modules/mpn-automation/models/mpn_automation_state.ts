@@ -16,4 +16,3 @@ export const MpnAutomationState = model
       mappedBy: "states",
     }),
   })
-

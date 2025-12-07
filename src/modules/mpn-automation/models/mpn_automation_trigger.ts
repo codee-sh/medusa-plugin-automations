@@ -58,5 +58,7 @@ export const MpnAutomationTrigger = model
     {
       on: ["event_name"],
     }
-  ]);
+  ]).cascades({
+    delete: ["actions", "states", "rules"],
+  });
 
