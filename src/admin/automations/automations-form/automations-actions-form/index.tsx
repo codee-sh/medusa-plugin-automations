@@ -55,15 +55,15 @@ export function AutomationsActionsForm({
                 control={form.control}
                 render={({ field: actionTypeField, fieldState }) => {
                   const actionType = actionTypeField.value
-                  // Find the action config component path
                   const actionData: any = availableActionsData?.actions?.find(
                     (a) => a.value === actionType
                   )
                   const configComponentKey = actionData?.configComponentKey
                   const fields = actionData?.fields
+                  const isEnabled = actionData?.enabled
 
                   return (
-                    <div className="flex flex-col gap-4 p-4 border rounded-lg">
+                    <div className={`flex flex-col gap-4 p-4 border rounded-lg ${isEnabled ? "opacity-100" : "opacity-50"}`}>
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 flex flex-col gap-2">
                           <Label>Action Type</Label>
@@ -132,12 +132,15 @@ export function AutomationsActionsForm({
                           />
                         </div>
                       )}
+
+                      {!isEnabled && <p className="text-sm text-red-500">The action is disabled by the configuration</p>}
                     </div>
                   )
                 }}
               />
             )
           })}
+          
           <Button
             type="button"
             variant="secondary"
