@@ -3,11 +3,11 @@ import { Modules } from "@medusajs/framework/utils";
 
 export interface SendSlackConfig {
   template: string;
-  resourceId?: string
-  resourceType?: string
-  channel?: string
-  triggerType?: string
-  [key: string]: any // Allow additional config options
+  resourceId?: string;
+  resourceType?: string;
+  channel?: string;
+  triggerType?: string;
+  [key: string]: any; // Allow additional config options
 }
 
 export interface SendSlackStepInput {
@@ -67,13 +67,13 @@ export const sendSlackStep = createStep(
       const notificationModuleService = container.resolve(Modules.NOTIFICATION);
 
       const template = settings.template;
-      const to = settings.to || "slack-channel"
-      const locale = settings.locale || "pl"
-      const customSubject = settings.subject
-      const resourceId = settings.resourceId || 'unknown'
-      const resourceType = settings.resourceType || "email.notification"
-      const channel = settings.channel || "slack"
-      const triggerType = settings.triggerType || "system"
+      const to = settings.to || "slack-channel";
+      const locale = settings.locale || "pl";
+      const customSubject = settings.subject;
+      const resourceId = settings.resourceId || "unknown";
+      const resourceType = settings.resourceType || "email.notification";
+      const channel = settings.channel || "slack";
+      const triggerType = settings.triggerType || "system";
 
       // Send notification
       const notificationResult =
