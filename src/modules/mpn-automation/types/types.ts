@@ -40,6 +40,10 @@ export type ModuleOptions = {
     customActions?: CustomAction[]
     // Allow passing ActionHandler instances directly
     actionHandlers?: ActionHandler[]
+    actionsEnabled?: {
+      slack?: boolean
+      email?: boolean
+    }
   }
 }
 
