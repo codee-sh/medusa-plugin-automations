@@ -1,18 +1,19 @@
 # Medusa plugin automations
 
-A comprehensive notification automation plugin for Medusa v2 that provides a flexible rule-based notification system with triggers, conditions, and actions. Create automated notifications based on events, schedules, or manual triggers with customizable rules.
+A comprehensive automation plugin for Medusa v2 that provides a flexible rule-based automation system with triggers, conditions, and actions. Create automated workflows that can send notifications (email, Slack), execute custom actions, or trigger other processes based on events, schedules, or manual triggers with customizable rules.
 
 ## Features
 
-- **Automation Triggers**: Create notification automations triggered by events, schedules, or manual actions
+- **Automation Triggers**: Create automations triggered by events, schedules, or manual actions
 - **Automation Management**: Create, edit, and delete automation triggers with automatic cleanup of related data
 - **Rule-Based Conditions**: Define complex conditions using rule attributes (e.g., inventory levels, order status)
+- **Multiple Action Types**: Execute various actions including email notifications, Slack messages, SMS, push notifications, and custom actions
 - **Event Subscribers**: Built-in subscribers for common Medusa events (inventory updates, order events, payment events)
 - **Admin Panel**: Manage automations directly from Medusa Admin
 - **Flexible Rules**: Support for multiple rule types and operators (equals, greater than, less than, contains, etc.)
 - **Slack Notifications**: Rich Slack notifications with Block Kit support including headers, action buttons, and dividers
+- **Extensible Actions**: Add custom action handlers to extend automation capabilities
 - **Type-Safe**: Full TypeScript support with exported types and workflows
-- **Extensible**: Add custom rule attributes and extend functionality via plugin options
 
 ## Compatibility
 
@@ -68,13 +69,21 @@ Automations are triggered by:
 
 ### Rules and Conditions
 
-Each automation can have multiple rules that define when notifications should be sent:
+Each automation can have multiple rules that define when actions should be executed:
 
 - **Rule Attributes**: Available attributes for conditions
 - **Operators**: Comparison operators (equals, greater than, less than, contains, in, etc.)
 - **Rule Values**: Values to compare against
 
-See [Configuration Documentation](./docs/configuration.md) for details on built-in subscribers, available rule attributes, and extending functionality.
+### Actions
+
+When automation rules pass, actions are executed. Supported action types include:
+
+- **Email**: Send email notifications
+- **Slack**: Send Slack messages with Block Kit formatting
+- **Custom**: Extend with custom action handlers
+
+See [Configuration Documentation](./docs/configuration.md) for details on built-in subscribers, available actions, and extending functionality.
 
 ## Admin Panel
 

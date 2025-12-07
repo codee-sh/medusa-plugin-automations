@@ -88,7 +88,86 @@ Evaluates automations when payments are captured.
 2. **Data Fetching**: When an event is triggered, the subscriber fetches relevant data
 3. **Trigger Evaluation**: The subscriber retrieves all active triggers for the event
 4. **Rule Evaluation**: For each trigger, rules are evaluated against the event context
-5. **Action Execution**: If all rules pass, actions are executed (e.g., send notifications)
+5. **Action Execution**: If all rules pass, configured actions are executed (e.g., send notifications, execute custom logic)
+
+## Actions
+
+Automations can execute various types of actions when rules pass. Actions are extensible and can be customized to perform different tasks.
+
+### Built-in Action Types
+
+The plugin includes built-in action handlers:
+
+- **Email** - Send email notifications
+- **Slack** - Send Slack messages (see [Slack Notification Provider](#slack-notification-provider) section for details)
+
+### Action Handlers
+
+Action handlers define how actions are executed. Each action handler implements the `ActionHandler` interface and can be enabled or disabled via plugin configuration.
+
+### Configuring Actions
+
+Enable or disable specific actions in your `medusa-config.ts`:
+
+```typescript
+module.exports = defineConfig({
+  plugins: [
+    {
+      resolve: "@codee-sh/medusa-plugin-automations",
+      options: {
+        automations: {
+          actionsEnabled: {
+            email: true,
+          },
+          actionHandlers: [
+            // Custom action handlers (optional)
+          ]
+        }
+      }
+    }
+  ]
+})
+```
+
+### Custom Action Handlers
+
+You can create custom action handlers to extend automation capabilities:
+
+```typescript
+import { ActionHandler } from "@codee-sh/medusa-plugin-automations/modules/mpn-automation/types/action-handler"
+
+class CustomActionHandler implements ActionHandler {
+  id = "custom-action"
+  label = "Custom Action"
+  description = "Performs a custom action"
+
+  async executeAction({ action, context, container }) {
+    // Your custom logic here
+    return {
+      success: true,
+      message: "Custom action executed"
+    }
+  }
+}
+
+module.exports = defineConfig({
+  plugins: [
+    {
+      resolve: "@codee-sh/medusa-plugin-automations",
+      options: {
+        automations: {
+          actionHandlers: [
+            new CustomActionHandler()
+          ],
+          actionsEnabled: {
+            "custom-action": true
+          }
+        }
+      }
+    }
+  ]
+})
+```
 
 ## Slack Notification Provider
 
@@ -137,67 +216,6 @@ module.exports = defineConfig({
 - `webhook_url` (required) - Slack webhook URL for sending notifications
 - `admin_url` (required) - Base URL for admin panel links in notifications
 - `channels` - Array of supported channels (should include "slack")
-
-### Slack Block Kit Support
-
-The Slack provider supports Block Kit formatting, allowing you to create rich notifications with:
-
-- **Headers** - Prominent header blocks with emoji support
-- **Action Buttons** - Interactive buttons that link to admin panel pages
-- **Dividers** - Visual separators between sections
-- **Sections** - Text sections with markdown formatting
-
-### Notification Templates
-
-The Slack provider uses a template-based system. Templates are defined per notification type and can include:
-
-- Custom text content
-- Block Kit blocks for rich formatting
-- Dynamic data from the automation context
-- Interactive elements (buttons, links)
-
-Currently supported templates:
-- `inventory-level` - Notifications for inventory level updates
-
-### Template Customization
-
-Templates are handled by the `getNotificationBlocks` and `getNotificationText` methods in the Slack provider service. You can extend the provider to add custom templates or modify existing ones.
-
-## Complete Configuration Example
-
-```typescript
-import { Modules } from '@medusajs/utils'
-
-module.exports = defineConfig({
-  plugins: [
-    {
-      resolve: "@codee-sh/medusa-plugin-automations",
-      options: {
-        // Plugin options
-      }
-    }
-  ],
-  modules: [
-    {
-      key: Modules.NOTIFICATION,
-      resolve: "@medusajs/notification",
-      options: {
-        providers: [
-          {
-            resolve: '@codee-sh/medusa-plugin-automations/providers/slack',
-            id: 'mpn-slack',
-            options: {
-              channels: ["slack"],
-              webhook_url: process.env.SLACK_WEBHOOK_URL,
-              admin_url: process.env.ADMIN_URL,
-            }
-          }
-        ]
-      }
-    }
-  ]
-})
-```
 
 ## Troubleshooting
 
