@@ -83,12 +83,6 @@ export const AutomationsList = () => {
         return <span>{row?.original?.event_name}</span>;
       },
     }),
-    columnHelper.accessor("interval_minutes", {
-      header: "Interval Minutes",
-      cell: ({ row }) => {
-        return <span>{row?.original?.interval_minutes}</span>;
-      },
-    }),
     columnHelper.accessor("last_run_at", {
       header: "Last Run At",
       cell: ({ row }) => {
@@ -104,7 +98,10 @@ export const AutomationsList = () => {
     columnHelper.accessor("active", {
       header: "Active",
       cell: ({ row }) => {
-        return <span>{row?.original?.active ? "Yes" : "No"}</span>;
+        const color = row?.original?.active ? "green" : "red";
+        const text = row?.original?.active ? "Yes" : "No";
+        
+        return <Badge size="small" color={color}>{text}</Badge>;
       },
     }),
     columnHelper.accessor("created_at", {
