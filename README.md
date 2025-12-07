@@ -5,10 +5,12 @@ A comprehensive notification automation plugin for Medusa v2 that provides a fle
 ## Features
 
 - **Automation Triggers**: Create notification automations triggered by events, schedules, or manual actions
+- **Automation Management**: Create, edit, and delete automation triggers with automatic cleanup of related data
 - **Rule-Based Conditions**: Define complex conditions using rule attributes (e.g., inventory levels, order status)
 - **Event Subscribers**: Built-in subscribers for common Medusa events (inventory updates, order events, payment events)
 - **Admin Panel**: Manage automations directly from Medusa Admin
 - **Flexible Rules**: Support for multiple rule types and operators (equals, greater than, less than, contains, etc.)
+- **Slack Notifications**: Rich Slack notifications with Block Kit support including headers, action buttons, and dividers
 - **Type-Safe**: Full TypeScript support with exported types and workflows
 - **Extensible**: Add custom rule attributes and extend functionality via plugin options
 
@@ -61,14 +63,14 @@ Navigate to **Notifications > Automations** in your Medusa Admin dashboard, or d
 
 Automations are triggered by:
 - **Events**: Medusa events (e.g., `inventory.inventory-level.updated`, `order.placed`)
-- **Schedule**: Time-based triggers with configurable intervals
+- **Schedule**: Time-based triggers with configurable intervals (In progress)
 - **Manual**: Triggered manually from the admin panel
 
 ### Rules and Conditions
 
 Each automation can have multiple rules that define when notifications should be sent:
 
-- **Rule Attributes**: Available attributes for conditions (e.g., `inventory_level.available_quantity`, `inventory_item.sku`)
+- **Rule Attributes**: Available attributes for conditions
 - **Operators**: Comparison operators (equals, greater than, less than, contains, in, etc.)
 - **Rule Values**: Values to compare against
 

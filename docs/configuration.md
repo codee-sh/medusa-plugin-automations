@@ -13,51 +13,6 @@ module.exports = defineConfig({
       resolve: "@codee-sh/medusa-plugin-automations",
       options: {
         // Plugin options here
-        ruleAttributes: [
-          // Custom rule attributes (optional)
-        ]
-      }
-    }
-  ]
-})
-```
-
-## Configuration Options
-
-### `ruleAttributes`
-
-Add custom rule attributes to extend the available conditions for automation rules.
-
-**Type**: `Array<RuleAttribute>`
-
-**Example**:
-
-```typescript
-import type { RuleAttribute } from "@codee-sh/medusa-plugin-automations/modules/mpn-automation/rules/types"
-
-module.exports = defineConfig({
-  plugins: [
-    {
-      resolve: "@codee-sh/medusa-plugin-automations",
-      options: {
-        ruleAttributes: [
-          {
-            id: "custom_product_price",
-            value: "product.price",
-            label: "Product Price",
-            description: "The price of the product",
-            field_type: "number",
-            group: "product",
-          },
-          {
-            id: "custom_order_total",
-            value: "order.total",
-            label: "Order Total",
-            description: "The total amount of the order",
-            field_type: "number",
-            group: "order",
-          }
-        ]
       }
     }
   ]
@@ -91,7 +46,6 @@ Evaluates automations when inventory levels are updated.
 
 - **Event**: `inventory.inventory-level.updated`
 - **Context**: Provides `inventory_level` data with related `inventory_item`
-- **Available Rule Attributes**: All `inventory_level.*` and `inventory_item.*` attributes
 
 #### `inventory.inventory-item.updated`
 
@@ -99,39 +53,34 @@ Evaluates automations when inventory items are updated.
 
 - **Event**: `inventory.inventory-item.updated`
 - **Context**: Provides `inventory_item` data
-- **Available Rule Attributes**: All `inventory_item.*` attributes
 
-#### `inventory.inventory-reservation-item.updated`
+#### `inventory.inventory-reservation-item.updated` (in progress)
 
 Evaluates automations when inventory reservations are updated.
 
 - **Event**: `inventory.inventory-reservation-item.updated`
 - **Context**: Provides reservation data
-- **Available Rule Attributes**: Reservation-related attributes
 
-#### `order.placed`
+#### `order.placed` (in progress)
 
 Evaluates automations when orders are placed.
 
 - **Event**: `order.placed`
 - **Context**: Provides order data
-- **Available Rule Attributes**: Order-related attributes (when implemented)
 
-#### `order.completed`
+#### `order.completed` (in progress)
 
 Evaluates automations when orders are completed.
 
 - **Event**: `order.completed`
 - **Context**: Provides order data
-- **Available Rule Attributes**: Order-related attributes (when implemented)
 
-#### `payment.captured`
+#### `payment.captured` (in progress)
 
 Evaluates automations when payments are captured.
 
 - **Event**: `payment.captured`
 - **Context**: Provides payment data
-- **Available Rule Attributes**: Payment-related attributes (when implemented)
 
 ### How Subscribers Work
 
@@ -141,147 +90,109 @@ Evaluates automations when payments are captured.
 4. **Rule Evaluation**: For each trigger, rules are evaluated against the event context
 5. **Action Execution**: If all rules pass, actions are executed (e.g., send notifications)
 
-### Creating Custom Subscribers
+## Slack Notification Provider
 
-You can create custom subscribers that integrate with the automation system:
+The plugin includes a Slack notification provider with Block Kit support for rich, interactive notifications.
 
-```typescript
-import {
-  SubscriberArgs,
-  type SubscriberConfig,
-} from "@medusajs/medusa"
-import { validateNotificationTriggersByEventWorkflow } from "@codee-sh/medusa-plugin-automations/workflows/mpn-automation/validate-notification-triggers-by-event"
+### Registering the Slack Provider
 
-export default async function customEventHandler({
-  event: { data },
-  container,
-}: SubscriberArgs<{ id: string }>) {
-  const { result: validationResult } = await validateNotificationTriggersByEventWorkflow(container).run({
-    input: {
-      event_name: "custom.event.name",
-      context: {
-        // Your custom context data
-        customData: data,
-      },
-    }
-  })
-
-  // Process validation results
-  for (const result of validationResult.results) {
-    if (result.passed) {
-      // Execute actions for triggers that passed
-      console.log(`Trigger ${result.trigger_name} passed validation`)
-    }
-  }
-}
-
-export const config: SubscriberConfig = {
-  event: "custom.event.name",
-}
-```
-
-## Rule Attributes
-
-Rule attributes define what data can be used in automation conditions. The plugin includes built-in attributes for inventory management.
-
-### Built-in Rule Attributes
-
-#### Inventory Level Attributes
-
-- `inventory_level.id` - Inventory level ID
-- `inventory_level.location_id` - Location ID
-- `inventory_level.stocked_quantity` - Stocked quantity
-- `inventory_level.reserved_quantity` - Reserved quantity
-- `inventory_level.available_quantity` - Available quantity
-- `inventory_level.incoming_quantity` - Incoming quantity
-
-#### Inventory Item Attributes
-
-- `inventory_item.id` - Inventory item ID
-- `inventory_item.sku` - SKU
-- `inventory_item.title` - Item title
-- `inventory_item.origin_country` - Origin country
-- `inventory_item.weight` - Weight
-- `inventory_item.length`, `inventory_item.height`, `inventory_item.width` - Dimensions
-- `inventory_item.requires_shipping` - Requires shipping flag
-- And more...
-
-### Extending Rule Attributes
-
-Add custom rule attributes via plugin options:
+Add the Slack provider to your `medusa-config.ts` in the `modules` section:
 
 ```typescript
-import type { RuleAttribute } from "@codee-sh/medusa-plugin-automations/modules/mpn-automation/rules/types"
-
-const customAttributes: RuleAttribute[] = [
-  {
-    id: "product_price",
-    value: "product.price",
-    label: "Product Price",
-    description: "The price of the product",
-    field_type: "number",
-    group: "product",
-  }
-]
+import { Modules } from '@medusajs/utils'
 
 module.exports = defineConfig({
   plugins: [
     {
       resolve: "@codee-sh/medusa-plugin-automations",
       options: {
-        ruleAttributes: customAttributes
+        // Plugin options
+      }
+    }
+  ],
+  modules: [
+    {
+      key: Modules.NOTIFICATION,
+      resolve: "@medusajs/notification",
+      options: {
+        providers: [
+          {
+            resolve: '@codee-sh/medusa-plugin-automations/providers/slack',
+            id: 'mpn-slack',
+            options: {
+              channels: ["slack"],
+              webhook_url: process.env.SLACK_WEBHOOK_URL,
+              admin_url: process.env.ADMIN_URL,
+            }
+          }
+        ]
       }
     }
   ]
 })
 ```
 
-## Workflows
+### Slack Provider Options
 
-The plugin exports workflows for managing automations:
+- `webhook_url` (required) - Slack webhook URL for sending notifications
+- `admin_url` (required) - Base URL for admin panel links in notifications
+- `channels` - Array of supported channels (should include "slack")
 
-### `editAutomationWorkflow`
+### Slack Block Kit Support
 
-Creates or updates an automation.
+The Slack provider supports Block Kit formatting, allowing you to create rich notifications with:
 
-```typescript
-import { editAutomationWorkflow } from "@codee-sh/medusa-plugin-automations/workflows/mpn-automation/edit-automation"
+- **Headers** - Prominent header blocks with emoji support
+- **Action Buttons** - Interactive buttons that link to admin panel pages
+- **Dividers** - Visual separators between sections
+- **Sections** - Text sections with markdown formatting
 
-const { result } = await editAutomationWorkflow(container).run({
-  input: {
-    id: "automation_id",
-    items: [
-      {
-        id: "rule_id",
-        name: "Rule Name"
-      }
-    ]
-  }
-})
-```
+### Notification Templates
+
+The Slack provider uses a template-based system. Templates are defined per notification type and can include:
+
+- Custom text content
+- Block Kit blocks for rich formatting
+- Dynamic data from the automation context
+- Interactive elements (buttons, links)
+
+Currently supported templates:
+- `inventory-level` - Notifications for inventory level updates
+
+### Template Customization
+
+Templates are handled by the `getNotificationBlocks` and `getNotificationText` methods in the Slack provider service. You can extend the provider to add custom templates or modify existing ones.
 
 ## Complete Configuration Example
 
 ```typescript
-import type { RuleAttribute } from "@codee-sh/medusa-plugin-automations/modules/mpn-automation/rules/types"
-
-const customRuleAttributes: RuleAttribute[] = [
-  {
-    id: "order_total",
-    value: "order.total",
-    label: "Order Total",
-    description: "The total amount of the order",
-    field_type: "number",
-    group: "order",
-  }
-]
+import { Modules } from '@medusajs/utils'
 
 module.exports = defineConfig({
   plugins: [
     {
       resolve: "@codee-sh/medusa-plugin-automations",
       options: {
-        ruleAttributes: customRuleAttributes
+        // Plugin options
+      }
+    }
+  ],
+  modules: [
+    {
+      key: Modules.NOTIFICATION,
+      resolve: "@medusajs/notification",
+      options: {
+        providers: [
+          {
+            resolve: '@codee-sh/medusa-plugin-automations/providers/slack',
+            id: 'mpn-slack',
+            options: {
+              channels: ["slack"],
+              webhook_url: process.env.SLACK_WEBHOOK_URL,
+              admin_url: process.env.ADMIN_URL,
+            }
+          }
+        ]
       }
     }
   ]
