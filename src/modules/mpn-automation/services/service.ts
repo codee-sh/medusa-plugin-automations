@@ -15,7 +15,7 @@ import {
   ALL_EVENTS,
   TRIGGER_TYPES,
 } from "../types";
-import { EmailActionHandler } from "../actions-handlers";
+import { EmailActionHandler, SlackActionHandler } from "../actions-handlers";
 import { Logger } from "@medusajs/framework/types"
 
 type InjectedDependencies = {
@@ -50,7 +50,7 @@ class MpnAutomationService extends MedusaService({
    */
   private initializeActionHandlers() {
     // 1. Register default actions
-    const defaultActions: ActionHandler[] = [new EmailActionHandler()];
+    const defaultActions: ActionHandler[] = [new EmailActionHandler(), new SlackActionHandler() ];
 
     defaultActions.forEach((action) => {
       this.actionHandlers_.set(action.id, action);
