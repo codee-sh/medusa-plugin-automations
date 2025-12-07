@@ -84,26 +84,6 @@ export const AutomationsList = () => {
         return <span>{row?.original?.active ? 'Yes' : 'No'}</span>
       },
     }),
-    columnHelper.accessor("channels", {
-      header: "Channels",
-      cell: ({ row }) => {
-        const channelObject = row.original.channels ? row.original.channels : {}
-        const activeChannels = Object.keys(channelObject).filter((channel: string) => channelObject[channel] === true)
-        return <>
-          <div className="flex items-center gap-1">
-            {activeChannels.length > 0 ? (
-              activeChannels.map((channel: string) => (
-                <Badge key={channel} size="2xsmall" className="text-xs">
-                  {channel}
-                </Badge>
-              ))
-            ) : (
-              <span className="text-ui-fg-muted">No channels</span>
-            )}
-          </div>
-        </>
-      },
-    }),
     columnHelper.accessor("created_at", {
       header: "Created At",
       cell: ({ row }) => {

@@ -60,7 +60,7 @@ export function AutomationsActionsForm({
                   )
                   const configComponentKey = actionData?.configComponentKey
                   const fields = actionData?.fields
-                  const isEnabled = actionData?.enabled
+                  const isEnabled = actionType ? actionData?.enabled : true
 
                   return (
                     <div className={`flex flex-col gap-4 p-4 border rounded-lg ${isEnabled ? "opacity-100" : "opacity-50"}`}>
@@ -93,7 +93,7 @@ export function AutomationsActionsForm({
                                     }
                                     value={action.value || ""}
                                   >
-                                    {action.label}
+                                    {action.label} {action.enabled ? "" : "(Disabled)"}
                                   </Select.Item>
                                 )
                               )}

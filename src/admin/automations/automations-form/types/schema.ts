@@ -15,7 +15,6 @@ export const baseAutomationFormSchema = z.object({
     event_name: z.string().min(1, "Event name is required"),
     interval_minutes: z.number().nullable(),
     active: z.boolean(),
-    channels: z.record(z.boolean()).nullable(),
   }),
   rules: z
     .object({

@@ -76,8 +76,7 @@ export function AutomationsEditForm({ id }: { id: string }) {
         trigger_type: "event",
         event_name: "",
         interval_minutes: null,
-        active: false,
-        channels: {}
+        active: false
       },
       rules: {
         items: [],
@@ -103,7 +102,6 @@ export function AutomationsEditForm({ id }: { id: string }) {
           event_name: trigger.event_name || "",
           interval_minutes: trigger.interval_minutes || null,
           active: trigger.active || false,
-          channels: (trigger.channels as Record<string, boolean>) || {}
         },
         rules: {
           items: rules.map((rule: any) => ({
@@ -140,7 +138,6 @@ export function AutomationsEditForm({ id }: { id: string }) {
           event_name: "",
           interval_minutes: null,
           active: false,
-          channels: {},
         },
         rules: {
           items: automationsRulesData?.rules || [],
@@ -162,7 +159,6 @@ export function AutomationsEditForm({ id }: { id: string }) {
         event_name: data.general.event_name,
         interval_minutes: data.general.interval_minutes,
         active: data.general.active,
-        channels: data.general.channels,
       }
 
       await editAutomation({

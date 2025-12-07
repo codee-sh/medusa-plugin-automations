@@ -6,7 +6,8 @@ import {
 import { sdk } from "../../../admin/lib/sdk"
 
 export type AvailableActionsQueryData = {
-  actions: { 
+  actions: {
+    enabled: any; 
     value: string
     label: string
     description?: string

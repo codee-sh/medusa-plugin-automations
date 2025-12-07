@@ -55,8 +55,7 @@ export function AutomationsCreateForm() {
         trigger_type: "event",
         event_name: "",
         interval_minutes: null,
-        active: false,
-        channels: {},
+        active: false
       },
     },
   });
@@ -69,8 +68,7 @@ export function AutomationsCreateForm() {
         trigger_type: data.general.trigger_type,
         event_name: data.general.event_name,
         interval_minutes: data.general.interval_minutes,
-        active: data.general.active,
-        channels: data.general.channels,
+        active: data.general.active
       };
 
       await createAutomation({

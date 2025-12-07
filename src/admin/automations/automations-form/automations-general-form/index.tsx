@@ -97,42 +97,6 @@ export function AutomationsGeneralForm({ form, isOpen }: { form: any; isOpen?: b
             />
           </div>
           <div className="flex flex-col gap-2">
-            <Label htmlFor="channels" className="block">Channels</Label>
-            <Controller
-              name="general.channels"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <div className="grid grid-cols-6 gap-2">
-                  {availableActions.map((channel) => (
-                    <div key={channel.value} className="flex items-center space-x-2">
-                      <Checkbox
-                        checked={field.value?.[channel.value] === true}
-                        onCheckedChange={(checked) => {
-                          field.onChange({
-                            ...(field.value || {}),
-                            [channel.value]: checked === true
-                          })
-                        }}
-                        id={`channel-${channel.value}`}
-                      />
-                      <Label
-                        htmlFor={`channel-${channel.value}`}
-                        className="text-sm font-medium cursor-pointer"
-                      >
-                        {channel.label}
-                      </Label>
-                    </div>
-                  ))}
-                  {fieldState.error && (
-                    <span className="text-red-500 text-sm">
-                      {fieldState.error.message}
-                    </span>
-                  )}
-                </div>
-              )}
-            />
-          </div>
-          <div className="flex flex-col gap-2">
             <Label htmlFor="active" className="block">Active</Label>
             <div className="flex items-center space-x-2">
               <Controller
