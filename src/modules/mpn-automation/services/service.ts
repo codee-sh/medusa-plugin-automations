@@ -34,7 +34,7 @@ class MpnAutomationService extends MedusaService({
   private logger_: Logger;
   private events_: CustomEvent[];
   private actionsEnabled_: any;
-  private actionHandlers_: Map<string, ActionHandler> = new Map();
+  private actionHandlers_: Map<string, { handler: ActionHandler, enabled: boolean }> = new Map();
 
   constructor({ logger }: InjectedDependencies, options?: ModuleOptions) {
     super(...arguments);
@@ -48,29 +48,34 @@ class MpnAutomationService extends MedusaService({
     };
     
     // Initialize default action handlers
-    this.initializeActionHandlers();
+    this.init();
   }
 
   /**
    * Initialize action handlers from defaults and options
    */
-  private initializeActionHandlers() {
+  private init() {
     const defaultActions: ActionHandler[] = [new EmailActionHandler(), new SlackActionHandler() ];
 
     defaultActions.forEach((action) => {
       const isEnabled = this.actionsEnabled_[action.id];
 
-      this.actionHandlers_.set(action.id, action);
-      
+      this.actionHandlers_.set(action.id, {
+        handler: action,
+        enabled: isEnabled,
+      });
+
       this.logger_.info(`Action handler for ${action.id} registered - ${isEnabled ? "enabled" : "disabled"} in config`);
     });
 
     const customHandlers = this.options_.automations?.actionHandlers || [];
     customHandlers.forEach((action) => {
-      // If replace is true or action doesn't exist, set it
       if (!this.actionHandlers_.has(action.id)) {
         const isEnabled = this.actionsEnabled_[action.id];
-        this.actionHandlers_.set(action.id, action);
+        this.actionHandlers_.set(action.id, {
+          handler: action,
+          enabled: isEnabled,
+        });
         this.logger_.info(`Action handler for ${action.id} registered - ${isEnabled ? "enabled" : "disabled"} in config`);
       }
     });
@@ -79,7 +84,7 @@ class MpnAutomationService extends MedusaService({
   /**
    * Get action handlers map
    */
-  private getActionHandlers(): Map<string, ActionHandler> {
+  private getActionHandlers(): Map<string, { handler: ActionHandler, enabled: boolean }> {
     return this.actionHandlers_;
   }
 
@@ -97,20 +102,20 @@ class MpnAutomationService extends MedusaService({
     const handlers = this.getActionHandlers();
 
     return Array.from(handlers.values()).map((handler) => ({
-      value: handler.id,
-      label: handler.label,
-      description: handler.description,
-      configComponentKey: handler.configComponentKey,
-      templateLoaders: handler.templateLoaders,
-      fields: handler.fields,
-      enabled: this.actionsEnabled_[handler.id],
+      value: handler.handler.id,
+      label: handler.handler.label,
+      description: handler.handler.description,
+      configComponentKey: handler.handler.configComponentKey,
+      templateLoaders: handler.handler.templateLoaders,
+      fields: handler.handler.fields,
+      enabled: handler.enabled,
     }));
   }
 
   /**
    * Get action handler by ID for the admin panel form
    */
-  getActionHandler(actionId: string): ActionHandler | undefined {
+  getActionHandler(actionId: string): { handler: ActionHandler, enabled: boolean } | undefined {
     const handlers = this.getActionHandlers();
     return handlers.get(actionId);
   }

@@ -5,6 +5,7 @@ import {
 } from "../../../modules/mpn-automation/types/interfaces";
 import MpnAutomationService from "../../../modules/mpn-automation/services/service";
 import { MedusaError } from "@medusajs/utils";
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
 
 export interface RunAutomationActionsStepInput {
   validated: Array<{
@@ -55,6 +56,7 @@ export const runAutomationActionsStep = createStep(
   ): Promise<StepResponse<RunAutomationActionsStepOutput>> => {
     const mpnAutomationService =
       container.resolve<MpnAutomationService>("mpnAutomation");
+    const logger = container.resolve(ContainerRegistrationKeys.LOGGER);
 
     const { validated, context } = input;
 
@@ -79,24 +81,48 @@ export const runAutomationActionsStep = createStep(
 
         const executedActions = await Promise.all(
           result.actions.map(async (action) => {
-            if (!action.action_type) {
-              throw new MedusaError(MedusaError.Types.INVALID_DATA, "Action type is required");
+            try {
+              if (!action.action_type) {
+                throw new MedusaError(
+                  MedusaError.Types.INVALID_DATA,
+                  "Action type is required"
+                );
+              }
+
+              const actionHandler = mpnAutomationService.getActionHandler(
+                action.action_type
+              );
+
+              const handler = actionHandler?.handler;
+              const enabled = actionHandler?.enabled;
+
+              if (!handler) {
+                throw new MedusaError(
+                  MedusaError.Types.NOT_FOUND,
+                  `Action handler for "${action.action_type}" not found`
+                );
+              }
+
+              if (!enabled) {
+                throw new MedusaError(
+                  MedusaError.Types.NOT_FOUND,
+                  `Action handler for "${action.action_type}" is disabled`
+                );
+              }
+
+              return await handler.executeAction({
+                action,
+                context,
+                result,
+                container,
+                eventName: `mpn.automation.action.${action.action_type}.executed`,
+                triggerId: result.trigger.id || result.trigger.trigger_id || "",
+              });
+            } catch (error) {
+              logger.info(error.message);
+
+              return error;
             }
-
-            const actionHandler = mpnAutomationService.getActionHandler(action.action_type);
-
-            if (!actionHandler) {
-              throw new MedusaError(MedusaError.Types.NOT_FOUND, `Action handler for "${action.action_type}" not found`);
-            }
-
-            return await actionHandler.executeAction({
-              action,
-              context,
-              result,
-              container,
-              eventName: `mpn.automation.action.${action.action_type}.executed`,
-              triggerId: result.trigger.id || result.trigger.trigger_id || "",
-            });
           })
         );
 
