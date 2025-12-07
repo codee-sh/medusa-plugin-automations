@@ -1,7 +1,7 @@
 import { MedusaStoreRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
 import { z } from "zod"
-import { editAutomationWorkflow, CreateAutomationWorkflowInput, EditAutomationWorkflowInput, createAutomationWorkflow } from "../../../../workflows/mpn-automation"
+import { editAutomationWorkflow, CreateAutomationWorkflowInput, EditAutomationWorkflowInput, createAutomationWorkflow, deleteAutomationWorkflow, DeleteAutomationWorkflowInput } from "../../../../workflows/mpn-automation"
 
 export const PostAutomationSchema = z.object({
   id: z.string().optional(),
@@ -79,16 +79,16 @@ export async function DELETE(
   req: MedusaStoreRequest<DeleteAutomationSchema>,
   res: MedusaResponse
 ) {
-  // const { result: automation } = await deleteAutomationWorkflow(
-  //   req.scope
-  // ).run({
-  //   input: {
-  //     id: req.body.id as string
-  //   },
-  // });
+  const { result } = await deleteAutomationWorkflow(
+    req.scope
+  ).run({
+    input: {
+      id: req.body.id as string
+    } as DeleteAutomationWorkflowInput,
+  });
 
-  // res.json({
-  //   automation: automation,
-  // });
+  res.json({
+    result: result,
+  });
 }
 
