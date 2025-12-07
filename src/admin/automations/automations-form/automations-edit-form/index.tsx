@@ -140,7 +140,7 @@ export function AutomationsEditForm({ id }: { id: string }) {
           active: false,
         },
         rules: {
-          items: automationsRulesData?.rules || [],
+          items: [],
         },
         actions: {
           items: [],
