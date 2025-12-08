@@ -6,20 +6,22 @@ interface FormFieldProps {
   children: React.ReactNode
 }
 
-export const FormField = ({ 
+export const FormField = ({
   label,
   required,
-  children
+  children,
 }: FormFieldProps) => {
   return (
     <div>
       <div className="mb-2">
         <Label className="text-sm font-medium">
           {label}
-          {required && <span className="text-red-500 ml-1">*</span>}
+          {required && (
+            <span className="text-red-500 ml-1">*</span>
+          )}
         </Label>
       </div>
       {children}
     </div>
   )
-} 
+}

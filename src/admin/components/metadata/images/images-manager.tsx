@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react"
 import { Select, Label } from "@medusajs/ui"
-import { ImageUploader, ImagesList, SaveButton } from "./index"
+import {
+  ImageUploader,
+  ImagesList,
+  SaveButton,
+} from "./index"
 
 interface ImagesManagerProps {
   images: any[]
@@ -14,20 +18,23 @@ interface ImagesManagerProps {
   sectionTypes?: Array<{ value: string; label: string }>
 }
 
-export const ImagesManager = ({ 
-  images, 
-  onImagesChange, 
+export const ImagesManager = ({
+  images,
+  onImagesChange,
   onSave,
   title = "Zarządzanie zdjęciami",
   showSaveButton = true,
   className = "",
   sectionType = "slider",
   onSectionTypeChange,
-  sectionTypes = []
+  sectionTypes = [],
 }: ImagesManagerProps) => {
   const handleAddImage = (imageUrl: string) => {
     if (imageUrl.trim()) {
-      onImagesChange([...images, { image_url: imageUrl.trim() }])
+      onImagesChange([
+        ...images,
+        { image_url: imageUrl.trim() },
+      ])
     }
   }
 
@@ -43,8 +50,12 @@ export const ImagesManager = ({
 
   return (
     <div>
-      {title && <h3 className="text-lg font-semibold mb-4">{title}</h3>}
-      
+      {title && (
+        <h3 className="text-lg font-semibold mb-4">
+          {title}
+        </h3>
+      )}
+
       {/* Section type selection */}
       {onSectionTypeChange && (
         <div className="mb-6">
@@ -61,8 +72,11 @@ export const ImagesManager = ({
               <Select.Value />
             </Select.Trigger>
             <Select.Content>
-              {sectionTypes.map(type => (
-                <Select.Item key={type.value} value={type.value}>
+              {sectionTypes.map((type) => (
+                <Select.Item
+                  key={type.value}
+                  value={type.value}
+                >
                   {type.label}
                 </Select.Item>
               ))}
@@ -70,20 +84,17 @@ export const ImagesManager = ({
           </Select>
         </div>
       )}
-      
+
       <ImageUploader onAddImage={handleAddImage} />
-      
-      <ImagesList 
-        images={images} 
-        onRemoveImage={handleRemoveImage} 
+
+      <ImagesList
+        images={images}
+        onRemoveImage={handleRemoveImage}
       />
-      
+
       {showSaveButton && onSave && (
-        <SaveButton 
-          onSave={onSave}
-          disabled={false}
-        />
+        <SaveButton onSave={onSave} disabled={false} />
       )}
     </div>
   )
-} 
+}

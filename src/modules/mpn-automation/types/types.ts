@@ -19,18 +19,28 @@ export type Attribute = {
 import { ActionHandler } from "./action-handler"
 
 export interface FieldConfig {
-  name: string;
-  key: string;
-  label: string;
-  description?: string;
-  type: "text" | "textarea" | "number" | "select" | "checkbox" | "date" | "chip-input" | "email" | "password" | "file";
-  placeholder?: string;
-  required?: boolean;
-  defaultValue?: any;
-  options?: Array<{ value: string; label: string }>;
-  min?: number;
-  max?: number;
-  step?: number;
+  name: string
+  key: string
+  label: string
+  description?: string
+  type:
+    | "text"
+    | "textarea"
+    | "number"
+    | "select"
+    | "checkbox"
+    | "date"
+    | "chip-input"
+    | "email"
+    | "password"
+    | "file"
+  placeholder?: string
+  required?: boolean
+  defaultValue?: any
+  options?: Array<{ value: string; label: string }>
+  min?: number
+  max?: number
+  step?: number
 }
 
 export type ModuleOptions = {
@@ -50,7 +60,7 @@ export type ModuleOptions = {
 export enum TriggerType {
   EVENT = "event",
   SCHEDULE = "schedule",
-  MANUAL = "manual"
+  MANUAL = "manual",
 }
 
 export enum ActionType {
@@ -59,7 +69,7 @@ export enum ActionType {
   PUSH = "push",
   IN_APP = "in_app",
   SLACK = "slack",
-  ADMIN = "admin"
+  ADMIN = "admin",
 }
 
 export enum OperatorType {
@@ -74,115 +84,115 @@ export enum OperatorType {
 export const OPERATOR_TYPES = [
   {
     value: OperatorType.EQUAL,
-    label: "Equal"
+    label: "Equal",
   },
   {
     value: OperatorType.NOT_EQUAL,
-    label: "Not Equal"
+    label: "Not Equal",
   },
   {
     value: OperatorType.GREATER_THAN,
-    label: "Greater Than"
+    label: "Greater Than",
   },
   {
     value: OperatorType.LESS_THAN,
-    label: "Less Than"
+    label: "Less Than",
   },
   {
     value: OperatorType.GREATER_THAN_OR_EQUAL,
-    label: "Greater Than or Equal"
+    label: "Greater Than or Equal",
   },
   {
     value: OperatorType.LESS_THAN_OR_EQUAL,
-    label: "Less Than or Equal"
+    label: "Less Than or Equal",
   },
 ]
 
 export const TRIGGER_TYPES = [
   {
     value: TriggerType.EVENT,
-    label: "Event"
+    label: "Event",
   },
   {
     value: TriggerType.SCHEDULE,
-    label: "Schedule"
+    label: "Schedule",
   },
   {
     value: TriggerType.MANUAL,
-    label: "Manual"
-  }
+    label: "Manual",
+  },
 ]
 
 export const ACTION_TYPES = [
   {
     value: ActionType.EMAIL,
-    label: "Email"
+    label: "Email",
   },
   {
     value: ActionType.SMS,
-    label: "SMS"
+    label: "SMS",
   },
   {
     value: ActionType.PUSH,
-    label: "Push"
+    label: "Push",
   },
   {
     value: ActionType.IN_APP,
-    label: "In App"
+    label: "In App",
   },
   {
     value: ActionType.SLACK,
-    label: "Slack"
+    label: "Slack",
   },
   {
     value: ActionType.ADMIN,
-    label: "Admin"
+    label: "Admin",
   },
 ]
 
 export const INVENTORY_ITEM_ATTRIBUTES = [
   {
     value: "inventory_item.stocked_quantity",
-    label: "Stocked Quantity"
+    label: "Stocked Quantity",
   },
   {
     value: "inventory_item.reserved_quantity",
-    label: "Reserved Quantity"
+    label: "Reserved Quantity",
   },
   {
     value: "inventory_item.available_quantity",
-    label: "Available Quantity"
+    label: "Available Quantity",
   },
   {
     value: "inventory_item.incoming_quantity",
-    label: "Incoming Quantity"
+    label: "Incoming Quantity",
   },
   {
     value: "inventory_item.location_id",
-    label: "Location ID"
+    label: "Location ID",
   },
 ]
 
 export const INVENTORY_LEVEL_ATTRIBUTES = [
   {
     value: "inventory_level.stocked_quantity",
-    label: "Stocked Quantity"
+    label: "Stocked Quantity",
   },
   {
     value: "inventory_level.reserved_quantity",
-    label: "Reserved Quantity"
+    label: "Reserved Quantity",
   },
   {
     value: "inventory_level.available_quantity",
-    label: "Available Quantity"
+    label: "Available Quantity",
   },
   {
     value: "inventory_level.incoming_quantity",
-    label: "Incoming Quantity"
+    label: "Incoming Quantity",
   },
   {
     value: "inventory_level.location_id",
-    label: "Location ID"
+    label: "Location ID",
   },
 ]
 
@@ -190,63 +200,57 @@ export const EVENT_INVENTORY_TYPES = [
   {
     value: "inventory.inventory-level.created",
     label: "Inventory Level Created",
-    attributes: INVENTORY_LEVEL_ATTRIBUTES
+    attributes: INVENTORY_LEVEL_ATTRIBUTES,
   },
   {
     value: "inventory.inventory-level.updated",
     label: "Inventory Level Updated",
-    attributes: INVENTORY_LEVEL_ATTRIBUTES
+    attributes: INVENTORY_LEVEL_ATTRIBUTES,
   },
   {
     value: "inventory.inventory-level.deleted",
     label: "Inventory Level Deleted",
-    attributes: INVENTORY_LEVEL_ATTRIBUTES
-  }
+    attributes: INVENTORY_LEVEL_ATTRIBUTES,
+  },
 ]
 
 export const EVENT_CUSTOMER_TYPES = [
   {
     value: "customer.created",
-    label: "Customer Created"
+    label: "Customer Created",
   },
   {
     value: "customer.updated",
-    label: "Customer Updated"
-  }
+    label: "Customer Updated",
+  },
 ]
 
 export const EVENT_ORDER_TYPES = [
   {
     value: "order.placed",
-    label: "Order Placed"
+    label: "Order Placed",
   },
   {
     value: "order.completed",
-    label: "Order Completed"
+    label: "Order Completed",
   },
   {
     value: "order.shipped",
-    label: "Order Shipped"
-  }
+    label: "Order Shipped",
+  },
 ]
 
 export const ALL_EVENTS = [
   {
     name: "Inventory",
-    events: [
-      ...EVENT_INVENTORY_TYPES,
-    ]
+    events: [...EVENT_INVENTORY_TYPES],
   },
   {
     name: "Customer",
-    events: [
-      ...EVENT_CUSTOMER_TYPES,
-    ]
+    events: [...EVENT_CUSTOMER_TYPES],
   },
   {
     name: "Order",
-    events: [
-      ...EVENT_ORDER_TYPES,
-    ]
-  }
+    events: [...EVENT_ORDER_TYPES],
+  },
 ]

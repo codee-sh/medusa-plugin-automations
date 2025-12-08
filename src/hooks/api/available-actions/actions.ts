@@ -1,13 +1,10 @@
 import { FetchError } from "@medusajs/js-sdk"
-import {
-  QueryKey,
-  useQuery
-} from "@tanstack/react-query"
+import { QueryKey, useQuery } from "@tanstack/react-query"
 import { sdk } from "../../../admin/lib/sdk"
 
 export type AvailableActionsQueryData = {
   actions: {
-    enabled: any; 
+    enabled: any
     value: string
     label: string
     description?: string
@@ -21,28 +18,36 @@ export type AvailableActionsQueryData = {
       required?: boolean
       placeholder?: string
     }>
-  }[];
-};
+  }[]
+}
 
 export const useAvailableActions = (
   params: any,
   options?: any
 ) => {
-  const { limit = 100, offset = 0, extraKey = [], enabled, fields, order = "created_at", id } = params;
+  const {
+    limit = 100,
+    offset = 0,
+    extraKey = [],
+    enabled,
+    fields,
+    order = "created_at",
+    id,
+  } = params
 
   const queryKey: QueryKey = [
-    "available-actions", 
+    "available-actions",
     limit,
     offset,
-    ...extraKey
-  ];
-  
+    ...extraKey,
+  ]
+
   const query: any = {
     limit,
     offset,
     fields,
     order,
-  };
+  }
 
   const { data, ...rest } = useQuery<
     AvailableActionsQueryData,
@@ -52,14 +57,17 @@ export const useAvailableActions = (
   >({
     queryKey,
     queryFn: async () => {
-      return await sdk.client.fetch("/admin/mpn/automations/available-actions", {
-        method: "GET",
-        query,
-      })
+      return await sdk.client.fetch(
+        "/admin/mpn/automations/available-actions",
+        {
+          method: "GET",
+          query,
+        }
+      )
     },
     enabled,
     ...(options as any),
-  });
+  })
 
-  return { data, ...rest };
-};
+  return { data, ...rest }
+}

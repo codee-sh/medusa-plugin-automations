@@ -1,9 +1,15 @@
 import React from "react"
-import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk"
+import {
+  StepResponse,
+  createStep,
+} from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
 import { renderTemplate } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
 import { getPluginOptions } from "@codee-sh/medusa-plugin-automations/utils/plugins"
-import type { TemplateData, TemplateOptionsType } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
+import type {
+  TemplateData,
+  TemplateOptionsType,
+} from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
 
 export interface SendEmailConfig {
   templateName: string
@@ -35,9 +41,9 @@ export const sendEmailStepId = "send-email"
 
 /**
  * Universal step that sends an email notification.
- * 
+ *
  * This step can be used independently or as part of automation workflows.
- * 
+ *
  * Configuration:
  * - templateName: Required - Name of the email template to use
  * - to: Required - Recipient email address
@@ -47,7 +53,7 @@ export const sendEmailStepId = "send-email"
  * - template: Optional - Template identifier for notification (defaults to templateName)
  * - resourceId: Optional - Resource ID for notification tracking
  * - resourceType: Optional - Resource type for notification tracking
- * 
+ *
  * @example
  * ```typescript
  * // Standalone usage
@@ -87,15 +93,21 @@ export const sendEmailStep = createStep(
     }
 
     try {
-      const notificationModuleService = container.resolve(Modules.NOTIFICATION)
-      const pluginOptions = getPluginOptions(container, "@codee-sh/medusa-plugin-notification-emails")
-      
+      const notificationModuleService = container.resolve(
+        Modules.NOTIFICATION
+      )
+      const pluginOptions = getPluginOptions(
+        container,
+        "@codee-sh/medusa-plugin-notification-emails"
+      )
+
       const templateName = settings.templateName
       const to = settings.to
       const locale = settings.locale || "pl"
       const customSubject = settings.subject
-      const resourceId = settings.resourceId || 'unknown'
-      const resourceType = settings.resourceType || "email.notification"
+      const resourceId = settings.resourceId || "unknown"
+      const resourceType =
+        settings.resourceType || "email.notification"
       const channel = settings.channel || "email"
       const triggerType = settings.triggerType || "system"
 
@@ -103,25 +115,41 @@ export const sendEmailStep = createStep(
       const renderOptions: TemplateOptionsType = {
         locale,
         theme: pluginOptions?.theme,
-        customTranslations: pluginOptions?.customTranslations?.[templateName],
+        customTranslations:
+          pluginOptions?.customTranslations?.[templateName],
       }
 
       // Load custom template function if specified
-      let customTemplateFunction: ((data: TemplateData, options: TemplateOptionsType) => React.ReactElement<any>) | undefined
-      
+      let customTemplateFunction:
+        | ((
+            data: TemplateData,
+            options: TemplateOptionsType
+          ) => React.ReactElement<any>)
+        | undefined
+
       if (settings.customTemplate) {
         try {
           // Dynamic import of custom template
           // config.customTemplate should be a relative path like "../emails/pos-email-inventory"
           // or absolute path from project root like "src/emails/pos-email-inventory"
-          const customTemplateModule = await import(settings.customTemplate)
-          customTemplateFunction = customTemplateModule.default || customTemplateModule.createCustomTemplate || customTemplateModule.createTemplate
-          
+          const customTemplateModule = await import(
+            settings.customTemplate
+          )
+          customTemplateFunction =
+            customTemplateModule.default ||
+            customTemplateModule.createCustomTemplate ||
+            customTemplateModule.createTemplate
+
           if (!customTemplateFunction) {
-            console.warn(`Custom template module from ${settings.customTemplate} does not export a default function or createCustomTemplate/createTemplate`)
+            console.warn(
+              `Custom template module from ${settings.customTemplate} does not export a default function or createCustomTemplate/createTemplate`
+            )
           }
         } catch (error) {
-          console.warn(`Failed to load custom template from ${settings.customTemplate}:`, error)
+          console.warn(
+            `Failed to load custom template from ${settings.customTemplate}:`,
+            error
+          )
           // Continue with default template
         }
       }
@@ -135,20 +163,23 @@ export const sendEmailStep = createStep(
       )
 
       // Send notification
-      const notificationResult = await notificationModuleService.createNotifications({
-        to: to,
-        channel: channel,
-        template: settings.template || templateName,
-        trigger_type: triggerType,
-        resource_id: resourceId,
-        resource_type: resourceType,
-        data: templateData,
-        content: {
-          subject: customSubject || subject,
-          html: html,
-          text: text,
-        },
-      })
+      const notificationResult =
+        await notificationModuleService.createNotifications(
+          {
+            to: to,
+            channel: channel,
+            template: settings.template || templateName,
+            trigger_type: triggerType,
+            resource_id: resourceId,
+            resource_type: resourceType,
+            data: templateData,
+            content: {
+              subject: customSubject || subject,
+              html: html,
+              text: text,
+            },
+          }
+        )
 
       return new StepResponse({
         success: true,
@@ -163,4 +194,3 @@ export const sendEmailStep = createStep(
     }
   }
 )
-

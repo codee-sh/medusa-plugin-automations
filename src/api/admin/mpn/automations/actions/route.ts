@@ -1,18 +1,28 @@
-import { MedusaStoreRequest, MedusaResponse } from "@medusajs/framework/http"
-import { ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
+import {
+  MedusaStoreRequest,
+  MedusaResponse,
+} from "@medusajs/framework/http"
+import {
+  ContainerRegistrationKeys,
+  MedusaError,
+} from "@medusajs/framework/utils"
 import { z } from "zod"
 import { editAutomationActionsWorkflow } from "../../../../../workflows/mpn-automation"
 
 export const PostAutomationActionsSchema = z.object({
   trigger_id: z.string(),
-  actions: z.array(z.object({
-    id: z.string().optional(),
-    action_type: z.string().optional(),
-    config: z.record(z.any()).nullable().optional(),
-  })),
-});
+  actions: z.array(
+    z.object({
+      id: z.string().optional(),
+      action_type: z.string().optional(),
+      config: z.record(z.any()).nullable().optional(),
+    })
+  ),
+})
 
-type PostAutomationActionsSchema = z.infer<typeof PostAutomationActionsSchema>;
+type PostAutomationActionsSchema = z.infer<
+  typeof PostAutomationActionsSchema
+>
 
 export async function POST(
   req: MedusaStoreRequest<PostAutomationActionsSchema>,
@@ -25,17 +35,17 @@ export async function POST(
       input: {
         triggerId: req.body.trigger_id,
         actions: req.body.actions || [],
-      }
-    });
+      },
+    })
 
     res.json({
       actions: result.actions,
-    });
+    })
   } else {
     throw new MedusaError(
       MedusaError.Types.INVALID_DATA,
       "trigger_id is required"
-    );
+    )
   }
 }
 
@@ -43,7 +53,9 @@ export async function GET(
   req: MedusaStoreRequest,
   res: MedusaResponse
 ) {
-  const query = req.scope.resolve(ContainerRegistrationKeys.QUERY)
+  const query = req.scope.resolve(
+    ContainerRegistrationKeys.QUERY
+  )
   const { id, trigger_id } = req.query
   const filters: any = {}
 
@@ -52,17 +64,20 @@ export async function GET(
       $eq: id,
     }
   }
-  
+
   if (trigger_id) {
     filters.trigger_id = {
       $eq: trigger_id,
     }
   }
 
-  const { data: actions, metadata: { count, take, skip } = {} } = await query.graph({
+  const {
+    data: actions,
+    metadata: { count, take, skip } = {},
+  } = await query.graph({
     entity: "mpn_automation_action",
     filters: filters,
-    ...req.queryConfig
+    ...req.queryConfig,
   })
 
   res.json({
@@ -72,7 +87,6 @@ export async function GET(
     offset: skip || 0,
   })
 }
-
 
 // export const DeleteAutomationSchema = z.object({
 //   id: z.string(),
@@ -96,4 +110,3 @@ export async function GET(
 //   //   automation: automation,
 //   // });
 // }
-

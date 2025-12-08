@@ -9,13 +9,13 @@ interface SelectFieldProps {
   disabled?: boolean
 }
 
-export const SelectField = ({ 
-  label, 
-  value, 
-  onChange, 
+export const SelectField = ({
+  label,
+  value,
+  onChange,
   options,
   required = false,
-  disabled = false
+  disabled = false,
 }: SelectFieldProps) => {
   return (
     <Select
@@ -27,12 +27,15 @@ export const SelectField = ({
         <Select.Value placeholder="Select an option" />
       </Select.Trigger>
       <Select.Content>
-        {options.map(option => (
-          <Select.Item key={option.value} value={option.value}>
+        {options.map((option) => (
+          <Select.Item
+            key={option.value}
+            value={option.value}
+          >
             {option.label}
           </Select.Item>
         ))}
       </Select.Content>
     </Select>
   )
-} 
+}

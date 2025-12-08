@@ -1,5 +1,10 @@
 import { ArrowUpRightOnBox } from "@medusajs/icons"
-import { Badge, Container, Heading, IconButton } from "@medusajs/ui"
+import {
+  Badge,
+  Container,
+  Heading,
+  IconButton,
+} from "@medusajs/ui"
 import { useTranslation } from "react-i18next"
 
 type MetadataSectionProps<TData extends object> = {
@@ -21,7 +26,9 @@ export const MetadataSection = <TData extends object>({
     return null
   }
 
-  const numberOfKeys = data.metadata ? Object.keys(data.metadata).length : 0
+  const numberOfKeys = data.metadata
+    ? Object.keys(data.metadata).length
+    : 0
 
   return (
     <Container className="flex items-center justify-between">

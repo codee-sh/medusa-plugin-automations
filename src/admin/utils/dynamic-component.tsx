@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { ActionConfigComponentProps } from "../../modules/mpn-automation/types/action-handler";
-import { loadTemplateComponent } from "./template";
+import { useState, useEffect } from "react"
+import { ActionConfigComponentProps } from "../../modules/mpn-automation/types/action-handler"
+import { loadTemplateComponent } from "./template"
 
 export default function LoadActionComponent({
   actionType,
@@ -10,62 +10,79 @@ export default function LoadActionComponent({
   errors,
   fields,
 }: {
-  actionType: string;
-  configComponentKey?: string;
-  form: any;
-  name: any;
-  errors?: Record<string, string>;
-  fields?: any;
+  actionType: string
+  configComponentKey?: string
+  form: any
+  name: any
+  errors?: Record<string, string>
+  fields?: any
 }) {
   const [Component, setComponent] =
-    useState<React.ComponentType<ActionConfigComponentProps> | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+    useState<React.ComponentType<ActionConfigComponentProps> | null>(
+      null
+    )
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!actionType || !configComponentKey) {
-      setComponent(null);
-      return;
+      setComponent(null)
+      return
     }
 
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     loadTemplateComponent(configComponentKey as any)
       .then((module) => {
-        const Component = module;
-        console.log("Component", Component);
+        const Component = module
+        console.log("Component", Component)
         if (Component) {
-          setComponent(() => Component as any);
+          setComponent(() => Component as any)
         } else {
-          setError(`Component not found in ${configComponentKey}`);
+          setError(
+            `Component not found in ${configComponentKey}`
+          )
         }
       })
       .catch((err) => {
         console.error(
           `Failed to load component from ${configComponentKey}:`,
           err
-        );
-        setError(`Failed to load component: ${err.message}`);
+        )
+        setError(`Failed to load component: ${err.message}`)
       })
       .finally(() => {
-        setLoading(false);
-      });
-  }, [actionType, configComponentKey]);
+        setLoading(false)
+      })
+  }, [actionType, configComponentKey])
 
   if (loading) {
     return (
-      <div className="text-sm text-gray-500">Loading configuration...</div>
-    );
+      <div className="text-sm text-gray-500">
+        Loading configuration...
+      </div>
+    )
   }
 
   if (error) {
-    return <div className="text-sm text-red-500">Error: {error}</div>;
+    return (
+      <div className="text-sm text-red-500">
+        Error: {error}
+      </div>
+    )
   }
 
   if (!Component) {
-    return null;
+    return null
   }
 
-  return <Component form={form} name={name} errors={errors} fields={fields} />;
+  return (
+    <Component
+      form={form}
+      name={name}
+      errors={errors}
+      fields={fields}
+    />
+  )
 }

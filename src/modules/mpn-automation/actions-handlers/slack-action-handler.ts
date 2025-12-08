@@ -1,9 +1,9 @@
-import { FieldConfig } from "../types";
-import { BaseActionHandler } from "./base-action-handler";
+import { FieldConfig } from "../types"
+import { BaseActionHandler } from "./base-action-handler"
 
 export class SlackActionHandler extends BaseActionHandler {
-  id = "slack";
-  label = "Slack";
+  id = "slack"
+  label = "Slack"
 
   fields: FieldConfig[] = [
     {
@@ -34,5 +34,5 @@ export class SlackActionHandler extends BaseActionHandler {
     //   type: "text" as const,
     //   required: true,
     // }
-  ];
+  ]
 }

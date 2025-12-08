@@ -1,8 +1,9 @@
-import { model } from "@medusajs/framework/utils";
-import { MpnAutomationTrigger } from "./mpn_automation_trigger";
+import { model } from "@medusajs/framework/utils"
+import { MpnAutomationTrigger } from "./mpn_automation_trigger"
 
-export const MpnAutomationState = model
-  .define("mpn_automation_state", {
+export const MpnAutomationState = model.define(
+  "mpn_automation_state",
+  {
     id: model.id().primaryKey(),
 
     target_key: model.text().nullable(),
@@ -15,4 +16,5 @@ export const MpnAutomationState = model
     trigger: model.belongsTo(() => MpnAutomationTrigger, {
       mappedBy: "states",
     }),
-  })
+  }
+)

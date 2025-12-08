@@ -7,7 +7,7 @@
 // import { TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification-emails/templates/emails/types"
 // import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee-sh/medusa-plugin-notification/utils"
 // import { getPluginOptions } from "@codee-sh/medusa-plugin-notification/utils/plugins"
-  
+
 // export default async function paymentCapturedHandler({
 //   event: { data: { id, trigger_type } },
 //   container,
@@ -19,7 +19,7 @@
 //   )
 //   const query = container.resolve(ContainerRegistrationKeys.QUERY)
 //   const triggerType = trigger_type || 'system'
-  
+
 //   console.log("id", id);
 
 //   if (!id) {
@@ -72,13 +72,13 @@
 //   //     currency_code: order.currency_code,
 //   //   }
 //   // };
-  
+
 //   // const templateName = TEMPLATES_NAMES.ORDER_PLACED
 
 //   // const { html, text, subject } = await renderTemplate(
 //   //   templateName,
 //   //   templateData,
-//   //   { 
+//   //   {
 //   //     locale: "pl",
 //   //     customTranslations: pluginOptions?.customTranslations?.[templateName]
 //   //   }

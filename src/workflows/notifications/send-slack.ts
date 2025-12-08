@@ -1,4 +1,8 @@
-import { createWorkflow, WorkflowData, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import {
+  createWorkflow,
+  WorkflowData,
+  WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk"
 import { sendSlackStep } from "./steps/send-slack"
 
 export interface SendSlackWorkflowInput {
@@ -17,13 +21,13 @@ export const sendSlackWorkflowId = "send-slack"
 
 /**
  * Universal workflow that sends a slack notification.
- * 
+ *
  * This workflow can be used independently or as part of automation workflows.
  * It's not tied to automation system and can be used anywhere in the application.
- * 
+ *
  * Configuration:
  * - templateName: Required - Name of the slack template
- * 
+ *
  * @example
  * ```typescript
  * // Standalone usage
@@ -52,7 +56,7 @@ export const sendSlackWorkflow = createWorkflow(
       context: input.context,
       eventName: input.eventName,
     })
-    
+
     return new WorkflowResponse(result)
   }
 )

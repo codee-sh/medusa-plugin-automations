@@ -8,12 +8,12 @@ interface CheckboxFieldProps {
   disabled?: boolean
 }
 
-export const CheckboxField = ({ 
-  label, 
-  checked, 
-  onChange, 
+export const CheckboxField = ({
+  label,
+  checked,
+  onChange,
   required = false,
-  disabled = false
+  disabled = false,
 }: CheckboxFieldProps) => {
   return (
     <div className="flex items-center space-x-2">
@@ -23,13 +23,15 @@ export const CheckboxField = ({
         disabled={disabled}
         id={`checkbox-${label}`}
       />
-      <Label 
+      <Label
         htmlFor={`checkbox-${label}`}
         className="text-sm font-medium cursor-pointer"
       >
         {label}
-        {required && <span className="text-red-500 ml-1">*</span>}
+        {required && (
+          <span className="text-red-500 ml-1">*</span>
+        )}
       </Label>
     </div>
   )
-} 
+}

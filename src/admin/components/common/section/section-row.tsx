@@ -7,7 +7,11 @@ export type SectionRowProps = {
   actions?: ReactNode
 }
 
-export const SectionRow = ({ title, value, actions }: SectionRowProps) => {
+export const SectionRow = ({
+  title,
+  value,
+  actions,
+}: SectionRowProps) => {
   const isValueString = typeof value === "string" || !value
 
   return (

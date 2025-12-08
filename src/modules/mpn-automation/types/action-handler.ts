@@ -5,7 +5,9 @@ import { FieldPath, FieldValues } from "react-hook-form"
 /**
  * Props for action configuration component
  */
-export interface ActionConfigComponentProps<TFieldValues extends FieldValues = FieldValues> {
+export interface ActionConfigComponentProps<
+  TFieldValues extends FieldValues = FieldValues,
+> {
   form: any
   name: FieldPath<TFieldValues>
   errors?: Record<string, string>
@@ -39,15 +41,13 @@ export interface ActionHandler {
   /**
    * Function that executes the action
    */
-  executeAction: (
-    params: {
-      trigger: NotificationTrigger;
-      action: Record<string, any>
-      context: any
-      container: any
-      eventName: string
-    }
-  ) => Promise<{
+  executeAction: (params: {
+    trigger: NotificationTrigger
+    action: Record<string, any>
+    context: any
+    container: any
+    eventName: string
+  }) => Promise<{
     success: boolean
     message?: string
     data?: any

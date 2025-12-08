@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getTimeLeft } from "../../../../utils";
+import { getTimeLeft } from "../../../../utils"
 
 type CountDownTimerProps = {
   expires_at: string | number | Date
@@ -7,8 +7,14 @@ type CountDownTimerProps = {
   text_before: string
 }
 
-export const CountDownTimer = ({ expires_at, text_expired, text_before }: CountDownTimerProps) => {
-  const [timeLeft, setTimeLeft] = useState(() => getTimeLeft(expires_at))
+export const CountDownTimer = ({
+  expires_at,
+  text_expired,
+  text_before,
+}: CountDownTimerProps) => {
+  const [timeLeft, setTimeLeft] = useState(() =>
+    getTimeLeft(expires_at)
+  )
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,7 +31,8 @@ export const CountDownTimer = ({ expires_at, text_expired, text_before }: CountD
 
   return (
     <span>
-      {text_before}: {timeLeft.hours}h, {timeLeft.minutes}m, {timeLeft.seconds}s
+      {text_before}: {timeLeft.hours}h, {timeLeft.minutes}m,{" "}
+      {timeLeft.seconds}s
     </span>
   )
 }

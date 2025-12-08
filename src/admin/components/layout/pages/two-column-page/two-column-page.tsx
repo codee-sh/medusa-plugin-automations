@@ -1,12 +1,18 @@
 import { clx, Text } from "@medusajs/ui"
-import { Children, ComponentPropsWithoutRef, ComponentType } from "react"
+import {
+  Children,
+  ComponentPropsWithoutRef,
+  ComponentType,
+} from "react"
 import { useTranslation } from "react-i18next"
 import { JsonViewSection } from "../../../common/json-view-section"
 import { MetadataSection } from "../../../common/metadata-section"
 import { PageProps } from "../types"
 import { Providers } from "../../../../../providers"
 
-interface TwoColumnPageProps<TData> extends PageProps<TData> {}
+interface TwoColumnPageProps<
+  TData,
+> extends PageProps<TData> {}
 
 const Root = <TData,>({
   children,
@@ -23,7 +29,7 @@ const Root = <TData,>({
    */
   showMetadata = false,
 
-  isLoading = false
+  isLoading = false,
 }: TwoColumnPageProps<TData>) => {
   if (showJSON && !data) {
     if (process.env.NODE_ENV === "development") {
@@ -48,7 +54,9 @@ const Root = <TData,>({
   const childrenArray = Children.toArray(children)
 
   if (childrenArray.length !== 2) {
-    throw new Error("TwoColumnPage expects exactly two children")
+    throw new Error(
+      "TwoColumnPage expects exactly two children"
+    )
   }
 
   const [main, sidebar] = childrenArray
@@ -56,12 +64,30 @@ const Root = <TData,>({
 
   return (
     <Providers>
-      {!isLoading ? RootHTML(data, main, sidebar, showExtraData, showMetadata, showJSON) : <Loading />}
+      {!isLoading ? (
+        RootHTML(
+          data,
+          main,
+          sidebar,
+          showExtraData,
+          showMetadata,
+          showJSON
+        )
+      ) : (
+        <Loading />
+      )}
     </Providers>
   )
 }
 
-const RootHTML = (data, main, sidebar, showExtraData: boolean, showMetadata: boolean, showJSON: boolean) => {
+const RootHTML = (
+  data,
+  main,
+  sidebar,
+  showExtraData: boolean,
+  showMetadata: boolean,
+  showJSON: boolean
+) => {
   return (
     <div className="flex w-full flex-col gap-y-3">
       <div className="flex w-full flex-col items-start gap-x-4 gap-y-3 xl:grid xl:grid-cols-[minmax(0,_1fr)_440px]">
@@ -69,7 +95,9 @@ const RootHTML = (data, main, sidebar, showExtraData: boolean, showMetadata: boo
           {main}
           {showExtraData && (
             <div className="hidden flex-col gap-y-3 xl:flex">
-              {showMetadata && <MetadataSection data={data!} />}
+              {showMetadata && (
+                <MetadataSection data={data!} />
+              )}
               {showJSON && <JsonViewSection data={data!} />}
             </div>
           )}
@@ -78,13 +106,15 @@ const RootHTML = (data, main, sidebar, showExtraData: boolean, showMetadata: boo
           {sidebar}
           {showExtraData && (
             <div className="flex flex-col gap-y-3 xl:hidden">
-              {showMetadata && <MetadataSection data={data!} />}
+              {showMetadata && (
+                <MetadataSection data={data!} />
+              )}
               {showJSON && <JsonViewSection data={data!} />}
             </div>
           )}
         </div>
       </div>
-    </div>     
+    </div>
   )
 }
 
@@ -94,7 +124,13 @@ const Main = ({
   ...props
 }: ComponentPropsWithoutRef<"div">) => {
   return (
-    <div className={clx("flex w-full flex-col gap-y-3", className)} {...props}>
+    <div
+      className={clx(
+        "flex w-full flex-col gap-y-3",
+        className
+      )}
+      {...props}
+    >
       {children}
     </div>
   )
@@ -124,10 +160,13 @@ const Loading = () => {
   return (
     <>
       <div className="p-6 text-center">
-        <Text>{t('general.loading')}</Text>
+        <Text>{t("general.loading")}</Text>
       </div>
     </>
   )
 }
 
-export const TwoColumnPage = Object.assign(Root, { Main, Sidebar })
+export const TwoColumnPage = Object.assign(Root, {
+  Main,
+  Sidebar,
+})

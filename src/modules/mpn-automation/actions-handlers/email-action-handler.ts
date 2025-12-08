@@ -1,9 +1,9 @@
-import { FieldConfig } from "../types";
-import { BaseActionHandler } from "./base-action-handler";
+import { FieldConfig } from "../types"
+import { BaseActionHandler } from "./base-action-handler"
 
 export class EmailActionHandler extends BaseActionHandler {
-  id = "email";
-  label = "Email";
+  id = "email"
+  label = "Email"
 
   fields: FieldConfig[] = [
     {
@@ -62,5 +62,5 @@ export class EmailActionHandler extends BaseActionHandler {
       ],
       defaultValue: "inventory-level",
     },
-  ];
+  ]
 }

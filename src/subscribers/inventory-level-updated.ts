@@ -5,7 +5,7 @@ import {
 import { getInventoryLevelByIdWorkflow } from "../workflows/inventory/get-inventory-level-by-id"
 import { runAutomationWorkflow } from "../workflows/mpn-automation/run-automation"
 import { TriggerType } from "../utils/types"
-  
+
 const eventName = "inventory.inventory-level.updated"
 
 /**
@@ -18,14 +18,18 @@ const eventName = "inventory.inventory-level.updated"
  * @param container - The container instance.
  */
 export default async function inventoryLevelUpdatedHandler({
-  event: { data: { id } },
+  event: {
+    data: { id },
+  },
   container,
 }: SubscriberArgs<{ id: string }>) {
   // Retrieve inventory level with related inventory item
-  const { result: { inventory_level } } = await getInventoryLevelByIdWorkflow(container).run({
+  const {
+    result: { inventory_level },
+  } = await getInventoryLevelByIdWorkflow(container).run({
     input: {
       inventory_level_id: id,
-    }
+    },
   })
 
   const contextData = {
@@ -36,13 +40,15 @@ export default async function inventoryLevelUpdatedHandler({
   // 1. Retrieve triggers for the event
   // 2. Validate triggers against context
   // 3. Execute actions for validated triggers
-  const { result } = await runAutomationWorkflow(container).run({
+  const { result } = await runAutomationWorkflow(
+    container
+  ).run({
     input: {
       eventName: eventName,
       eventType: TriggerType.EVENT,
       triggerKey: `inventory_level-${id}`,
       context: contextData,
-    }
+    },
   })
 }
 

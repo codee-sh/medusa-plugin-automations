@@ -5,7 +5,10 @@ interface SaveButtonProps {
   disabled: boolean
 }
 
-export const SaveButton = ({ onSave, disabled }: SaveButtonProps) => {
+export const SaveButton = ({
+  onSave,
+  disabled,
+}: SaveButtonProps) => {
   return (
     <div className="flex gap-4">
       <Button
@@ -18,4 +21,4 @@ export const SaveButton = ({ onSave, disabled }: SaveButtonProps) => {
       </Button>
     </div>
   )
-} 
+}

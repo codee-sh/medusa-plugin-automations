@@ -1,5 +1,9 @@
 import { Label, Select, Button } from "@medusajs/ui"
-import { Controller, useFieldArray, useWatch } from "react-hook-form"
+import {
+  Controller,
+  useFieldArray,
+  useWatch,
+} from "react-hook-form"
 import { Trash, Plus } from "@medusajs/icons"
 import LoadActionComponent from "../../../utils/dynamic-component"
 import { useAvailableActions } from "../../../../hooks/api/available-actions"
@@ -11,12 +15,18 @@ export function AutomationsActionsForm({
   form: any
   isOpen?: boolean
 }) {
-  const { data: availableActionsData, isLoading: isAvailableActionsLoading } =
-    useAvailableActions({
-      enabled: isOpen !== false,
-    })
+  const {
+    data: availableActionsData,
+    isLoading: isAvailableActionsLoading,
+  } = useAvailableActions({
+    enabled: isOpen !== false,
+  })
 
-  const { fields = [], append, remove } = useFieldArray({
+  const {
+    fields = [],
+    append,
+    remove,
+  } = useFieldArray({
     control: form.control,
     name: "actions.items",
   })
@@ -44,7 +54,8 @@ export function AutomationsActionsForm({
         <div className="flex flex-col gap-4">
           {fields.length === 0 && (
             <div className="text-sm text-gray-500 text-center py-4">
-              No actions added yet. Click "Add Item" to create a new action.
+              No actions added yet. Click "Add Item" to
+              create a new action.
             </div>
           )}
           {fields.map((field, index) => {
@@ -53,30 +64,46 @@ export function AutomationsActionsForm({
                 key={field?.id ?? `action-${index}`}
                 name={`actions.items.${index}.action_type`}
                 control={form.control}
-                render={({ field: actionTypeField, fieldState }) => {
+                render={({
+                  field: actionTypeField,
+                  fieldState,
+                }) => {
                   const actionType = actionTypeField.value
-                  const actionData: any = availableActionsData?.actions?.find(
-                    (a) => a.value === actionType
-                  )
-                  const configComponentKey = actionData?.configComponentKey
+                  const actionData: any =
+                    availableActionsData?.actions?.find(
+                      (a) => a.value === actionType
+                    )
+                  const configComponentKey =
+                    actionData?.configComponentKey
                   const fields = actionData?.fields
-                  const isEnabled = actionType ? actionData?.enabled : true
+                  const isEnabled = actionType
+                    ? actionData?.enabled
+                    : true
 
                   return (
-                    <div className={`flex flex-col gap-4 p-4 border rounded-lg ${isEnabled ? "opacity-100" : "opacity-50"}`}>
+                    <div
+                      className={`flex flex-col gap-4 p-4 border rounded-lg ${isEnabled ? "opacity-100" : "opacity-50"}`}
+                    >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 flex flex-col gap-2">
                           <Label>Action Type</Label>
                           <Select
                             key={`action-type-${index}-${availableActionsData?.actions?.length || 0}`}
-                            value={actionTypeField.value ?? ""}
+                            value={
+                              actionTypeField.value ?? ""
+                            }
                             onValueChange={(value) => {
-                              actionTypeField.onChange(value)
+                              actionTypeField.onChange(
+                                value
+                              )
                               // Reset config when action type changes
                               form.setValue(
                                 `actions.items.${index}.config`,
                                 {},
-                                { shouldValidate: false, shouldDirty: true }
+                                {
+                                  shouldValidate: false,
+                                  shouldDirty: true,
+                                }
                               )
                             }}
                           >
@@ -91,9 +118,14 @@ export function AutomationsActionsForm({
                                       action.value ||
                                       `action-${index}-${actionIndex}`
                                     }
-                                    value={action.value || ""}
+                                    value={
+                                      action.value || ""
+                                    }
                                   >
-                                    {action.label} {action.enabled ? "" : "(Disabled)"}
+                                    {action.label}{" "}
+                                    {action.enabled
+                                      ? ""
+                                      : "(Disabled)"}
                                   </Select.Item>
                                 )
                               )}
@@ -109,7 +141,9 @@ export function AutomationsActionsForm({
                           type="button"
                           variant="secondary"
                           size="small"
-                          onClick={() => handleRemoveRule(index)}
+                          onClick={() =>
+                            handleRemoveRule(index)
+                          }
                           className="mt-2"
                         >
                           <Trash />
@@ -121,26 +155,37 @@ export function AutomationsActionsForm({
                         <div className="mt-4 pt-4 border-t">
                           <LoadActionComponent
                             actionType={actionType}
-                            configComponentKey={configComponentKey}
+                            configComponentKey={
+                              configComponentKey
+                            }
                             form={form}
-                            name={`actions.items.${index}.config` as any}
+                            name={
+                              `actions.items.${index}.config` as any
+                            }
                             errors={
-                              form.formState.errors?.actions?.items?.[index]
-                                ?.config as Record<string, string> | undefined
+                              form.formState.errors?.actions
+                                ?.items?.[index]?.config as
+                                | Record<string, string>
+                                | undefined
                             }
                             fields={fields}
                           />
                         </div>
                       )}
 
-                      {!isEnabled && <p className="text-sm text-red-500">The action is disabled by the configuration</p>}
+                      {!isEnabled && (
+                        <p className="text-sm text-red-500">
+                          The action is disabled by the
+                          configuration
+                        </p>
+                      )}
                     </div>
                   )
                 }}
               />
             )
           })}
-          
+
           <Button
             type="button"
             variant="secondary"

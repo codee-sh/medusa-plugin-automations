@@ -1,4 +1,7 @@
-import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import {
+  createWorkflow,
+  WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk"
 import { createAutomationStep } from "./steps/create-automation"
 import { NotificationTrigger } from "../../modules/mpn-automation/types/interfaces"
 
@@ -18,4 +21,3 @@ export const createAutomationWorkflow = createWorkflow(
     })
   }
 )
-

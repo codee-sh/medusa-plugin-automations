@@ -1,6 +1,6 @@
-import { defineRouteConfig } from "@medusajs/admin-sdk";
-import { SingleColumnPage } from "../../../components/layout/pages";
-import { AutomationsList } from "../../../automations/automations-list";
+import { defineRouteConfig } from "@medusajs/admin-sdk"
+import { SingleColumnPage } from "../../../components/layout/pages"
+import { AutomationsList } from "../../../automations/automations-list"
 
 const ListPage = () => {
   return (
@@ -12,11 +12,11 @@ const ListPage = () => {
     >
       <AutomationsList />
     </SingleColumnPage>
-  );
-};
+  )
+}
 
 export const config = defineRouteConfig({
-  label: "List of automations"
-});
+  label: "List of automations",
+})
 
-export default ListPage;
+export default ListPage

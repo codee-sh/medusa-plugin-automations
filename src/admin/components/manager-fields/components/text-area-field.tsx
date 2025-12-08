@@ -10,14 +10,14 @@ interface TextAreaFieldProps {
   rows?: number
 }
 
-export const TextAreaField = ({ 
-  label, 
-  value, 
-  onChange, 
+export const TextAreaField = ({
+  label,
+  value,
+  onChange,
   placeholder = "",
   required = false,
   disabled = false,
-  rows = 3
+  rows = 3,
 }: TextAreaFieldProps) => {
   return (
     <Textarea
@@ -28,4 +28,4 @@ export const TextAreaField = ({
       rows={rows}
     />
   )
-} 
+}

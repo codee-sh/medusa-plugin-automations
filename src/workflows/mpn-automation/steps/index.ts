@@ -7,4 +7,3 @@ export * from "./edit-automation-rules"
 export * from "./edit-automation-actions"
 export * from "./delete-automation"
 export * from "./save-automation-state"
-

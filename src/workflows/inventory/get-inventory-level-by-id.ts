@@ -1,15 +1,20 @@
-import { createWorkflow, WorkflowData, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import {
+  createWorkflow,
+  WorkflowData,
+  WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk"
 import { getInventoryLevelByIdStep } from "./steps/get-inventory-level-by-id"
 
 export interface GetInventoryLevelByIdWorkflowInput {
   inventory_level_id: string
 }
 
-export const getInventoryLevelByIdWorkflowId = "get-inventory-level-by-id"
+export const getInventoryLevelByIdWorkflowId =
+  "get-inventory-level-by-id"
 
 /**
  * This workflow retrieves an inventory level by its ID with related inventory item.
- * 
+ *
  * @example
  * const { result } = await getInventoryLevelByIdWorkflow(container).run({
  *   input: {
@@ -19,7 +24,9 @@ export const getInventoryLevelByIdWorkflowId = "get-inventory-level-by-id"
  */
 export const getInventoryLevelByIdWorkflow = createWorkflow(
   getInventoryLevelByIdWorkflowId,
-  (input: WorkflowData<GetInventoryLevelByIdWorkflowInput>) => {
+  (
+    input: WorkflowData<GetInventoryLevelByIdWorkflowInput>
+  ) => {
     const inventoryLevel = getInventoryLevelByIdStep({
       inventory_level_id: input.inventory_level_id,
     })
@@ -27,4 +34,3 @@ export const getInventoryLevelByIdWorkflow = createWorkflow(
     return new WorkflowResponse(inventoryLevel)
   }
 )
-

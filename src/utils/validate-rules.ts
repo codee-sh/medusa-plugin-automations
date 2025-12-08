@@ -1,5 +1,9 @@
-import { pickValueFromObject, MathBN, isString } from "@medusajs/framework/utils"
-import { NotificationRule } from '../modules/mpn-automation/types/interfaces'
+import {
+  pickValueFromObject,
+  MathBN,
+  isString,
+} from "@medusajs/framework/utils"
+import { NotificationRule } from "../modules/mpn-automation/types/interfaces"
 
 /**
  * Validates a single rule value condition based on operator
@@ -19,44 +23,63 @@ export function validateRuleValueCondition(
   }
 
   // Check if any value is undefined or null - this prevents bugs where attribute path is wrong
-  const hasInvalidValues = valuesToCheck.some((val) => val === undefined || val === null)
+  const hasInvalidValues = valuesToCheck.some(
+    (val) => val === undefined || val === null
+  )
   if (hasInvalidValues) {
-    console.warn("Rule validation failed: valuesToCheck contains undefined or null values", {
-      valuesToCheck,
-      ruleValues,
-      operator,
-    })
+    console.warn(
+      "Rule validation failed: valuesToCheck contains undefined or null values",
+      {
+        valuesToCheck,
+        ruleValues,
+        operator,
+      }
+    )
     return false
   }
 
   switch (operator) {
     case "eq": {
       const ruleValueSet = new Set(ruleValues)
-      return valuesToCheck.every((val) => ruleValueSet.has(`${val}`))
+      return valuesToCheck.every((val) =>
+        ruleValueSet.has(`${val}`)
+      )
     }
     case "in": {
       const ruleValueSet = new Set(ruleValues)
-      return valuesToCheck.some((val) => ruleValueSet.has(`${val}`))
+      return valuesToCheck.some((val) =>
+        ruleValueSet.has(`${val}`)
+      )
     }
     case "ne": {
       const ruleValueSet = new Set(ruleValues)
-      return valuesToCheck.every((val) => !ruleValueSet.has(`${val}`))
+      return valuesToCheck.every(
+        (val) => !ruleValueSet.has(`${val}`)
+      )
     }
     case "gt":
       return valuesToCheck.every((val) =>
-        ruleValues.some((ruleVal) => MathBN.gt(val, ruleVal))
+        ruleValues.some((ruleVal) =>
+          MathBN.gt(val, ruleVal)
+        )
       )
     case "gte":
       return valuesToCheck.every((val) =>
-        ruleValues.some((ruleVal) => MathBN.gte(val, ruleVal))
+        ruleValues.some((ruleVal) =>
+          MathBN.gte(val, ruleVal)
+        )
       )
     case "lt":
       return valuesToCheck.every((val) =>
-        ruleValues.some((ruleVal) => MathBN.lt(val, ruleVal))
+        ruleValues.some((ruleVal) =>
+          MathBN.lt(val, ruleVal)
+        )
       )
     case "lte":
       return valuesToCheck.every((val) =>
-        ruleValues.some((ruleVal) => MathBN.lte(val, ruleVal))
+        ruleValues.some((ruleVal) =>
+          MathBN.lte(val, ruleVal)
+        )
       )
     default:
       return false
@@ -92,8 +115,11 @@ export function validateRulesForContext(
 
     // Get value from context based on rule attribute
     // e.g. "inventory_level.stocked_quantity" or "inventory_item.stocked_quantity"
-    const valuesToCheck = pickValueFromObject(rule.attribute, context)
-    
+    const valuesToCheck = pickValueFromObject(
+      rule.attribute,
+      context
+    )
+
     console.log("Rule evaluation:", {
       attribute: rule.attribute,
       operator: rule.operator,
@@ -109,4 +135,3 @@ export function validateRulesForContext(
     )
   })
 }
-

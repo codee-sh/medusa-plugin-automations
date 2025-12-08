@@ -37,7 +37,9 @@
     "dev": "medusa plugin:develop",
     "prepublishOnly": "medusa plugin:build",
     "publish-local": "npx medusa plugin:publish",
-    "publish-package": "dotenv npm publish --access public"
+    "publish-package": "dotenv npm publish --access public",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\""
   },
   "devDependencies": {
     "@medusajs/admin-sdk": "2.8.8",

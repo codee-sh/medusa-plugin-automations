@@ -1,4 +1,9 @@
-import { createWorkflow, WorkflowData, WorkflowResponse, transform } from "@medusajs/framework/workflows-sdk"
+import {
+  createWorkflow,
+  WorkflowData,
+  WorkflowResponse,
+  transform,
+} from "@medusajs/framework/workflows-sdk"
 import { sendSlackWorkflow } from "../notifications/send-slack"
 import { NotificationAction } from "../../modules/mpn-automation/types/interfaces"
 
@@ -18,13 +23,13 @@ export const sendSlackActionWorkflowId = "send-slack-action"
 
 /**
  * Workflow wrapper for automation system that sends an email notification.
- * 
+ *
  * This is a convenience wrapper around the universal sendEmailWorkflow,
  * specifically designed for use with automation actions.
- * 
+ *
  * It extracts configuration from action.config and context, then calls
  * the universal sendEmailWorkflow.
- * 
+ *
  * Configuration is stored in action.config:
  * - templateName: Required - Name of the email template
  * - to: Required - Recipient email address
@@ -32,7 +37,7 @@ export const sendSlackActionWorkflowId = "send-slack-action"
  * - customTemplate: Optional - Path to custom template function
  * - subject: Optional - Custom subject (otherwise uses template default)
  * - template: Optional - Template identifier for notification (defaults to templateName)
- * 
+ *
  * @example
  * ```typescript
  * const { result } = await sendEmailActionWorkflow(container).run({
@@ -60,18 +65,21 @@ export const sendSlackActionWorkflow = createWorkflow(
   sendSlackActionWorkflowId,
   (input: WorkflowData<SendSlackActionWorkflowInput>) => {
     // Transform automation action format for sendEmailWorkflow
-    const settings = transform({ action: input.action, eventName: input.eventName }, (data) => {
-      const actionConfig = data?.action?.config || {}
-      const eventName = data?.eventName
+    const settings = transform(
+      { action: input.action, eventName: input.eventName },
+      (data) => {
+        const actionConfig = data?.action?.config || {}
+        const eventName = data?.eventName
 
-      return {
-        template: actionConfig?.template,
-        resourceId: data?.action?.id,
-        resourceType: eventName,
-        channel: actionConfig?.channel,
-        triggerType: "mpn",
+        return {
+          template: actionConfig?.template,
+          resourceId: data?.action?.id,
+          resourceType: eventName,
+          channel: actionConfig?.channel,
+          triggerType: "mpn",
+        }
       }
-    })
+    )
 
     const result = sendSlackWorkflow.runAsStep({
       input: {
@@ -84,4 +92,3 @@ export const sendSlackActionWorkflow = createWorkflow(
     return new WorkflowResponse(result)
   }
 )
-

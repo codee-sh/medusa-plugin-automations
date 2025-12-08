@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod"
 
 // Base schema without dynamic validation
 export const baseAutomationFormSchema = z.object({
@@ -18,21 +18,28 @@ export const baseAutomationFormSchema = z.object({
   }),
   rules: z
     .object({
-      items: z
-        .array(
-          z.object({
-            id: z.string().optional(),
-            attribute: z.string().min(1, "Attribute is required"),
-            operator: z.string().min(1, "Operator is required"),
-            description: z.string().nullable().optional(),
-            rule_values: z.array(
+      items: z.array(
+        z.object({
+          id: z.string().optional(),
+          attribute: z
+            .string()
+            .min(1, "Attribute is required"),
+          operator: z
+            .string()
+            .min(1, "Operator is required"),
+          description: z.string().nullable().optional(),
+          rule_values: z
+            .array(
               z.object({
                 id: z.string().optional(),
-                value: z.string().min(1, "Value is required"),
+                value: z
+                  .string()
+                  .min(1, "Value is required"),
               })
-            ).optional(),
-          })
-        )
+            )
+            .optional(),
+        })
+      ),
     })
     .optional(),
   actions: z
@@ -41,11 +48,13 @@ export const baseAutomationFormSchema = z.object({
         .array(
           z.object({
             id: z.string().optional(),
-            action_type: z.string().min(1, "Action type is required"),
+            action_type: z
+              .string()
+              .min(1, "Action type is required"),
             config: z.record(z.any()),
           })
         )
         .optional(),
     })
     .optional(),
-});
+})

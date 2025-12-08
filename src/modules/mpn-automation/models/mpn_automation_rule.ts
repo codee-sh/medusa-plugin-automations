@@ -1,6 +1,6 @@
-import { model } from "@medusajs/framework/utils";
-import { MpnAutomationTrigger } from "./mpn_automation_trigger";
-import { MpnAutomationRuleValue } from "./mpn_automation_rule_value";
+import { model } from "@medusajs/framework/utils"
+import { MpnAutomationTrigger } from "./mpn_automation_trigger"
+import { MpnAutomationRuleValue } from "./mpn_automation_rule_value"
 
 export const MpnAutomationRule = model
   .define("mpn_automation_rule", {
@@ -23,9 +23,13 @@ export const MpnAutomationRule = model
       mappedBy: "rules",
     }),
 
-    rule_values: model.hasMany(() => MpnAutomationRuleValue, {
-      mappedBy: "rule",
-    }),
-  }).cascades({
+    rule_values: model.hasMany(
+      () => MpnAutomationRuleValue,
+      {
+        mappedBy: "rule",
+      }
+    ),
+  })
+  .cascades({
     delete: ["rule_values"],
   })

@@ -5,7 +5,9 @@ interface ImageUploaderProps {
   onAddImage: (imageUrl: string) => void
 }
 
-export const ImageUploader = ({ onAddImage }: ImageUploaderProps) => {
+export const ImageUploader = ({
+  onAddImage,
+}: ImageUploaderProps) => {
   const [newImageUrl, setNewImageUrl] = useState("")
 
   const handleAddImage = () => {
@@ -16,7 +18,7 @@ export const ImageUploader = ({ onAddImage }: ImageUploaderProps) => {
   }
 
   const handleKeyPress = (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleAddImage()
     }
   }
@@ -24,7 +26,9 @@ export const ImageUploader = ({ onAddImage }: ImageUploaderProps) => {
   return (
     <div className="mb-6">
       <div className="mb-3">
-        <Label className="text-sm font-medium">Add new image:</Label>
+        <Label className="text-sm font-medium">
+          Add new image:
+        </Label>
       </div>
       <div className="flex gap-2">
         <Input
@@ -46,4 +50,4 @@ export const ImageUploader = ({ onAddImage }: ImageUploaderProps) => {
       </div>
     </div>
   )
-} 
+}

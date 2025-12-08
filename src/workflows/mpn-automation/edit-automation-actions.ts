@@ -1,4 +1,7 @@
-import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import {
+  createWorkflow,
+  WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk"
 import { editAutomationActionsStep } from "./steps/edit-automation-actions"
 import { NotificationAction } from "../../modules/mpn-automation/types/interfaces"
 
@@ -9,7 +12,10 @@ export type EditAutomationActionsWorkflowInput = {
 
 export const editAutomationActionsWorkflow = createWorkflow(
   "edit-automation-actions",
-  ({ triggerId, actions }: EditAutomationActionsWorkflowInput) => {
+  ({
+    triggerId,
+    actions,
+  }: EditAutomationActionsWorkflowInput) => {
     const automationActions = editAutomationActionsStep({
       trigger_id: triggerId,
       actions: actions,
@@ -20,4 +26,3 @@ export const editAutomationActionsWorkflow = createWorkflow(
     })
   }
 )
-

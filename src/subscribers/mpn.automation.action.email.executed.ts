@@ -1,5 +1,8 @@
-import { SubscriberArgs, type SubscriberConfig } from "@medusajs/medusa";
-import { sendEmailActionWorkflow } from "../workflows/mpn-automation/send-email-action";
+import {
+  SubscriberArgs,
+  type SubscriberConfig,
+} from "@medusajs/medusa"
+import { sendEmailActionWorkflow } from "../workflows/mpn-automation/send-email-action"
 
 /**
  * Event name for the MPN automation action email executed event.
@@ -19,11 +22,13 @@ export default async function mpnAutomationActionEmailExecutedHandler({
   event: { data },
   container,
 }: SubscriberArgs<any>) {
-  const { action, context, eventName } = data;
+  const { action, context, eventName } = data
 
-  console.log(eventName, data);
+  console.log(eventName, data)
 
-  const { result } = await sendEmailActionWorkflow(container).run({
+  const { result } = await sendEmailActionWorkflow(
+    container
+  ).run({
     input: {
       action: {
         ...action,
@@ -32,19 +37,24 @@ export default async function mpnAutomationActionEmailExecutedHandler({
           to: action?.config?.to,
           subject: action?.config?.subject,
           locale: action?.config?.locale ?? "pl",
-          templateName: action?.config?.templateName ?? "inventory-level",
+          templateName:
+            action?.config?.templateName ??
+            "inventory-level",
         },
       },
       context: context,
       eventName: eventName,
     },
-  });
+  })
 
   if (!result.success) {
-    console.error(`Failed to send email action ${action?.id}:`, result.error);
+    console.error(
+      `Failed to send email action ${action?.id}:`,
+      result.error
+    )
   }
 }
 
 export const config: SubscriberConfig = {
   event: eventName,
-};
+}

@@ -1,7 +1,7 @@
-import { model } from "@medusajs/framework/utils";
-import { MpnAutomationRule } from "./mpn_automation_rule";
-import { MpnAutomationState } from "./mpn_automation_state";
-import { MpnAutomationAction } from "./npm_automation_action";
+import { model } from "@medusajs/framework/utils"
+import { MpnAutomationRule } from "./mpn_automation_rule"
+import { MpnAutomationState } from "./mpn_automation_state"
+import { MpnAutomationAction } from "./npm_automation_action"
 
 export const MpnAutomationTrigger = model
   .define("mpn_automation_trigger", {
@@ -14,7 +14,11 @@ export const MpnAutomationTrigger = model
     description: model.text().nullable(),
 
     // Activation type: event / schedule / manual
-    trigger_type: model.enum(["event", "schedule", "manual"]),
+    trigger_type: model.enum([
+      "event",
+      "schedule",
+      "manual",
+    ]),
 
     // Event name — only when trigger_type = "event"
     event_name: model.text().nullable(),
@@ -54,8 +58,8 @@ export const MpnAutomationTrigger = model
     },
     {
       on: ["event_name"],
-    }
-  ]).cascades({
+    },
+  ])
+  .cascades({
     delete: ["actions", "states", "rules"],
-  });
-
+  })

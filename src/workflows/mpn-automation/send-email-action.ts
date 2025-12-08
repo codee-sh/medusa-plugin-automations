@@ -1,4 +1,9 @@
-import { createWorkflow, WorkflowData, WorkflowResponse, transform } from "@medusajs/framework/workflows-sdk"
+import {
+  createWorkflow,
+  WorkflowData,
+  WorkflowResponse,
+  transform,
+} from "@medusajs/framework/workflows-sdk"
 import { sendEmailWorkflow } from "../notifications/send-email"
 import { NotificationAction } from "../../modules/mpn-automation/types/interfaces"
 
@@ -18,13 +23,13 @@ export const sendEmailActionWorkflowId = "send-email-action"
 
 /**
  * Workflow wrapper for automation system that sends an email notification.
- * 
+ *
  * This is a convenience wrapper around the universal sendEmailWorkflow,
  * specifically designed for use with automation actions.
- * 
+ *
  * It extracts configuration from action.config and context, then calls
  * the universal sendEmailWorkflow.
- * 
+ *
  * Configuration is stored in action.config:
  * - templateName: Required - Name of the email template
  * - to: Required - Recipient email address
@@ -32,7 +37,7 @@ export const sendEmailActionWorkflowId = "send-email-action"
  * - customTemplate: Optional - Path to custom template function
  * - subject: Optional - Custom subject (otherwise uses template default)
  * - template: Optional - Template identifier for notification (defaults to templateName)
- * 
+ *
  * @example
  * ```typescript
  * const { result } = await sendEmailActionWorkflow(container).run({
@@ -60,22 +65,25 @@ export const sendEmailActionWorkflow = createWorkflow(
   sendEmailActionWorkflowId,
   (input: WorkflowData<SendEmailActionWorkflowInput>) => {
     // Transform automation action format for sendEmailWorkflow
-    const settings = transform({ action: input.action, eventName: input.eventName }, (data) => {
-      const actionConfig = data?.action?.config || {}
-      const eventName = data?.eventName
+    const settings = transform(
+      { action: input.action, eventName: input.eventName },
+      (data) => {
+        const actionConfig = data?.action?.config || {}
+        const eventName = data?.eventName
 
-      return {
-        templateName: actionConfig?.templateName,
-        to: actionConfig?.to,
-        locale: actionConfig?.locale,
-        subject: actionConfig?.subject,
-        customTemplate: actionConfig?.customTemplate,
-        template: actionConfig?.template,
-        resourceId: data?.action?.id,
-        resourceType: eventName,
-        triggerType: "mpn",
+        return {
+          templateName: actionConfig?.templateName,
+          to: actionConfig?.to,
+          locale: actionConfig?.locale,
+          subject: actionConfig?.subject,
+          customTemplate: actionConfig?.customTemplate,
+          template: actionConfig?.template,
+          resourceId: data?.action?.id,
+          resourceType: eventName,
+          triggerType: "mpn",
+        }
       }
-    })
+    )
 
     const result = sendEmailWorkflow.runAsStep({
       input: {
@@ -88,4 +96,3 @@ export const sendEmailActionWorkflow = createWorkflow(
     return new WorkflowResponse(result)
   }
 )
-

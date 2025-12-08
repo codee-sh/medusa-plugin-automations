@@ -1,24 +1,24 @@
 import { TriggerType } from "./types"
 
 export interface NotificationRuleValue {
-  id?: string;
-  value: string | null;
-  metadata: Record<string, any> | null;
+  id?: string
+  value: string | null
+  metadata: Record<string, any> | null
 }
 
 export interface NotificationRule {
-  id?: string;
-  attribute: string;
-  operator: string;
-  description: string | null;
-  metadata: Record<string, any> | null;
-  rule_values: NotificationRuleValue[];
+  id?: string
+  attribute: string
+  operator: string
+  description: string | null
+  metadata: Record<string, any> | null
+  rule_values: NotificationRuleValue[]
 }
 
 export interface NotificationAction {
-  id?: string;
-  action_type?: string | null;
-  config?: Record<string, any> | null;
+  id?: string
+  action_type?: string | null
+  config?: Record<string, any> | null
 }
 
 export interface NotificationTrigger {

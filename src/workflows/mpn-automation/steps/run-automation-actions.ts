@@ -1,27 +1,31 @@
-import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk";
-import { MedusaError } from "@medusajs/utils";
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
+import {
+  StepResponse,
+  createStep,
+} from "@medusajs/framework/workflows-sdk"
+import { MedusaError } from "@medusajs/utils"
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import {
   NotificationAction,
   NotificationTrigger,
-} from "../../../modules/mpn-automation/types/interfaces";
-import MpnAutomationService from "../../../modules/mpn-automation/services/service";
-import { saveAutomationStateWorkflow } from "../save-automation-state";
+} from "../../../modules/mpn-automation/types/interfaces"
+import MpnAutomationService from "../../../modules/mpn-automation/services/service"
+import { saveAutomationStateWorkflow } from "../save-automation-state"
 
 export interface RunAutomationActionsStepInput {
   validatedTriggers: Array<{
-    isValid: boolean;
-    trigger: NotificationTrigger;
-    actions: NotificationAction[];
-  }>;
-  context: Record<string, any>;
+    isValid: boolean
+    trigger: NotificationTrigger
+    actions: NotificationAction[]
+  }>
+  context: Record<string, any>
 }
 
 export interface RunAutomationActionsStepOutput {
-  triggersExecuted: any;
+  triggersExecuted: any
 }
 
-export const runAutomationActionsStepId = "run-automation-actions";
+export const runAutomationActionsStepId =
+  "run-automation-actions"
 
 /**
  * This step runs automation actions for all validated triggers by emitting events for each action type.
@@ -43,26 +47,34 @@ export const runAutomationActionsStep = createStep(
   async (
     input: RunAutomationActionsStepInput,
     { container }
-  ): Promise<StepResponse<RunAutomationActionsStepOutput>> => {
+  ): Promise<
+    StepResponse<RunAutomationActionsStepOutput>
+  > => {
     const mpnAutomationService =
-      container.resolve<MpnAutomationService>("mpnAutomation");
-    const logger = container.resolve(ContainerRegistrationKeys.LOGGER);
+      container.resolve<MpnAutomationService>(
+        "mpnAutomation"
+      )
+    const logger = container.resolve(
+      ContainerRegistrationKeys.LOGGER
+    )
 
-    const { validatedTriggers, context } = input;
+    const { validatedTriggers, context } = input
 
-    if (!validatedTriggers || validatedTriggers.length === 0) {
+    if (
+      !validatedTriggers ||
+      validatedTriggers.length === 0
+    ) {
       return new StepResponse({
-        results: [],
-        triggersCount: 0,
-        totalActionsExecuted: 0,
-      });
+        triggersExecuted: [],
+      })
     }
 
     const getActionExecutionResults = await Promise.all(
       validatedTriggers.map(async (validatedTrigger) => {
         const isValid = validatedTrigger.isValid
         const trigger = validatedTrigger.trigger
-        const actions = validatedTrigger.trigger.actions || []
+        const actions =
+          validatedTrigger.trigger.actions || []
 
         if (!isValid || !actions || actions.length === 0) {
           return {
@@ -70,7 +82,7 @@ export const runAutomationActionsStep = createStep(
             isValid,
             actionsExecuted: 0,
             actions: [],
-          };
+          }
         }
 
         const executedActions = await Promise.all(
@@ -80,28 +92,29 @@ export const runAutomationActionsStep = createStep(
                 throw new MedusaError(
                   MedusaError.Types.INVALID_DATA,
                   "Action type is required"
-                );
+                )
               }
 
-              const actionHandler = mpnAutomationService.getActionHandler(
-                action.action_type
-              );
+              const actionHandler =
+                mpnAutomationService.getActionHandler(
+                  action.action_type
+                )
 
-              const getHandler = actionHandler?.handler;
-              const isEnabled = actionHandler?.enabled;
+              const getHandler = actionHandler?.handler
+              const isEnabled = actionHandler?.enabled
 
               if (!getHandler) {
                 throw new MedusaError(
                   MedusaError.Types.NOT_FOUND,
                   `Action handler for "${action.action_type}" not found`
-                );
+                )
               }
 
               if (!isEnabled) {
                 throw new MedusaError(
                   MedusaError.Types.NOT_FOUND,
                   `Action handler for "${action.action_type}" is disabled`
-                );
+                )
               }
 
               return await getHandler.executeAction({
@@ -110,24 +123,24 @@ export const runAutomationActionsStep = createStep(
                 action,
                 context,
                 eventName: `mpn.automation.action.${action.action_type}.executed`,
-              });
+              })
             } catch (error) {
-              logger.info(error.message);
+              logger.info(error.message)
 
-              return error;
+              return error
             }
           })
-        );
+        )
 
         return {
           trigger,
-          executedActions: executedActions
-        };
+          executedActions: executedActions,
+        }
       })
-    );
+    )
 
     return new StepResponse({
-      triggersExecuted: getActionExecutionResults
-    });
+      triggersExecuted: getActionExecutionResults,
+    })
   }
-);
+)

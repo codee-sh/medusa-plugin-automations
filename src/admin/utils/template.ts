@@ -2,7 +2,9 @@ import { templateLoaders } from "../automations/actions"
 
 export type TemplateKey = keyof typeof templateLoaders
 
-export async function loadTemplateComponent(key: TemplateKey) {
+export async function loadTemplateComponent(
+  key: TemplateKey
+) {
   const loader = templateLoaders[key]
 
   if (!loader) {

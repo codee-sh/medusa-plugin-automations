@@ -1,5 +1,5 @@
-import { model } from "@medusajs/framework/utils";
-import { MpnAutomationTrigger } from "./mpn_automation_trigger";
+import { model } from "@medusajs/framework/utils"
+import { MpnAutomationTrigger } from "./mpn_automation_trigger"
 
 export const MpnAutomationAction = model
   .define("mpn_automation_action", {
@@ -23,4 +23,4 @@ export const MpnAutomationAction = model
     {
       on: ["position"],
     },
-  ]);
+  ])

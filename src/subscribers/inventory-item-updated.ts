@@ -2,12 +2,16 @@ import {
   SubscriberArgs,
   type SubscriberConfig,
 } from "@medusajs/medusa"
-import { Modules, ContainerRegistrationKeys, MedusaError } from "@medusajs/framework/utils"
+import {
+  Modules,
+  ContainerRegistrationKeys,
+  MedusaError,
+} from "@medusajs/framework/utils"
 // import { renderTemplate } from "@codee-sh/medusa-plugin-notification/templates/emails"
 // import { TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails/types"
 // import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee-sh/medusa-plugin-notification/utils"
 // import { getPluginOptions } from "@codee-sh/medusa-plugin-notification/utils/plugins"
-  
+
 export default async function inventoryItemUpdatedHandler({
   event: { data: data },
   container,
@@ -19,8 +23,8 @@ export default async function inventoryItemUpdatedHandler({
   // )
   // const query = container.resolve(ContainerRegistrationKeys.QUERY)
   // const triggerType = trigger_type || 'system'
-  console.log("inventoryItemUpdatedHandler");
-  console.log(data);
+  console.log("inventoryItemUpdatedHandler")
+  console.log(data)
 }
 
 export const config: SubscriberConfig = {

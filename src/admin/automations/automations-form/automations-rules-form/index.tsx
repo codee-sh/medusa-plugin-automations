@@ -4,9 +4,18 @@ import { OPERATOR_TYPES } from "../../../../modules/mpn-automation/types/types"
 import { Controller, useFieldArray } from "react-hook-form"
 import { useMemo } from "react"
 import { Trash, Plus } from "@medusajs/icons"
-  
-export function AutomationsRulesForm({ form, isOpen }: { form: any; isOpen?: boolean }) {
-  const { data: availableEventsData, isLoading: isAvailableEventsLoading } = useAvailableEvents({
+
+export function AutomationsRulesForm({
+  form,
+  isOpen,
+}: {
+  form: any
+  isOpen?: boolean
+}) {
+  const {
+    data: availableEventsData,
+    isLoading: isAvailableEventsLoading,
+  } = useAvailableEvents({
     enabled: isOpen !== false,
   })
 
@@ -30,7 +39,11 @@ export function AutomationsRulesForm({ form, isOpen }: { form: any; isOpen?: boo
     return []
   }, [availableEventsData, eventName])
 
-  const { fields = [], append, remove } = useFieldArray({
+  const {
+    fields = [],
+    append,
+    remove,
+  } = useFieldArray({
     control: form.control,
     name: "rules.items",
   })
@@ -57,48 +70,64 @@ export function AutomationsRulesForm({ form, isOpen }: { form: any; isOpen?: boo
         <div className="flex flex-col gap-4">
           {fields.length === 0 && (
             <div className="text-sm text-gray-500 text-center py-4">
-              No rules added yet. Click "Add Item" to create a new rule.
+              No rules added yet. Click "Add Item" to create
+              a new rule.
             </div>
           )}
           {fields.map((field, index) => (
-            <div key={field?.id ?? `rule-${index}`} className="flex flex-col gap-2 p-4 border rounded-lg">
+            <div
+              key={field?.id ?? `rule-${index}`}
+              className="flex flex-col gap-2 p-4 border rounded-lg"
+            >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1 flex flex-col gap-2">
-                    <Controller
-                      name={`rules.items.${index}.attribute`}
-                      control={form.control}
-                      render={({ field, fieldState }) => (
-                        <>
-                          <Label>Attribute</Label>
-                          <Select 
-                            key={`attribute-${index}-${eventAttributes.length}`}
-                            value={field.value ?? ""}
-                            onValueChange={(value) => {
-                              field.onChange(value)
-                            }}
-                          >
-                            <Select.Trigger>
-                              <Select.Value placeholder="Select the attribute" />
-                            </Select.Trigger>
-                            <Select.Content>
-                              {eventAttributes.map((attribute, attrIndex) => (
-                                <Select.Item key={attribute.value || `attr-${index}-${attrIndex}`} value={attribute.value || "ss"}>
+                  <Controller
+                    name={`rules.items.${index}.attribute`}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <>
+                        <Label>Attribute</Label>
+                        <Select
+                          key={`attribute-${index}-${eventAttributes.length}`}
+                          value={field.value ?? ""}
+                          onValueChange={(value) => {
+                            field.onChange(value)
+                          }}
+                        >
+                          <Select.Trigger>
+                            <Select.Value placeholder="Select the attribute" />
+                          </Select.Trigger>
+                          <Select.Content>
+                            {eventAttributes.map(
+                              (attribute, attrIndex) => (
+                                <Select.Item
+                                  key={
+                                    attribute.value ||
+                                    `attr-${index}-${attrIndex}`
+                                  }
+                                  value={
+                                    attribute.value || "ss"
+                                  }
+                                >
                                   {attribute.label}
                                 </Select.Item>
-                              ))}
-                            </Select.Content>
-                          </Select>
-                          {fieldState.error && (
-                            <span className="text-red-500 text-sm">{fieldState.error.message}</span>
-                          )}
-                        </>
+                              )
+                            )}
+                          </Select.Content>
+                        </Select>
+                        {fieldState.error && (
+                          <span className="text-red-500 text-sm">
+                            {fieldState.error.message}
+                          </span>
+                        )}
+                      </>
                     )}
-                    />
-                    <Controller
-                      name={`rules.items.${index}.operator`}
-                      control={form.control}
-                      render={({ field, fieldState }) => (
-                        <>
+                  />
+                  <Controller
+                    name={`rules.items.${index}.operator`}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <>
                         <Label>Operator</Label>
                         <Select
                           key={`operator-${index}-${eventAttributes.length}-${field.value ?? ""}`}
@@ -111,39 +140,51 @@ export function AutomationsRulesForm({ form, isOpen }: { form: any; isOpen?: boo
                             <Select.Value placeholder="Select the operator" />
                           </Select.Trigger>
                           <Select.Content>
-                            {OPERATOR_TYPES.map((operator, opIndex) => (
-                              <Select.Item key={operator.value || `op-${opIndex}`} value={operator.value}>
-                                {operator.label}
-                              </Select.Item>
-                            ))}
+                            {OPERATOR_TYPES.map(
+                              (operator, opIndex) => (
+                                <Select.Item
+                                  key={
+                                    operator.value ||
+                                    `op-${opIndex}`
+                                  }
+                                  value={operator.value}
+                                >
+                                  {operator.label}
+                                </Select.Item>
+                              )
+                            )}
                           </Select.Content>
                         </Select>
                         {fieldState.error && (
-                          <span className="text-red-500 text-sm">{fieldState.error.message}</span>
+                          <span className="text-red-500 text-sm">
+                            {fieldState.error.message}
+                          </span>
                         )}
-                        </>
-                      )}
-                    />
-                    <Controller
-                      name={`rules.items.${index}.rule_values.0.value`}
-                      control={form.control}
-                      render={({ field, fieldState }) => (
-                        <>
-                          <Label>Value</Label>
-                          <Input
-                            value={field.value ?? ""}
-                            onChange={(e) => {
-                              field.onChange(e.target.value)
-                            }}
-                            onBlur={field.onBlur}
-                            ref={field.ref}
-                          />
-                          {fieldState.error && (
-                            <span className="text-red-500 text-sm">{fieldState.error.message}</span>
-                          )}
-                        </>
-                      )}
-                    />
+                      </>
+                    )}
+                  />
+                  <Controller
+                    name={`rules.items.${index}.rule_values.0.value`}
+                    control={form.control}
+                    render={({ field, fieldState }) => (
+                      <>
+                        <Label>Value</Label>
+                        <Input
+                          value={field.value ?? ""}
+                          onChange={(e) => {
+                            field.onChange(e.target.value)
+                          }}
+                          onBlur={field.onBlur}
+                          ref={field.ref}
+                        />
+                        {fieldState.error && (
+                          <span className="text-red-500 text-sm">
+                            {fieldState.error.message}
+                          </span>
+                        )}
+                      </>
+                    )}
+                  />
                 </div>
                 <Button
                   type="button"

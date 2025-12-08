@@ -9,13 +9,13 @@ interface TextFieldProps {
   disabled?: boolean
 }
 
-export const TextField = ({ 
-  label, 
-  value, 
-  onChange, 
+export const TextField = ({
+  label,
+  value,
+  onChange,
   placeholder = "",
   required = false,
-  disabled = false
+  disabled = false,
 }: TextFieldProps) => {
   return (
     <Input
@@ -26,4 +26,4 @@ export const TextField = ({
       disabled={disabled}
     />
   )
-} 
+}

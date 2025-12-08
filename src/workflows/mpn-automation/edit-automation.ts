@@ -1,4 +1,7 @@
-import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import {
+  createWorkflow,
+  WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk"
 import { editAutomationStep } from "./steps/edit-automation"
 import { NotificationTrigger } from "../../modules/mpn-automation/types/interfaces"
 

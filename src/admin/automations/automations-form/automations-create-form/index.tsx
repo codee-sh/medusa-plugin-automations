@@ -1,16 +1,33 @@
-import { Button, FocusModal, ProgressTabs, ProgressStatus, toast } from "@medusajs/ui"
+import {
+  Button,
+  FocusModal,
+  ProgressTabs,
+  ProgressStatus,
+  toast,
+} from "@medusajs/ui"
 import { Plus } from "@medusajs/icons"
 import { useState, useEffect, useMemo } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useQueryClient } from "@tanstack/react-query"
-import { useCreateAutomation, useListAutomations } from "../../../../hooks/api/automations"
+import {
+  useCreateAutomation,
+  useListAutomations,
+} from "../../../../hooks/api/automations"
 import { useAvailableActions } from "../../../../hooks/api/available-actions"
 import { AutomationsGeneralForm } from "../automations-general-form"
-import { AutomationFormValues, Tab, TabState } from "../types"
+import {
+  AutomationFormValues,
+  Tab,
+  TabState,
+} from "../types"
 import { createAutomationFormSchema } from "../utils/automation-form-schema"
 
-export function AutomationsCreateForm({ id }: { id: string }) {
+export function AutomationsCreateForm({
+  id,
+}: {
+  id: string
+}) {
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<Tab>(Tab.GENERAL)
   const [tabState, setTabState] = useState<TabState>({
@@ -32,21 +49,30 @@ export function AutomationsCreateForm({ id }: { id: string }) {
 
   const queryClient = useQueryClient()
 
-  const { data: automationsTriggerData, isLoading: isAutomationsTriggerLoading } = useListAutomations({
+  const {
+    data: automationsTriggerData,
+    isLoading: isAutomationsTriggerLoading,
+  } = useListAutomations({
     id: id,
     extraKey: [],
     enabled: open && !!id,
   })
 
-  const { data: availableActionsData } = useAvailableActions({
-    enabled: open,
-  })
+  const { data: availableActionsData } =
+    useAvailableActions({
+      enabled: open,
+    })
 
-  const { mutateAsync: createAutomation, isPending: isCreateAutomationPending } = useCreateAutomation()
+  const {
+    mutateAsync: createAutomation,
+    isPending: isCreateAutomationPending,
+  } = useCreateAutomation()
 
   // Create dynamic schema with superRefine based on availableActions
   const automationFormSchema = useMemo(() => {
-    return createAutomationFormSchema(availableActionsData?.actions)
+    return createAutomationFormSchema(
+      availableActionsData?.actions
+    )
   }, [availableActionsData?.actions])
 
   const form = useForm<AutomationFormValues>({
@@ -58,7 +84,7 @@ export function AutomationsCreateForm({ id }: { id: string }) {
         trigger_type: "event",
         event_name: "",
         interval_minutes: null,
-        active: false
+        active: false,
       },
       rules: {
         items: [],
@@ -71,24 +97,28 @@ export function AutomationsCreateForm({ id }: { id: string }) {
 
   // Reset form when data is loaded and modal is open
   useEffect(() => {
-    if (automationsTriggerData && automationsTriggerData.triggers?.[0]) {
+    if (
+      automationsTriggerData &&
+      automationsTriggerData.triggers?.[0]
+    ) {
       const trigger = automationsTriggerData.triggers[0]
-      
+
       form.reset({
         general: {
           name: trigger.name || "",
           description: trigger.description || "",
           trigger_type: trigger.trigger_type || "event",
           event_name: trigger.event_name || "",
-          interval_minutes: trigger.interval_minutes || null,
+          interval_minutes:
+            trigger.interval_minutes || null,
           active: trigger.active || false,
         },
         rules: {
-            items: [],
-          },
-          actions: {
-            items: [],
-          },
+          items: [],
+        },
+        actions: {
+          items: [],
+        },
       })
     }
   }, [open, automationsTriggerData])
@@ -127,21 +157,25 @@ export function AutomationsCreateForm({ id }: { id: string }) {
 
       await createAutomation({
         items: [items],
-      }).then(() => {
-        queryClient.invalidateQueries({ queryKey: ["automations"] })
-        toast.success("Automation created successfully", {
-          position: "top-right",
-          duration: 3000,
+      })
+        .then(() => {
+          queryClient.invalidateQueries({
+            queryKey: ["automations"],
+          })
+          toast.success("Automation created successfully", {
+            position: "top-right",
+            duration: 3000,
+          })
+          setOpen(false)
         })
-        setOpen(false)
-      }).catch((error) => {
-        toast.error(error.message)
-      });
+        .catch((error) => {
+          toast.error(error.message)
+        })
     }
   }
 
   const getFieldsForTab = (tab: Tab): string[] => {
-    switch(tab) {
+    switch (tab) {
       case Tab.GENERAL:
         return [
           "general.name",
@@ -162,7 +196,9 @@ export function AutomationsCreateForm({ id }: { id: string }) {
       </FocusModal.Trigger>
       <FocusModal.Content>
         <FocusModal.Header>
-          <FocusModal.Title>Create Automation</FocusModal.Title>
+          <FocusModal.Title>
+            Create Automation
+          </FocusModal.Title>
           <div className="-my-2 w-full border-l">
             <ProgressTabs
               dir="ltr"
@@ -170,7 +206,10 @@ export function AutomationsCreateForm({ id }: { id: string }) {
               className="flex h-full flex-col overflow-hidden"
             >
               <ProgressTabs.List className="justify-start-start flex w-full items-center">
-                <ProgressTabs.Trigger value={Tab.GENERAL} status={tabState[Tab.GENERAL]}>
+                <ProgressTabs.Trigger
+                  value={Tab.GENERAL}
+                  status={tabState[Tab.GENERAL]}
+                >
                   General
                 </ProgressTabs.Trigger>
               </ProgressTabs.List>
@@ -181,8 +220,15 @@ export function AutomationsCreateForm({ id }: { id: string }) {
           {isAutomationsTriggerLoading ? (
             <div className="p-6">Loading...</div>
           ) : (
-            <form onSubmit={form.handleSubmit(handleSubmit)}>
-              {tab === Tab.GENERAL && <AutomationsGeneralForm form={form} isOpen={open} />}
+            <form
+              onSubmit={form.handleSubmit(handleSubmit)}
+            >
+              {tab === Tab.GENERAL && (
+                <AutomationsGeneralForm
+                  form={form}
+                  isOpen={open}
+                />
+              )}
             </form>
           )}
         </FocusModal.Body>
@@ -191,9 +237,9 @@ export function AutomationsCreateForm({ id }: { id: string }) {
             <Button size="small" variant="secondary">
               Cancel
             </Button>
-          </FocusModal.Close>          
-          <Button 
-            type="submit" 
+          </FocusModal.Close>
+          <Button
+            type="submit"
             onClick={form.handleSubmit(handleSubmit)}
             disabled={isCreateAutomationPending}
             isLoading={isCreateAutomationPending}
@@ -205,4 +251,3 @@ export function AutomationsCreateForm({ id }: { id: string }) {
     </FocusModal>
   )
 }
-

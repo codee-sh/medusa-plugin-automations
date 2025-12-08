@@ -7,7 +7,7 @@
 // import { TEMPLATES_NAMES } from "@codee-sh/medusa-plugin-notification/templates/emails/types"
 // import { formatDate, getFormattedAddress, getLocaleAmount, getTotalCaptured } from "@codee-sh/medusa-plugin-notification/utils"
 // import { getPluginOptions } from "@codee-sh/medusa-plugin-notification/utils/plugins"
-  
+
 // export default async function orderCompletedHandler({
 //   event: { data: { id, trigger_type } },
 //   container,
@@ -84,13 +84,13 @@
 //       currency_code: order.currency_code,
 //     }
 //   };
-  
+
 //   const templateName = TEMPLATES_NAMES.ORDER_COMPLETED
 
 //   const { html, text, subject } = await renderTemplate(
 //     templateName,
 //     templateData,
-//     { 
+//     {
 //       locale: "pl",
 //       customTranslations: pluginOptions?.customTranslations?.[templateName]
 //     }

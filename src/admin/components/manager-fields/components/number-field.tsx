@@ -12,16 +12,16 @@ interface NumberFieldProps {
   step?: number | null
 }
 
-export const NumberField = ({ 
-  label, 
-  value, 
-  onChange, 
+export const NumberField = ({
+  label,
+  value,
+  onChange,
   placeholder = "",
   required = false,
   disabled = false,
   min,
   max,
-  step = null
+  step = null,
 }: NumberFieldProps) => {
   return (
     <Input
@@ -35,4 +35,4 @@ export const NumberField = ({
       step={step || undefined}
     />
   )
-} 
+}

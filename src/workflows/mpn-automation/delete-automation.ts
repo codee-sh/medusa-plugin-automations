@@ -1,4 +1,7 @@
-import { createWorkflow, WorkflowResponse } from "@medusajs/framework/workflows-sdk"
+import {
+  createWorkflow,
+  WorkflowResponse,
+} from "@medusajs/framework/workflows-sdk"
 import { deleteAutomationStep } from "./steps/delete-automation"
 
 export type DeleteAutomationWorkflowInput = {
@@ -17,4 +20,3 @@ export const deleteAutomationWorkflow = createWorkflow(
     })
   }
 )
-

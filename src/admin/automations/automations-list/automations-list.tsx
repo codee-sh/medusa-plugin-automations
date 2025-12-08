@@ -1,4 +1,4 @@
-import { InformationCircleSolid } from "@medusajs/icons";
+import { InformationCircleSolid } from "@medusajs/icons"
 import {
   Container,
   Heading,
@@ -9,28 +9,29 @@ import {
   Tooltip,
   Badge,
   Divider,
-} from "@medusajs/ui";
-import { useQueryClient } from "@tanstack/react-query";
-import { useListAutomations } from "../../../hooks/api/automations";
-import { useState, useMemo } from "react";
+} from "@medusajs/ui"
+import { useQueryClient } from "@tanstack/react-query"
+import { useListAutomations } from "../../../hooks/api/automations"
+import { useState, useMemo } from "react"
 import {
   AutomationsEditForm,
   AutomationsCreateForm,
-} from "../automations-form";
-import { AutomationDeleteButton } from "./components/automation-delete-button";
+} from "../automations-form"
+import { AutomationDeleteButton } from "./components/automation-delete-button"
 
 export const AutomationsList = () => {
-  const [pagination, setPagination] = useState<DataTablePaginationState>({
-    pageSize: 8,
-    pageIndex: 0,
-  });
+  const [pagination, setPagination] =
+    useState<DataTablePaginationState>({
+      pageSize: 8,
+      pageIndex: 0,
+    })
 
-  const limit = 8;
+  const limit = 8
   const offset = useMemo(() => {
-    return pagination.pageIndex * limit;
-  }, [pagination]);
+    return pagination.pageIndex * limit
+  }, [pagination])
 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const {
     data: automationsTriggersData,
@@ -40,15 +41,15 @@ export const AutomationsList = () => {
     limit: limit,
     offset: offset,
     order: "-created_at",
-  });
+  })
 
-  const columnHelper = createDataTableColumnHelper<any>();
+  const columnHelper = createDataTableColumnHelper<any>()
 
   const columns = [
     columnHelper.accessor("to", {
       header: "Name and description",
       cell: ({ row }) => {
-        const tooltip = `Device (DB) ID: \n ${row?.original?.id}`;
+        const tooltip = `Device (DB) ID: \n ${row?.original?.id}`
         return (
           <>
             <div className="py-2">
@@ -56,7 +57,11 @@ export const AutomationsList = () => {
                 <span>{row?.original?.name}</span>
                 <Tooltip
                   content={
-                    <div dangerouslySetInnerHTML={{ __html: tooltip }} />
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: tooltip,
+                      }}
+                    />
                   }
                   maxWidth={400}
                 >
@@ -68,39 +73,52 @@ export const AutomationsList = () => {
               </div>
             </div>
           </>
-        );
+        )
       },
     }),
     columnHelper.accessor("trigger_type", {
       header: "Trigger Type",
       cell: ({ row }) => {
-        return <span>{row?.original?.trigger_type}</span>;
+        return <span>{row?.original?.trigger_type}</span>
       },
     }),
     columnHelper.accessor("event_name", {
       header: "Event Name",
       cell: ({ row }) => {
-        return <span>{row?.original?.event_name}</span>;
+        return <span>{row?.original?.event_name}</span>
       },
     }),
     columnHelper.accessor("last_run_at", {
       header: "Last Run At",
       cell: ({ row }) => {
-        const lastRunAtAll = row?.original?.states?.map((state: any) => state.last_triggered_at).sort((a: any, b: any) => new Date(b).getTime() - new Date(a).getTime());
+        const lastRunAtAll = row?.original?.states
+          ?.map((state: any) => state.last_triggered_at)
+          .sort(
+            (a: any, b: any) =>
+              new Date(b).getTime() - new Date(a).getTime()
+          )
         return (
           <span>
-            {lastRunAtAll.length > 0 ? new Date(lastRunAtAll[0]).toLocaleString() : "-"}
+            {lastRunAtAll.length > 0
+              ? new Date(lastRunAtAll[0]).toLocaleString()
+              : "-"}
           </span>
-        );
+        )
       },
     }),
     columnHelper.accessor("active", {
       header: "Active",
       cell: ({ row }) => {
-        const color = row?.original?.active ? "green" : "red";
-        const text = row?.original?.active ? "Yes" : "No";
-        
-        return <Badge size="small" color={color}>{text}</Badge>;
+        const color = row?.original?.active
+          ? "green"
+          : "red"
+        const text = row?.original?.active ? "Yes" : "No"
+
+        return (
+          <Badge size="small" color={color}>
+            {text}
+          </Badge>
+        )
       },
     }),
     columnHelper.accessor("created_at", {
@@ -109,10 +127,12 @@ export const AutomationsList = () => {
         return (
           <span>
             {row?.original?.created_at
-              ? new Date(row.original.created_at).toLocaleString()
+              ? new Date(
+                  row.original.created_at
+                ).toLocaleString()
               : "-"}
           </span>
-        );
+        )
       },
     }),
     columnHelper.accessor("updated_at", {
@@ -121,10 +141,12 @@ export const AutomationsList = () => {
         return (
           <span>
             {row?.original?.updated_at
-              ? new Date(row.original.updated_at).toLocaleString()
+              ? new Date(
+                  row.original.updated_at
+                ).toLocaleString()
               : "-"}
           </span>
-        );
+        )
       },
     }),
     columnHelper.accessor("actions", {
@@ -133,12 +155,14 @@ export const AutomationsList = () => {
         return (
           <div className="flex items-center gap-2">
             <AutomationsEditForm id={row?.original?.id} />
-            <AutomationDeleteButton id={row?.original?.id} />
+            <AutomationDeleteButton
+              id={row?.original?.id}
+            />
           </div>
-        );
+        )
       },
     }),
-  ];
+  ]
 
   const table = useDataTable({
     columns,
@@ -149,7 +173,7 @@ export const AutomationsList = () => {
       onPaginationChange: setPagination,
     },
     rowCount: automationsTriggersData?.count ?? 0,
-  });
+  })
 
   return (
     <Container className="p-0">
@@ -162,5 +186,5 @@ export const AutomationsList = () => {
         <DataTable.Pagination />
       </DataTable>
     </Container>
-  );
-};
+  )
+}
