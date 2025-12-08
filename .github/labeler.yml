@@ -1,0 +1,23 @@
+# Auto-label PRs based on title patterns
+# This helps with automatic release notes generation
+
+"type: feature":
+  - title: ["feat:", "feature:", "add "]
+  - head: ["feat/", "feature/", "add/"]
+
+"type: bug":
+  - title: ["fix:", "bug:", "bugfix:", "resolve "]
+  - head: ["fix/", "bug/", "bugfix/"]
+
+"type: improvement":
+  - title: ["refactor:", "improve:", "update ", "enhance "]
+  - head: ["refactor/", "improve/", "update/"]
+
+"type: docs":
+  - title: ["docs:", "documentation:"]
+  - head: ["docs/", "documentation/"]
+
+dependencies:
+  - title: ["deps:", "dependencies:", "bump "]
+  - head: ["deps/", "dependencies/"]
+
