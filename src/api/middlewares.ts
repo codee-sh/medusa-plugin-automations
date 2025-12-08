@@ -118,6 +118,7 @@ export default defineMiddlewares({
             "active",
             "created_at",
             "updated_at",
+            "states.*",
             "rules.*",
             "rules.rule_values.*",
             "actions.*",

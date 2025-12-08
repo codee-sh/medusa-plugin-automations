@@ -86,11 +86,10 @@ export const AutomationsList = () => {
     columnHelper.accessor("last_run_at", {
       header: "Last Run At",
       cell: ({ row }) => {
+        const lastRunAtAll = row?.original?.states?.map((state: any) => state.last_triggered_at).sort((a: any, b: any) => new Date(b).getTime() - new Date(a).getTime());
         return (
           <span>
-            {row?.original?.last_run_at
-              ? new Date(row.original.last_run_at).toLocaleString()
-              : "-"}
+            {lastRunAtAll.length > 0 ? new Date(lastRunAtAll[0]).toLocaleString() : "-"}
           </span>
         );
       },
