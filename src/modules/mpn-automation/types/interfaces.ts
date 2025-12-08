@@ -29,7 +29,6 @@ export interface NotificationTrigger {
   trigger_type: TriggerType
   event_name: string | null
   interval_minutes: number | null
-  last_run_at: Date | null
   active: boolean
   channels: Record<string, boolean> | null
   metadata: Record<string, any> | null

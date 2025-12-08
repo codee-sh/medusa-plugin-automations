@@ -21,9 +21,8 @@ export default async function mpnAutomationActionEmailExecutedHandler({
 }: SubscriberArgs<any>) {
   const { action, context, eventName } = data;
 
-  console.log("mpnAutomationActionEmailExecutedHandler", data);
+  console.log(eventName, data);
 
-  // Execute email action workflow
   const { result } = await sendEmailActionWorkflow(container).run({
     input: {
       action: {

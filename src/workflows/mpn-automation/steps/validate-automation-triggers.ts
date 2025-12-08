@@ -27,14 +27,14 @@ export const validateAutomationTriggersStep = createStep(
 
     const validated = triggers.map((trigger) => {
       // Validate rules for context
-      const isValid = validateRulesForContext(trigger.rules || [], context)
+      const rules = trigger.rules || []
+      const isValid = validateRulesForContext(rules, context)
 
       return {
-        isValid,
         trigger,
-        actions: trigger.actions,
+        isValid,
       }
-    }).filter((action: any) => action.isValid)
+    }).filter((trigger: any) => trigger.isValid)
 
     return new StepResponse(validated, validated)
   }

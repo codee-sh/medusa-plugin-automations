@@ -1,6 +1,7 @@
 import { ActionHandler } from "../types";
 import { FieldConfig } from "../types";
 import { Modules } from "@medusajs/framework/utils";
+import { NotificationTrigger } from "../types";
 
 export class BaseActionHandler implements ActionHandler {
   id = "base";
@@ -12,19 +13,17 @@ export class BaseActionHandler implements ActionHandler {
   fields: FieldConfig[] = [];
 
   async executeAction({
+    trigger,
     action,
     context,
-    result,
     container,
     eventName,
-    triggerId,
   }: {
+    trigger: any;
     action: Record<string, any>;
     context: any;
-    result: any;
     container: any;
     eventName: string;
-    triggerId: string;
   }) {
     const eventBusService = container.resolve(Modules.EVENT_BUS);
 
@@ -33,7 +32,7 @@ export class BaseActionHandler implements ActionHandler {
       data: {
         eventName: eventName,
         action: action,
-        triggerId: triggerId,
+        trigger: trigger.id,
         context: context,
       },
     });

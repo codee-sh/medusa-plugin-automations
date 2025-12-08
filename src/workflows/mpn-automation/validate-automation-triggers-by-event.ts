@@ -39,20 +39,20 @@ export const validateAutomationTriggersByEventWorkflow = createWorkflow(
   validateAutomationTriggersByEventWorkflowId,
   (input: WorkflowData<ValidateAutomationTriggersByEventWorkflowInput>) => {
     // Retrieve triggers for the event
-    const triggers = getAutomationTriggersByEventStep({
+    const getTriggers = getAutomationTriggersByEventStep({
       eventName: input.eventName,
       eventType: input.eventType,
     })
 
     // Validate all triggers against context
-    const validated = validateAutomationTriggersStep({
-      triggers: triggers || [],
+    const getValidatedTriggers = validateAutomationTriggersStep({
+      triggers: getTriggers || [],
       context: input.context,
     })
 
     return new WorkflowResponse({
-      validated: validated,
-      triggers: triggers,
+      triggers: getTriggers,
+      triggersValidated: getValidatedTriggers
     })
   }
 )

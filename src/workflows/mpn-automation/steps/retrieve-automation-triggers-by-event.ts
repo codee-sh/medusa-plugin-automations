@@ -25,7 +25,6 @@ export const getAutomationTriggersByEventStep = createStep(
     input: GetAutomationTriggersByEventStepInput,
     { container }
   ): Promise<StepResponse<NotificationTrigger[]>> => {
-    // Use the main module service
     const automationService = container.resolve<MpnAutomationService>(
       MPN_AUTOMATION_MODULE
     )
@@ -53,7 +52,6 @@ export const getAutomationTriggersByEventStep = createStep(
       trigger_type: trigger.trigger_type as TriggerType,
       event_name: trigger.event_name,
       interval_minutes: trigger.interval_minutes,
-      last_run_at: trigger.last_run_at,
       active: trigger.active,
       channels: trigger.channels as Record<string, boolean> | null,
       metadata: trigger.metadata as Record<string, any> | null,

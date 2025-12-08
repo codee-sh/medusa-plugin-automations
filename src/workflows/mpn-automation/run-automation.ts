@@ -1,12 +1,14 @@
 import { createWorkflow, WorkflowData, WorkflowResponse, transform } from "@medusajs/framework/workflows-sdk"
 import { validateAutomationTriggersByEventWorkflow } from "./validate-automation-triggers-by-event"
 import { runAutomationActionsStep } from "./steps/run-automation-actions"
+import { saveAutomationStateWorkflow } from "./save-automation-state"
 import { TriggerType } from "../../utils/types"
 import { logStep } from "../../workflows/steps/log-step"
 
 export interface RunAutomationWorkflowInput {
   eventName: string
-  eventType: TriggerType 
+  eventType: TriggerType
+  triggerKey: string
   context: Record<string, any>
 }
 
@@ -59,8 +61,8 @@ export const runAutomationWorkflowId = "run-automation"
 export const runAutomationWorkflow = createWorkflow(
   runAutomationWorkflowId,
   (input: WorkflowData<RunAutomationWorkflowInput>) => {
-    // Step 1: Retrieve and validate triggers for the event
-    const validationResult = validateAutomationTriggersByEventWorkflow.runAsStep({
+    // Step 1: Retrieve and validate triggers by the event
+    const getValidationResult = validateAutomationTriggersByEventWorkflow.runAsStep({
       input: {
         eventName: input.eventName,
         eventType: input.eventType,
@@ -68,37 +70,36 @@ export const runAutomationWorkflow = createWorkflow(
       },
     })
 
-    // Run actions for all validated triggers
-    const actionRunningResult = runAutomationActionsStep({
-      validated: validationResult.validated,
-      context: input.context,
+    // Step 2: Run actions for all validated triggers
+    const getActionRunningResult = runAutomationActionsStep({
+      validatedTriggers: getValidationResult.triggersValidated,
+      context: input.context
+    })
+
+    // Step 3: Save automation state
+    const getSaveAutomationStateResult = saveAutomationStateWorkflow.runAsStep({
+      input: {
+        triggers: getActionRunningResult.triggersExecuted,
+        targetKey: input.triggerKey
+      }
     })
 
     // Combine all results
-    const finalResult = transform({ validationResult, actionRunningResult }, (data) => {
-      const validatedResults = data.validationResult.validated || []
-      const actionRunningResults = data.actionRunningResult.results || []
+    const finalResult = transform({ getValidationResult, getActionRunningResult, getSaveAutomationStateResult }, (data) => {
+      const triggers = data.getValidationResult.triggers || []
+      const triggersValidated = data.getValidationResult.triggersValidated || []
+      const triggersExecuted = data.getActionRunningResult.triggersExecuted || []
+      const statesSaved = data.getSaveAutomationStateResult.statesSaved || []
       
-      // Map action running results back to validation results
-      const actionsExecuted = validatedResults.map((action: any, index: number) => {
-        const actionRunningResult = actionRunningResults[index]
-        
-        return {
-          triggerId: action.trigger.id || action.trigger.trigger_id,
-          isValid: action.isValid,
-          actionsExecuted: actionRunningResult?.actionsExecuted || 0,
-          actions: actionRunningResult?.actions || [],
-        }
-      })
-
-      const triggersExecuted = actionsExecuted.filter((r: any) => r.isValid && r.actionsExecuted > 0).length
-
       return {
-        triggersFound: data.validationResult.triggers.length || 0,
-        triggersValidated: validatedResults.length,
-        triggersExecuted: triggersExecuted,
-        totalActionsExecuted: data.actionRunningResult.totalActionsExecuted || 0,
-        actionsExecuted: actionsExecuted,
+        triggers,
+        triggersValidated,
+        triggersExecuted,
+        statesSaved,
+        triggersCount: triggers.length || 0,
+        triggersValidatedCount: triggersValidated.length || 0,
+        triggersExecutedCount: triggersExecuted.length || 0,
+        statesSavedCount: statesSaved.length || 0,
       }
     })
 

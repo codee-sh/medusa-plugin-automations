@@ -22,9 +22,6 @@ export const MpnAutomationTrigger = model
     // Interval in minutes — only when trigger_type = "schedule"
     interval_minutes: model.number().nullable(),
 
-    // When the trigger was last run (schedule)
-    last_run_at: model.dateTime().nullable(),
-
     // Whether the trigger is enabled
     active: model.boolean().default(true),
 

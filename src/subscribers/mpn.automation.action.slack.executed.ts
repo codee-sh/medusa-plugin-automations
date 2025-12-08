@@ -20,23 +20,9 @@ export default async function mpnAutomationActionSlackExecutedHandler({
   event: { data },
   container,
 }: SubscriberArgs<any>) {
-  const notificationModuleService = container.resolve(Modules.NOTIFICATION)
-
   const { action, context, eventName } = data;
 
-  console.log("mpnAutomationActionSlackExecutedHandler", data);
-
-  // const notificationResult = await notificationModuleService.createNotifications({
-  //   to: "slack-channel", // This will be configured in the Slack app
-  //   channel: "slack",
-  //   template: action.config.templateName,
-  //   trigger_type: "mpn",
-  //   resource_id: "123",
-  //   resource_type: eventName,
-  //   data: {
-  //     ...context
-  //   }
-  // })  
+  console.log(eventName, data);
 
   // Execute email action workflow
   const { result } = await sendSlackActionWorkflow(container).run({

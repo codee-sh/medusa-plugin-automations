@@ -65,16 +65,6 @@
           "nullable": true,
           "mappedType": "integer"
         },
-        "last_run_at": {
-          "name": "last_run_at",
-          "type": "timestamptz",
-          "unsigned": false,
-          "autoincrement": false,
-          "primary": false,
-          "nullable": true,
-          "length": 6,
-          "mappedType": "datetime"
-        },
         "active": {
           "name": "active",
           "type": "boolean",

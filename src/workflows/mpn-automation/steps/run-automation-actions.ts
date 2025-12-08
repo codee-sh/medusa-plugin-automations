@@ -1,14 +1,15 @@
 import { StepResponse, createStep } from "@medusajs/framework/workflows-sdk";
+import { MedusaError } from "@medusajs/utils";
+import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
 import {
   NotificationAction,
   NotificationTrigger,
 } from "../../../modules/mpn-automation/types/interfaces";
 import MpnAutomationService from "../../../modules/mpn-automation/services/service";
-import { MedusaError } from "@medusajs/utils";
-import { ContainerRegistrationKeys } from "@medusajs/framework/utils";
+import { saveAutomationStateWorkflow } from "../save-automation-state";
 
 export interface RunAutomationActionsStepInput {
-  validated: Array<{
+  validatedTriggers: Array<{
     isValid: boolean;
     trigger: NotificationTrigger;
     actions: NotificationAction[];
@@ -17,18 +18,7 @@ export interface RunAutomationActionsStepInput {
 }
 
 export interface RunAutomationActionsStepOutput {
-  results: Array<{
-    triggerId?: string;
-    isValid: boolean;
-    actionsExecuted: number;
-    actions: Array<{
-      actionId?: string;
-      actionType?: string | null;
-      success: boolean;
-    }>;
-  }>;
-  triggersCount: number;
-  totalActionsExecuted: number;
+  triggersExecuted: any;
 }
 
 export const runAutomationActionsStepId = "run-automation-actions";
@@ -58,9 +48,9 @@ export const runAutomationActionsStep = createStep(
       container.resolve<MpnAutomationService>("mpnAutomation");
     const logger = container.resolve(ContainerRegistrationKeys.LOGGER);
 
-    const { validated, context } = input;
+    const { validatedTriggers, context } = input;
 
-    if (!validated || validated.length === 0) {
+    if (!validatedTriggers || validatedTriggers.length === 0) {
       return new StepResponse({
         results: [],
         triggersCount: 0,
@@ -68,19 +58,23 @@ export const runAutomationActionsStep = createStep(
       });
     }
 
-    const results = await Promise.all(
-      validated.map(async (result) => {
-        if (!result.isValid || !result.actions || result.actions.length === 0) {
+    const getActionExecutionResults = await Promise.all(
+      validatedTriggers.map(async (validatedTrigger) => {
+        const isValid = validatedTrigger.isValid
+        const trigger = validatedTrigger.trigger
+        const actions = validatedTrigger.trigger.actions || []
+
+        if (!isValid || !actions || actions.length === 0) {
           return {
-            triggerId: result.trigger.id || result.trigger.trigger_id,
-            isValid: result.isValid,
+            trigger,
+            isValid,
             actionsExecuted: 0,
             actions: [],
           };
         }
 
         const executedActions = await Promise.all(
-          result.actions.map(async (action) => {
+          actions.map(async (action) => {
             try {
               if (!action.action_type) {
                 throw new MedusaError(
@@ -93,30 +87,29 @@ export const runAutomationActionsStep = createStep(
                 action.action_type
               );
 
-              const handler = actionHandler?.handler;
-              const enabled = actionHandler?.enabled;
+              const getHandler = actionHandler?.handler;
+              const isEnabled = actionHandler?.enabled;
 
-              if (!handler) {
+              if (!getHandler) {
                 throw new MedusaError(
                   MedusaError.Types.NOT_FOUND,
                   `Action handler for "${action.action_type}" not found`
                 );
               }
 
-              if (!enabled) {
+              if (!isEnabled) {
                 throw new MedusaError(
                   MedusaError.Types.NOT_FOUND,
                   `Action handler for "${action.action_type}" is disabled`
                 );
               }
 
-              return await handler.executeAction({
+              return await getHandler.executeAction({
+                container,
+                trigger,
                 action,
                 context,
-                result,
-                container,
                 eventName: `mpn.automation.action.${action.action_type}.executed`,
-                triggerId: result.trigger.id || result.trigger.trigger_id || "",
               });
             } catch (error) {
               logger.info(error.message);
@@ -127,23 +120,14 @@ export const runAutomationActionsStep = createStep(
         );
 
         return {
-          triggerId: result.trigger.id || result.trigger.trigger_id,
-          isValid: result.isValid,
-          actions: executedActions,
-          actionsExecuted: executedActions.filter((a) => a.success).length,
+          trigger,
+          executedActions: executedActions
         };
       })
     );
 
-    const totalActionsExecuted = results.reduce(
-      (sum, r) => sum + r.actionsExecuted,
-      0
-    );
-
     return new StepResponse({
-      results,
-      triggersCount: validated.length,
-      totalActionsExecuted,
+      triggersExecuted: getActionExecutionResults
     });
   }
 );

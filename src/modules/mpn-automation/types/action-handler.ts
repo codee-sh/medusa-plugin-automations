@@ -41,12 +41,11 @@ export interface ActionHandler {
    */
   executeAction: (
     params: {
+      trigger: NotificationTrigger;
       action: Record<string, any>
       context: any
-      result: any
       container: any
       eventName: string
-      triggerId: string
     }
   ) => Promise<{
     success: boolean
