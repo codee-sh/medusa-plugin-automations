@@ -1,7 +1,6 @@
 import { ActionHandler } from "../types"
 import { FieldConfig } from "../types"
 import { Modules } from "@medusajs/framework/utils"
-import { NotificationTrigger } from "../types"
 
 export class BaseActionHandler implements ActionHandler {
   id = "base"

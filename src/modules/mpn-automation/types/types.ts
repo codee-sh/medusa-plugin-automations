@@ -47,8 +47,6 @@ export type ModuleOptions = {
   automations?: {
     enabled?: boolean
     customEvents?: CustomEvent[]
-    customActions?: CustomAction[]
-    // Allow passing ActionHandler instances directly
     actionHandlers?: ActionHandler[]
     actionsEnabled?: {
       slack?: boolean
@@ -61,15 +59,6 @@ export enum TriggerType {
   EVENT = "event",
   SCHEDULE = "schedule",
   MANUAL = "manual",
-}
-
-export enum ActionType {
-  EMAIL = "email",
-  SMS = "sms",
-  PUSH = "push",
-  IN_APP = "in_app",
-  SLACK = "slack",
-  ADMIN = "admin",
 }
 
 export enum OperatorType {
@@ -120,33 +109,6 @@ export const TRIGGER_TYPES = [
   {
     value: TriggerType.MANUAL,
     label: "Manual",
-  },
-]
-
-export const ACTION_TYPES = [
-  {
-    value: ActionType.EMAIL,
-    label: "Email",
-  },
-  {
-    value: ActionType.SMS,
-    label: "SMS",
-  },
-  {
-    value: ActionType.PUSH,
-    label: "Push",
-  },
-  {
-    value: ActionType.IN_APP,
-    label: "In App",
-  },
-  {
-    value: ActionType.SLACK,
-    label: "Slack",
-  },
-  {
-    value: ActionType.ADMIN,
-    label: "Admin",
   },
 ]
 

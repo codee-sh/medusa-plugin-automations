@@ -40,7 +40,6 @@ export const getInventoryLevelByIdStep = createStep(
     const inventoryService: IInventoryService =
       container.resolve(Modules.INVENTORY)
 
-    // Retrieve inventory level with inventory_item relation
     const inventoryLevel =
       await inventoryService.retrieveInventoryLevel(
         input.inventory_level_id,
@@ -48,6 +47,8 @@ export const getInventoryLevelByIdStep = createStep(
           relations: ["inventory_item"],
         }
       )
+
+    console.log("inventoryLevel", inventoryLevel)
 
     return new StepResponse({
       inventory_level: inventoryLevel,

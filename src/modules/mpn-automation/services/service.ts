@@ -21,6 +21,45 @@ import {
   SlackActionHandler,
 } from "../actions-handlers"
 import { Logger } from "@medusajs/framework/types"
+import {
+  InventoryEvents,
+  ProductEvents,
+  UserEvents,
+  PricingEvents,
+  NotificationEvents,
+  FulfillmentEvents,
+  CartWorkflowEvents,
+  CustomerWorkflowEvents,
+  OrderWorkflowEvents,
+  OrderEditWorkflowEvents,
+  UserWorkflowEvents,
+  AuthWorkflowEvents,
+  SalesChannelWorkflowEvents,
+  ProductCategoryWorkflowEvents,
+  ProductCollectionWorkflowEvents,
+  ProductVariantWorkflowEvents,
+  ProductWorkflowEvents,
+  ProductTypeWorkflowEvents,
+  ProductTagWorkflowEvents,
+  ProductOptionWorkflowEvents,
+  InviteWorkflowEvents,
+  RegionWorkflowEvents,
+  FulfillmentWorkflowEvents,
+  PaymentEvents,
+  Modules,
+} from "@medusajs/framework/utils"
+import { INVENTORY_LEVEL_ATTRIBUTES } from "../types/modules/inventory"
+
+// Optional import for ShippingOptionTypeWorkflowEvents (available from v2.10.0+)
+let ShippingOptionTypeWorkflowEvents: any = null
+try {
+  const coreFlowsModule = require("@medusajs/framework/utils")
+  if (coreFlowsModule.ShippingOptionTypeWorkflowEvents) {
+    ShippingOptionTypeWorkflowEvents = coreFlowsModule.ShippingOptionTypeWorkflowEvents
+  }
+} catch (e) {
+  // Event not available in this version
+}
 
 type InjectedDependencies = {
   logger: Logger
@@ -114,7 +153,126 @@ class MpnAutomationService extends MedusaService({
    * Get available events for the admin panel form
    */
   getAvailableEvents() {
-    return [...ALL_EVENTS, ...this.events_]
+    return [...this.buildAvailableEvents(), ...this.events_]
+  }
+
+  buildAvailableEvents() {
+    const buildEvents = (events: any) => {
+      return Object.values(events).map((event: any) => {
+        console.log("event", event)
+
+        let attributes = [] as any
+
+        if (event === 'inventory.inventory-level.updated') {
+          attributes = INVENTORY_LEVEL_ATTRIBUTES
+        }
+
+        return {
+          value: event,
+          label: event,
+          attributes: attributes,
+        }
+      })
+    }
+
+    const events = [
+      // Service Events (automatic CRUD events)
+      {
+        name: Modules.INVENTORY,
+        events: buildEvents(InventoryEvents),
+      },
+      // {
+      //   name: Modules.PRICING,
+      //   events: buildEvents(PricingEvents),
+      // },
+      // {
+      //   name: Modules.FULFILLMENT,
+      //   events: buildEvents(FulfillmentEvents),
+      // },
+      // Workflow Events (business-level events)
+      {
+        name: "Cart",
+        events: buildEvents(CartWorkflowEvents),
+      },
+      {
+        name: "Customer",
+        events: buildEvents(CustomerWorkflowEvents),
+      },
+      {
+        name: "Order",
+        events: buildEvents(OrderWorkflowEvents),
+      },
+      {
+        name: "Order Edit",
+        events: buildEvents(OrderEditWorkflowEvents),
+      },
+      {
+        name: "User",
+        events: buildEvents(UserWorkflowEvents),
+      },
+      {
+        name: "Auth",
+        events: buildEvents(AuthWorkflowEvents),
+      },
+      {
+        name: "Sales Channel",
+        events: buildEvents(SalesChannelWorkflowEvents),
+      },
+      {
+        name: "Product Category",
+        events: buildEvents(ProductCategoryWorkflowEvents),
+      },
+      {
+        name: "Product Collection",
+        events: buildEvents(ProductCollectionWorkflowEvents),
+      },
+      {
+        name: "Product Variant",
+        events: buildEvents(ProductVariantWorkflowEvents),
+      },
+      {
+        name: "Product",
+        events: buildEvents(ProductWorkflowEvents),
+      },
+      {
+        name: "Product Type",
+        events: buildEvents(ProductTypeWorkflowEvents),
+      },
+      {
+        name: "Product Tag",
+        events: buildEvents(ProductTagWorkflowEvents),
+      },
+      {
+        name: "Product Option",
+        events: buildEvents(ProductOptionWorkflowEvents),
+      },
+      {
+        name: "Invite",
+        events: buildEvents(InviteWorkflowEvents),
+      },
+      {
+        name: "Region",
+        events: buildEvents(RegionWorkflowEvents),
+      },
+      {
+        name: "Fulfillment",
+        events: buildEvents(FulfillmentWorkflowEvents),
+      },
+      ...(ShippingOptionTypeWorkflowEvents
+        ? [
+            {
+              name: "Shipping Option Type Workflows",
+              events: buildEvents(ShippingOptionTypeWorkflowEvents),
+            },
+          ]
+        : []),
+      {
+        name: "Payment Events",
+        events: buildEvents(PaymentEvents),
+      },
+    ]
+
+    return events
   }
 
   /**
