@@ -2,7 +2,6 @@ import {
   SubscriberArgs,
   type SubscriberConfig,
 } from "@medusajs/medusa"
-import { Modules } from "@medusajs/framework/utils"
 import { sendSlackActionWorkflow } from "../workflows/mpn-automation/send-slack-action"
 
 /**
@@ -24,10 +23,11 @@ export default async function mpnAutomationActionSlackExecutedHandler({
   container,
 }: SubscriberArgs<any>) {
   const { action, context, eventName } = data
+  const config = container.resolve("configModule") as any
+  const moduleConfig = config?.modules.mpnAutomation
+  const backendUrl = moduleConfig?.options.backend_url
 
-  console.log(eventName, data)
-
-  // Execute email action workflow
+  // Execute s;acl action workflow
   const { result } = await sendSlackActionWorkflow(
     container
   ).run({
@@ -38,6 +38,7 @@ export default async function mpnAutomationActionSlackExecutedHandler({
           ...action.config,
           template:
             action.config.templateName ?? "inventory-level",
+          backendUrl: backendUrl
         },
       },
       context: context,

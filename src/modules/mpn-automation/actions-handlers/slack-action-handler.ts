@@ -19,20 +19,6 @@ export class SlackActionHandler extends BaseActionHandler {
         },
       ],
       defaultValue: "inventory-level",
-    },
-    // {
-    //   name: "webhook_url",
-    //   key: "webhook_url",
-    //   label: "Webhook URL",
-    //   type: "text" as const,
-    //   required: true,
-    // },
-    // {
-    //   name: "admin_url",
-    //   key: "admin_url",
-    //   label: "Admin URL",
-    //   type: "text" as const,
-    //   required: true,
-    // }
+    }
   ]
 }

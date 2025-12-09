@@ -1,0 +1,13 @@
+{
+  "general": {
+    "headerTitle": "Poziom zapasów #{{inventoryItemTitle}} został zaktualizowany",
+    "labels": {
+      "quantity": "Ilość",
+      "location": "Lokalizacja"
+    },
+    "actions": {
+      "openInPanel": "Otwórz w panelu"
+    }
+  }
+}
+

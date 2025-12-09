@@ -9,8 +9,10 @@ export class BaseActionHandler implements ActionHandler {
 
   configComponentKey = "BaseConfigComponent"
 
+  // Fields for the action configuration rendered in the admin panel then saved in the action config
   fields: FieldConfig[] = []
 
+  // Function that executes the action in the workflow actions
   async executeAction({
     trigger,
     action,

@@ -57,73 +57,25 @@ export class SlackNotificationProviderService extends AbstractFulfillmentProvide
     }).format(amount)
   }
 
-  private getNotificationText(template: string, data: any) {
-    switch (template) {
-      case "inventory-level":
-        return `New inventory ${(data?.inventory_level?.id as string) || "unknown"} level was updated`
-      default:
-        return `Unknown notification`
-    }
-  }
-
-  private getNotificationBlocks(
-    template: string,
-    data: any
-  ) {
-    switch (template) {
-      case "inventory-level":
-        return [
-          {
-            type: "header",
-            text: {
-              type: "plain_text",
-              text: `New inventory ${(data?.inventory_level?.id as string) || "unknown"} level was updated`,
-              emoji: true,
-            },
-          },
-          {
-            type: "actions",
-            elements: [
-              {
-                type: "button",
-                text: {
-                  type: "plain_text",
-                  text: "Otwórz w panelu",
-                },
-                url: `${this.options_.admin_url}/inventory/${data?.inventory_level?.inventory_item_id as string}`,
-                style: "primary",
-              },
-            ],
-          },
-          {
-            type: "divider",
-          },
-        ]
-      default:
-        return []
-    }
-  }
-
   async send(
-    notification: NotificationTypes.ProviderSendNotificationDTO
+    notification: NotificationTypes.ProviderSendNotificationDTO & { content: any }
   ): Promise<any> {
-    const { template, data } = notification as {
+    const { template, data, content } = notification as {
       template: string
       data: any
+      content: {
+        text: string
+        blocks: any
+      }
     }
-
-    console.log("notification", notification)
 
     const response = await fetch(
       this.options_.webhook_url,
       {
         method: "POST",
         body: JSON.stringify({
-          text: this.getNotificationText(template, data),
-          blocks: this.getNotificationBlocks(
-            template,
-            data
-          ),
+          text: content.text,
+          blocks: content.blocks,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -139,17 +91,7 @@ export class SlackNotificationProviderService extends AbstractFulfillmentProvide
     }
 
     return {
-      status: response.ok ? "success" : "error",
+      status: response.ok ? "success" : "failed",
     }
-
-    // switch (template) {
-    //   case "inventory-level":
-    //     // return this.sendOrderNotification(notification);
-    //   default:
-    //     throw new MedusaError(
-    //       MedusaError.Types.NOT_FOUND,
-    //       `Template ${template} not supported`
-    //     );
-    // }
   }
 }

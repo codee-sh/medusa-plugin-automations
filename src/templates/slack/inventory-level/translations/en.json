@@ -1,0 +1,13 @@
+{
+  "general": {
+    "headerTitle": "Inventory level #{{inventoryItemTitle}} has been updated",
+    "labels": {
+      "quantity": "Quantity",
+      "location": "Location"
+    },
+    "actions": {
+      "openInPanel": "Open in panel"
+    }
+  }
+}
+

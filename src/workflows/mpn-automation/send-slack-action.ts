@@ -77,6 +77,7 @@ export const sendSlackActionWorkflow = createWorkflow(
           resourceType: eventName,
           channel: actionConfig?.channel,
           triggerType: "mpn",
+          backendUrl: actionConfig?.backendUrl,
         }
       }
     )
