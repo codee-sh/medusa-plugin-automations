@@ -17,6 +17,8 @@ export type AvailableActionsQueryData = {
       type: string
       required?: boolean
       placeholder?: string
+      options?: Array<{ value: string; name: string }>
+      defaultValue?: string
     }>
   }[]
 }
@@ -33,12 +35,14 @@ export const useAvailableActions = (
     fields,
     order = "created_at",
     id,
+    eventName, // Add eventName parameter
   } = params
 
   const queryKey: QueryKey = [
     "available-actions",
     limit,
     offset,
+    eventName, // Include eventName in query key for proper caching
     ...extraKey,
   ]
 
@@ -47,6 +51,7 @@ export const useAvailableActions = (
     offset,
     fields,
     order,
+    ...(eventName && { eventName }), // Add eventName to query params if provided
   }
 
   const { data, ...rest } = useQuery<

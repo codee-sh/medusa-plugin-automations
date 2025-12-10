@@ -5,6 +5,7 @@ import {
   useWatch,
 } from "react-hook-form"
 import { Trash, Plus } from "@medusajs/icons"
+import { useEffect } from "react"
 import LoadActionComponent from "../../../utils/dynamic-component"
 import { useAvailableActions } from "../../../../hooks/api/available-actions"
 
@@ -15,12 +16,38 @@ export function AutomationsActionsForm({
   form: any
   isOpen?: boolean
 }) {
+  // Watch eventName to dynamically update available actions
+  const eventName = useWatch({
+    control: form.control,
+    name: "general.event_name",
+  })
+
   const {
     data: availableActionsData,
     isLoading: isAvailableActionsLoading,
   } = useAvailableActions({
     enabled: isOpen !== false,
+    eventName: eventName, // Pass eventName to fetch dynamic templates
   })
+
+  console.log("availableActionsData", availableActionsData)
+
+  // Reset action configs when eventName changes to ensure templates are updated
+  useEffect(() => {
+    const actions = form.getValues("actions.items") || []
+    if (actions.length > 0 && eventName) {
+      actions.forEach((_: any, index: number) => {
+        const currentConfig = form.getValues(`actions.items.${index}.config`) || {}
+        // Only reset templateName if it exists and event changed
+        if (currentConfig.templateName) {
+          form.setValue(`actions.items.${index}.config.templateName`, undefined, {
+            shouldValidate: false,
+            shouldDirty: true,
+          })
+        }
+      })
+    }
+  }, [eventName, form])
 
   const {
     fields = [],

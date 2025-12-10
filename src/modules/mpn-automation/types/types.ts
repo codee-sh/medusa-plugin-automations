@@ -1,9 +1,32 @@
+import { ActionHandler } from "./action-handler"
+
 export type CustomEvent = {
   id?: string
   value?: string
   label?: string
   field_type?: string
   group?: string
+  attributes?: Array<Attribute>
+  /**
+   * Template object with value and name
+   * Example: { value: "inventory-level", name: "Inventory Level" }
+   */
+  template?: { value: string; name: string }
+}
+
+/**
+ * Custom event group structure - supports nested groups with events
+ * Example:
+ * {
+ *   name: "POS events",
+ *   events: [
+ *     { value: "pos.system.healthy", label: "System Heartbeat", attributes: [...] }
+ *   ]
+ * }
+ */
+export type CustomEventGroup = {
+  name: string
+  events: CustomEvent[]
 }
 
 export type CustomAction = {
@@ -15,8 +38,6 @@ export type Attribute = {
   value?: string
   label?: string
 }
-
-import { ActionHandler } from "./action-handler"
 
 export interface FieldConfig {
   name: string
@@ -37,7 +58,7 @@ export interface FieldConfig {
   placeholder?: string
   required?: boolean
   defaultValue?: any
-  options?: Array<{ value: string; label: string }>
+  options?: Array<{ value: string; name: string }>
   min?: number
   max?: number
   step?: number
@@ -46,7 +67,25 @@ export interface FieldConfig {
 export type ModuleOptions = {
   automations?: {
     enabled?: boolean
-    customEvents?: CustomEvent[]
+    /**
+     * Custom events organized in groups
+     * Example:
+     * customEvents: [
+     *   {
+     *     name: "POS events",
+     *     events: [
+     *       {
+     *         value: "pos.system.healthy",
+     *         label: "System Heartbeat",
+     *         attributes: [
+     *           { value: "system.device.id", label: "Device ID" }
+     *         ]
+     *       }
+     *     ]
+     *   }
+     * ]
+     */
+    customEvents?: CustomEventGroup[]
     actionHandlers?: ActionHandler[]
     actionsEnabled?: {
       slack?: boolean
@@ -109,110 +148,5 @@ export const TRIGGER_TYPES = [
   {
     value: TriggerType.MANUAL,
     label: "Manual",
-  },
-]
-
-export const INVENTORY_ITEM_ATTRIBUTES = [
-  {
-    value: "inventory_item.stocked_quantity",
-    label: "Stocked Quantity",
-  },
-  {
-    value: "inventory_item.reserved_quantity",
-    label: "Reserved Quantity",
-  },
-  {
-    value: "inventory_item.available_quantity",
-    label: "Available Quantity",
-  },
-  {
-    value: "inventory_item.incoming_quantity",
-    label: "Incoming Quantity",
-  },
-  {
-    value: "inventory_item.location_id",
-    label: "Location ID",
-  },
-]
-
-export const INVENTORY_LEVEL_ATTRIBUTES = [
-  {
-    value: "inventory_level.stocked_quantity",
-    label: "Stocked Quantity",
-  },
-  {
-    value: "inventory_level.reserved_quantity",
-    label: "Reserved Quantity",
-  },
-  {
-    value: "inventory_level.available_quantity",
-    label: "Available Quantity",
-  },
-  {
-    value: "inventory_level.incoming_quantity",
-    label: "Incoming Quantity",
-  },
-  {
-    value: "inventory_level.location_id",
-    label: "Location ID",
-  },
-]
-
-export const EVENT_INVENTORY_TYPES = [
-  {
-    value: "inventory.inventory-level.created",
-    label: "Inventory Level Created",
-    attributes: INVENTORY_LEVEL_ATTRIBUTES,
-  },
-  {
-    value: "inventory.inventory-level.updated",
-    label: "Inventory Level Updated",
-    attributes: INVENTORY_LEVEL_ATTRIBUTES,
-  },
-  {
-    value: "inventory.inventory-level.deleted",
-    label: "Inventory Level Deleted",
-    attributes: INVENTORY_LEVEL_ATTRIBUTES,
-  },
-]
-
-export const EVENT_CUSTOMER_TYPES = [
-  {
-    value: "customer.created",
-    label: "Customer Created",
-  },
-  {
-    value: "customer.updated",
-    label: "Customer Updated",
-  },
-]
-
-export const EVENT_ORDER_TYPES = [
-  {
-    value: "order.placed",
-    label: "Order Placed",
-  },
-  {
-    value: "order.completed",
-    label: "Order Completed",
-  },
-  {
-    value: "order.shipped",
-    label: "Order Shipped",
-  },
-]
-
-export const ALL_EVENTS = [
-  {
-    name: "Inventory",
-    events: [...EVENT_INVENTORY_TYPES],
-  },
-  {
-    name: "Customer",
-    events: [...EVENT_CUSTOMER_TYPES],
-  },
-  {
-    name: "Order",
-    events: [...EVENT_ORDER_TYPES],
   },
 ]

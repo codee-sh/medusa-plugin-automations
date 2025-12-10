@@ -10,10 +10,9 @@ import {
   MpnAutomationAction,
 } from "../models"
 import {
-  ActionHandler,
   ModuleOptions,
-  CustomEvent,
-  ALL_EVENTS,
+  ActionHandler,
+  CustomEventGroup,
   TRIGGER_TYPES,
 } from "../types"
 import {
@@ -23,11 +22,6 @@ import {
 import { Logger } from "@medusajs/framework/types"
 import {
   InventoryEvents,
-  ProductEvents,
-  UserEvents,
-  PricingEvents,
-  NotificationEvents,
-  FulfillmentEvents,
   CartWorkflowEvents,
   CustomerWorkflowEvents,
   OrderWorkflowEvents,
@@ -45,21 +39,9 @@ import {
   InviteWorkflowEvents,
   RegionWorkflowEvents,
   FulfillmentWorkflowEvents,
-  PaymentEvents,
-  Modules,
+  PaymentEvents
 } from "@medusajs/framework/utils"
-import { INVENTORY_LEVEL_ATTRIBUTES } from "../types/modules/inventory"
-
-// Optional import for ShippingOptionTypeWorkflowEvents (available from v2.10.0+)
-let ShippingOptionTypeWorkflowEvents: any = null
-try {
-  const coreFlowsModule = require("@medusajs/framework/utils")
-  if (coreFlowsModule.ShippingOptionTypeWorkflowEvents) {
-    ShippingOptionTypeWorkflowEvents = coreFlowsModule.ShippingOptionTypeWorkflowEvents
-  }
-} catch (e) {
-  // Event not available in this version
-}
+import { getEventMetadata } from "../types/modules"
 
 type InjectedDependencies = {
   logger: Logger
@@ -74,7 +56,7 @@ class MpnAutomationService extends MedusaService({
 }) {
   private options_: ModuleOptions
   private logger_: Logger
-  private events_: CustomEvent[]
+  private events_: CustomEventGroup[]
   private actionsEnabled_: any
   private actionHandlers_: Map<
     string,
@@ -98,13 +80,177 @@ class MpnAutomationService extends MedusaService({
     }
 
     // Initialize default action handlers
-    this.init()
+    this.initializeActionHandlers()
+  }
+
+  /**
+   * Get available triggers for the admin panel form
+   */
+  getAvailableTriggers() {
+    return [...TRIGGER_TYPES]
+  }
+
+  /**
+   * Get action handlers map
+   */
+  private getActionHandlers(): Map<
+    string,
+    { handler: ActionHandler; enabled: boolean }
+  > {
+    return this.actionHandlers_
+  }
+
+  /**
+   * Get available events for the admin panel form
+   * Combines Medusa events with custom events
+   * Returns grouped structure: [{ name: string, events: [...] }]
+   */
+  getAvailableEvents() {
+    const medusaEvents = this.buildAvailableEvents()
+    
+    if (!this.events_ || this.events_.length === 0) {
+      return medusaEvents
+    }
+
+    // If there are custom events, add them to the result
+    if (this.events_.length > 0) {
+      return [...medusaEvents, ...this.events_]
+    }
+
+    return medusaEvents
+  }
+
+  /**
+   * Build events list using central metadata registry
+   * Supports both Medusa events and custom events
+   */
+  buildAvailableEvents() {
+    const events = [
+      // Service Events (automatic CRUD events)
+      {
+        name: "Inventory",
+        events: this.buildEvents(InventoryEvents) || [],
+      },
+      // {
+      //   name: Modules.PRICING,
+      //   events: buildEvents(PricingEvents),
+      // },
+      // {
+      //   name: Modules.FULFILLMENT,
+      //   events: buildEvents(FulfillmentEvents),
+      // },
+      // Workflow Events (business-level events)
+      {
+        name: "Cart",
+        events: this.buildEvents(CartWorkflowEvents),
+      },
+      {
+        name: "Customer",
+        events: this.buildEvents(CustomerWorkflowEvents),
+      },
+      {
+        name: "Order",
+        events: this.buildEvents(OrderWorkflowEvents),
+      },
+      {
+        name: "Order Edit",
+        events: this.buildEvents(OrderEditWorkflowEvents),
+      },
+      {
+        name: "User",
+        events: this.buildEvents(UserWorkflowEvents),
+      },
+      {
+        name: "Auth",
+        events: this.buildEvents(AuthWorkflowEvents),
+      },
+      {
+        name: "Sales Channel",
+        events: this.buildEvents(SalesChannelWorkflowEvents),
+      },
+      {
+        name: "Product Category",
+        events: this.buildEvents(ProductCategoryWorkflowEvents),
+      },
+      {
+        name: "Product Collection",
+        events: this.buildEvents(ProductCollectionWorkflowEvents),
+      },
+      {
+        name: "Product Variant",
+        events: this.buildEvents(ProductVariantWorkflowEvents),
+      },
+      {
+        name: "Product",
+        events: this.buildEvents(ProductWorkflowEvents),
+      },
+      {
+        name: "Product Type",
+        events: this.buildEvents(ProductTypeWorkflowEvents),
+      },
+      {
+        name: "Product Tag",
+        events: this.buildEvents(ProductTagWorkflowEvents),
+      },
+      {
+        name: "Product Option",
+        events: this.buildEvents(ProductOptionWorkflowEvents),
+      },
+      {
+        name: "Invite",
+        events: this.buildEvents(InviteWorkflowEvents),
+      },
+      {
+        name: "Region",
+        events: this.buildEvents(RegionWorkflowEvents),
+      },
+      {
+        name: "Fulfillment",
+        events: this.buildEvents(FulfillmentWorkflowEvents),
+      },
+      {
+        name: "Payment Events",
+        events: this.buildEvents(PaymentEvents) || [],
+      },
+    ]
+
+    // Filter out empty groups and ensure all groups have events array
+    return events
+      .filter((group) => group && group.events && Array.isArray(group.events) && group.events.length > 0)
+      .map((group) => ({
+        name: String(group.name || ''),
+        events: group.events || [],
+      }))
+  }
+
+  /**
+   * Get available templates for a given event name
+   * Uses getAvailableEvents() to find the event and extract template
+   * Returns array of template options: [{ value: string, name: string }]
+   */
+  getTemplatesForEvent(eventName?: string): Array<{ value: string; name: string }> {
+    if (!eventName) {
+      return []
+    }
+
+    // Use getAvailableEvents() to find the event
+    const allEvents = this.getAvailableEvents()
+    
+    // Search through all event groups
+    for (const group of allEvents) {
+      const event = group.events?.find((e: any) => e.value === eventName)
+      if (event?.template) {
+        return [event.template]
+      }
+    }
+
+    return []
   }
 
   /**
    * Initialize action handlers from defaults and options
    */
-  private init() {
+  private initializeActionHandlers() {
     const defaultActions: ActionHandler[] = [
       new EmailActionHandler(),
       new SlackActionHandler(),
@@ -140,157 +286,70 @@ class MpnAutomationService extends MedusaService({
   }
 
   /**
-   * Get action handlers map
-   */
-  private getActionHandlers(): Map<
-    string,
-    { handler: ActionHandler; enabled: boolean }
-  > {
-    return this.actionHandlers_
-  }
-
-  /**
-   * Get available events for the admin panel form
-   */
-  getAvailableEvents() {
-    return [...this.buildAvailableEvents(), ...this.events_]
-  }
-
-  buildAvailableEvents() {
-    const buildEvents = (events: any) => {
-      return Object.values(events).map((event: any) => {
-        console.log("event", event)
-
-        let attributes = [] as any
-
-        if (event === 'inventory.inventory-level.updated') {
-          attributes = INVENTORY_LEVEL_ATTRIBUTES
-        }
-
-        return {
-          value: event,
-          label: event,
-          attributes: attributes,
-        }
-      })
-    }
-
-    const events = [
-      // Service Events (automatic CRUD events)
-      {
-        name: Modules.INVENTORY,
-        events: buildEvents(InventoryEvents),
-      },
-      // {
-      //   name: Modules.PRICING,
-      //   events: buildEvents(PricingEvents),
-      // },
-      // {
-      //   name: Modules.FULFILLMENT,
-      //   events: buildEvents(FulfillmentEvents),
-      // },
-      // Workflow Events (business-level events)
-      {
-        name: "Cart",
-        events: buildEvents(CartWorkflowEvents),
-      },
-      {
-        name: "Customer",
-        events: buildEvents(CustomerWorkflowEvents),
-      },
-      {
-        name: "Order",
-        events: buildEvents(OrderWorkflowEvents),
-      },
-      {
-        name: "Order Edit",
-        events: buildEvents(OrderEditWorkflowEvents),
-      },
-      {
-        name: "User",
-        events: buildEvents(UserWorkflowEvents),
-      },
-      {
-        name: "Auth",
-        events: buildEvents(AuthWorkflowEvents),
-      },
-      {
-        name: "Sales Channel",
-        events: buildEvents(SalesChannelWorkflowEvents),
-      },
-      {
-        name: "Product Category",
-        events: buildEvents(ProductCategoryWorkflowEvents),
-      },
-      {
-        name: "Product Collection",
-        events: buildEvents(ProductCollectionWorkflowEvents),
-      },
-      {
-        name: "Product Variant",
-        events: buildEvents(ProductVariantWorkflowEvents),
-      },
-      {
-        name: "Product",
-        events: buildEvents(ProductWorkflowEvents),
-      },
-      {
-        name: "Product Type",
-        events: buildEvents(ProductTypeWorkflowEvents),
-      },
-      {
-        name: "Product Tag",
-        events: buildEvents(ProductTagWorkflowEvents),
-      },
-      {
-        name: "Product Option",
-        events: buildEvents(ProductOptionWorkflowEvents),
-      },
-      {
-        name: "Invite",
-        events: buildEvents(InviteWorkflowEvents),
-      },
-      {
-        name: "Region",
-        events: buildEvents(RegionWorkflowEvents),
-      },
-      {
-        name: "Fulfillment",
-        events: buildEvents(FulfillmentWorkflowEvents),
-      },
-      ...(ShippingOptionTypeWorkflowEvents
-        ? [
-            {
-              name: "Shipping Option Type Workflows",
-              events: buildEvents(ShippingOptionTypeWorkflowEvents),
-            },
-          ]
-        : []),
-      {
-        name: "Payment Events",
-        events: buildEvents(PaymentEvents),
-      },
-    ]
-
-    return events
-  }
-
-  /**
    * Get available actions for the admin panel form
+   * @param eventName - Optional event name to filter templates dynamically
    */
-  getAvailableActions() {
+  getAvailableActions(eventName?: string) {
     const handlers = this.getActionHandlers()
 
-    return Array.from(handlers.values()).map((handler) => ({
-      value: handler.handler.id,
-      label: handler.handler.label,
-      description: handler.handler.description,
-      configComponentKey:
-        handler.handler.configComponentKey,
-      templateLoaders: handler.handler.templateLoaders,
-      fields: handler.handler.fields,
-      enabled: handler.enabled,
-    }))
+    return Array.from(handlers.values()).map((handler) => {
+      // Get fields, potentially with dynamic template options
+      let fields = handler.handler.fields || []
+
+      // If eventName is provided, update templateName fields dynamically
+      if (eventName && fields.length > 0) {
+        const templates = this.getTemplatesForEvent(eventName)
+        
+        fields = fields.map((field) => {
+          // If this is a templateName field, update its options
+          if (field.key === "templateName" && field.type === "select") {
+            return {
+              ...field,
+              options: templates.length > 0 ? templates : field.options || [],
+              defaultValue: templates.length > 0 ? templates[0]?.value : field.defaultValue,
+            }
+          }
+          return field
+        })
+      }
+
+      return {
+        value: handler.handler.id,
+        label: handler.handler.label,
+        description: handler.handler.description,
+        configComponentKey: handler.handler.configComponentKey,
+        templateLoaders: handler.handler.templateLoaders,
+        fields: fields,
+        enabled: handler.enabled,
+      }
+    })
+  }
+
+  private buildEvents(events: any) {
+    if (!events || typeof events !== 'object') {
+      return []
+    }
+    
+    return Object.values(events)
+      .filter((event: any) => event != null) // Filter out null/undefined
+      .map((event: any) => {
+        const eventName = String(event)
+        
+        // Skip invalid event names
+        if (!eventName || eventName === 'undefined' || eventName === 'null') {
+          return null
+        }
+
+        const metadata = getEventMetadata(eventName)
+        
+        return {
+          value: eventName,
+          label: eventName,
+          attributes: metadata.attributes || event.attributes || [],
+          template: metadata.template || event.template || null,
+        }
+      })
+      .filter((event: any) => event != null) // Filter out null results
   }
 
   /**
@@ -303,13 +362,6 @@ class MpnAutomationService extends MedusaService({
     | undefined {
     const handlers = this.getActionHandlers()
     return handlers.get(actionId)
-  }
-
-  /**
-   * Get available triggers for the admin panel form
-   */
-  getAvailableTriggers() {
-    return [...TRIGGER_TYPES]
   }
 }
 

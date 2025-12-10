@@ -52,21 +52,3 @@ export const INVENTORY_LEVEL_ATTRIBUTES = [
     label: "Location ID",
   },
 ]
-
-export const EVENT_INVENTORY_TYPES = [
-  {
-    value: "inventory.inventory-level.created",
-    label: "Inventory Level Created",
-    attributes: INVENTORY_LEVEL_ATTRIBUTES,
-  },
-  {
-    value: "inventory.inventory-level.updated",
-    label: "Inventory Level Updated",
-    attributes: INVENTORY_LEVEL_ATTRIBUTES,
-  },
-  {
-    value: "inventory.inventory-level.deleted",
-    label: "Inventory Level Deleted",
-    attributes: INVENTORY_LEVEL_ATTRIBUTES,
-  },
-]

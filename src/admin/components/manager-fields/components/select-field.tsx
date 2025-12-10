@@ -4,7 +4,7 @@ interface SelectFieldProps {
   label: string
   value: string
   onChange: (value: string) => void
-  options: Array<{ value: string; label: string }>
+  options: Array<{ value: string; name: string }>
   required?: boolean
   disabled?: boolean
 }
@@ -32,7 +32,7 @@ export const SelectField = ({
             key={option.value}
             value={option.value}
           >
-            {option.label}
+            {option.name}
           </Select.Item>
         ))}
       </Select.Content>

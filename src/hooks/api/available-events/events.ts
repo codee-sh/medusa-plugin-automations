@@ -9,7 +9,15 @@ export type useAvailableEventsParams = {
 export type AvailableEventsQueryData = {
   events: {
     name: string
-    events: { value: string; label: string }[]
+    events: {
+      value: string
+      label: string
+      attributes?: Array<{ value: string; label: string }>
+      template?: { value: string; name: string } | null
+      id?: string
+      group?: string
+      field_type?: string
+    }[]
   }[]
 }
 
