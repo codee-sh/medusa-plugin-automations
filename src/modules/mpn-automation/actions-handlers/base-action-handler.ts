@@ -5,7 +5,6 @@ import { Modules } from "@medusajs/framework/utils"
 /**
  * Base action handler class
  *
- * @extends ActionHandler
  * @param id - Action ID (default: "base")
  * @param label - Action label (default: "Base")
  * @param description - Action description (default: "")
@@ -26,15 +25,22 @@ export class BaseActionHandler implements ActionHandler {
    * Helper method to add templateName field to fields array
    * Call this in constructor or fields initialization if you need template selection
    *
+   * @param options - Template options array (will be populated dynamically by service if eventName is provided)
+   * @param defaultValue - Default template value
    * @returns FieldConfig for template
    */
-  addTemplateNameField(): FieldConfig {
+  protected addTemplateNameField(
+    options: Array<{ value: string; name: string }> = [],
+    defaultValue?: string
+  ): FieldConfig {
     return {
       name: "templateName",
       key: "templateName",
-      label: "Template",
+      label: "Template Name",
       type: "select" as const,
       required: true,
+      options: options,
+      defaultValue: defaultValue,
     }
   }
 
@@ -46,6 +52,7 @@ export class BaseActionHandler implements ActionHandler {
    * @param context - Context object
    * @param container - Container object
    * @param eventName - Event name
+   * @param contextType - Context type determining structure of data in context
    * @returns object with actionId, actionType and success status
    */
   async executeAction({
@@ -54,12 +61,14 @@ export class BaseActionHandler implements ActionHandler {
     context,
     container,
     eventName,
+    contextType,
   }: {
     trigger: any
     action: Record<string, any>
     context: any
     container: any
     eventName: string
+    contextType?: string | null
   }) {
     const eventBusService = container.resolve(
       Modules.EVENT_BUS
@@ -72,6 +81,7 @@ export class BaseActionHandler implements ActionHandler {
         action: action,
         trigger: trigger.id,
         context: context,
+        contextType: contextType,
       },
     })
 

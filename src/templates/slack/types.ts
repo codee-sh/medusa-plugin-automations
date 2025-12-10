@@ -16,9 +16,14 @@ export interface SlackTemplateOptions {
   [key: string]: any
 }
 
+export interface SlackTemplateRendererParams {
+  context: SlackTemplateData
+  contextType?: string | null
+  options?: SlackTemplateOptions
+}
+
 export type SlackTemplateRenderer = (
-  data: SlackTemplateData,
-  options: SlackTemplateOptions
+  params: SlackTemplateRendererParams
 ) =>
   | Promise<{ text: string; blocks: SlackBlock[] }>
   | { text: string; blocks: SlackBlock[] }

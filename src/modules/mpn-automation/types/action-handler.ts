@@ -35,6 +35,7 @@ export interface ActionHandler {
     context: any
     container: any
     eventName: string
+    contextType?: string | null
   }) => Promise<{
     success: boolean
     message?: string

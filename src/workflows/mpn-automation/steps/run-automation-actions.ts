@@ -18,6 +18,7 @@ export interface RunAutomationActionsStepInput {
     actions: NotificationAction[]
   }>
   context: Record<string, any>
+  contextType?: string | null
 }
 
 export interface RunAutomationActionsStepOutput {
@@ -58,7 +59,7 @@ export const runAutomationActionsStep = createStep(
       ContainerRegistrationKeys.LOGGER
     )
 
-    const { validatedTriggers, context } = input
+    const { validatedTriggers, context, contextType } = input
 
     if (
       !validatedTriggers ||
@@ -122,6 +123,7 @@ export const runAutomationActionsStep = createStep(
                 trigger,
                 action,
                 context,
+                contextType: contextType,
                 eventName: `mpn.automation.action.${action.action_type}.executed`,
               })
             } catch (error) {

@@ -25,6 +25,7 @@ export interface SendSlackStepInput {
   settings: SendSlackConfig
   context: any
   eventName?: string
+  contextType?: string | null
 }
 
 export interface SendSlackStepOutput {
@@ -64,7 +65,7 @@ export const sendSlackStep = createStep(
     input: SendSlackStepInput,
     { container }
   ): Promise<StepResponse<SendSlackStepOutput>> => {
-    const { settings, context, eventName } = input
+    const { settings, context, contextType, eventName } = input
 
     // Validate required config
     if (!settings.template) {
@@ -89,9 +90,14 @@ export const sendSlackStep = createStep(
       const triggerType = settings.triggerType || "system"
       const backendUrl = settings.backendUrl || ""
 
-      const { text, blocks } = renderSlackTemplate(template, context, {
-        locale: locale,
-        backendUrl: backendUrl,
+      const { text, blocks } = renderSlackTemplate({
+        templateName: template,
+        context: context,
+        contextType: contextType,
+        options: {
+          locale: locale,
+          backendUrl: backendUrl,
+        },
       })
 
       // Send notification

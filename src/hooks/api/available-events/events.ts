@@ -14,6 +14,7 @@ export type AvailableEventsQueryData = {
       label: string
       attributes?: Array<{ value: string; label: string }>
       template?: { value: string; name: string } | null
+      contextType?: string | null
       id?: string
       group?: string
       field_type?: string

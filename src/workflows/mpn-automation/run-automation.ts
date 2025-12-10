@@ -15,6 +15,7 @@ export interface RunAutomationWorkflowInput {
   eventType: TriggerType
   triggerKey: string
   context: Record<string, any>
+  contextType?: string | null
 }
 
 export interface RunAutomationWorkflowOutput {
@@ -82,6 +83,7 @@ export const runAutomationWorkflow = createWorkflow(
         validatedTriggers:
           getValidationResult.triggersValidated,
         context: input.context,
+        contextType: input.contextType,
       }
     )
 

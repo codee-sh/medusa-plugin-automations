@@ -352,12 +352,13 @@ class MpnAutomationService extends MedusaService({
 
         const metadata = getEventMetadata(eventName)
         
-        return {
-          value: eventName,
-          label: eventName,
-          attributes: metadata.attributes || event.attributes || [],
-          template: metadata.template || event.template || null,
-        }
+          return {
+            value: eventName,
+            label: eventName,
+            attributes: metadata.attributes || event.attributes || [],
+            template: metadata.template || event.template || null,
+            contextType: event.contextType || null, // Only from custom events, not from registry
+          }
       })
       .filter((event: any) => event != null) // Filter out null results
   }

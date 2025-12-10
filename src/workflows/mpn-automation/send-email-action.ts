@@ -11,6 +11,7 @@ export interface SendEmailActionWorkflowInput {
   action: NotificationAction
   context: Record<string, any>
   eventName?: string
+  contextType?: string | null
 }
 
 export interface SendEmailActionWorkflowOutput {
@@ -66,7 +67,7 @@ export const sendEmailActionWorkflow = createWorkflow(
   (input: WorkflowData<SendEmailActionWorkflowInput>) => {
     // Transform automation action format for sendEmailWorkflow
     const settings = transform(
-      { action: input.action, eventName: input.eventName },
+      { action: input.action, eventName: input.eventName, contextType: input.contextType },
       (data) => {
         const actionConfig = data?.action?.config || {}
         const eventName = data?.eventName
@@ -90,6 +91,7 @@ export const sendEmailActionWorkflow = createWorkflow(
         settings: settings,
         templateData: input.context,
         eventName: input.eventName,
+        contextType: input.contextType,
       },
     })
 

@@ -9,13 +9,20 @@ import {
   mergeTranslations,
 } from "../../../utils"
 
-export function renderInventoryLevel(
-  data: SlackTemplateData,
-  options: SlackTemplateOptions = {}
-): { text: string; blocks: SlackBlock[] } {
-  const backendUrl = options.backendUrl || ""
-  const locale = options.locale || "pl"
-  const inventoryLevel = data?.inventory_level
+export interface RenderInventoryLevelParams {
+  context: SlackTemplateData
+  contextType?: string | null
+  options?: SlackTemplateOptions
+}
+
+export function renderInventoryLevel({
+  context,
+  contextType,
+  options = {},
+}: RenderInventoryLevelParams): { text: string; blocks: SlackBlock[] } {
+  const backendUrl = options?.backendUrl || ""
+  const locale = options?.locale || "pl"
+  const inventoryLevel = context?.inventory_level
 
   // Merge custom translations if provided
   const mergedTranslations = mergeTranslations(

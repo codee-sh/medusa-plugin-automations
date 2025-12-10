@@ -9,6 +9,7 @@ export interface SendSlackWorkflowInput {
   settings: any
   context: any
   eventName?: string
+  contextType?: string | null
 }
 
 export interface SendSlackWorkflowOutput {
@@ -55,6 +56,7 @@ export const sendSlackWorkflow = createWorkflow(
       settings: input.settings,
       context: input.context,
       eventName: input.eventName,
+      contextType: input.contextType,
     })
 
     return new WorkflowResponse(result)

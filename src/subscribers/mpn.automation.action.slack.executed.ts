@@ -22,12 +22,12 @@ export default async function mpnAutomationActionSlackExecutedHandler({
   event: { data },
   container,
 }: SubscriberArgs<any>) {
-  const { action, context, eventName } = data
+  const { action, context, eventName: triggerEventName, contextType } = data
   const config = container.resolve("configModule") as any
   const moduleConfig = config?.modules.mpnAutomation
   const backendUrl = moduleConfig?.options.backend_url
 
-  // Execute s;acl action workflow
+  // Execute slack action workflow
   const { result } = await sendSlackActionWorkflow(
     container
   ).run({
@@ -42,7 +42,8 @@ export default async function mpnAutomationActionSlackExecutedHandler({
         },
       },
       context: context,
-      eventName: eventName,
+      eventName: triggerEventName,
+      contextType: contextType,
     },
   })
 

@@ -8,18 +8,39 @@ const templateRegistry: Record<string, SlackTemplateRenderer> = {
   [SLACK_TEMPLATES_NAMES.INVENTORY_LEVEL]: renderInventoryLevel
 }
 
-export function renderSlackTemplate(
-  templateName: string,
-  data: SlackTemplateData,
-  options: SlackTemplateOptions = {}
-): { text: string; blocks: SlackBlock[] } {
+export interface RenderSlackTemplateParams {
+  templateName: string
+  context: SlackTemplateData
+  contextType?: string | null
+  options?: SlackTemplateOptions
+}
+
+/**
+ * Render a slack template
+ * 
+ * @param templateName - Template name
+ * @param context - Context data
+ * @param contextType - Context type
+ * @param options - Options
+ * @returns Text and blocks
+ */
+export function renderSlackTemplate({
+  templateName,
+  context,
+  contextType,
+  options = {},
+}: RenderSlackTemplateParams): { text: string; blocks: SlackBlock[] } {
   const renderer = templateRegistry[templateName]
   
   if (!renderer) {
     throw new Error(`Slack template "${templateName}" not found. Available: ${Object.keys(templateRegistry).join(', ')}`)
   }
 
-  const result = renderer(data, options)
+  const result = renderer({
+    context: context,
+    contextType: contextType,
+    options: options,
+  })
   
   if (result instanceof Promise) {
     throw new Error('Async templates not supported yet. Use sync renderer.')

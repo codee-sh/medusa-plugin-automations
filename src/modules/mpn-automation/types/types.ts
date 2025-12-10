@@ -12,6 +12,11 @@ export type CustomEvent = {
    * Example: { value: "inventory-level", name: "Inventory Level" }
    */
   template?: { value: string; name: string }
+  /**
+   * Context type determines the structure of data in context
+   * Example: "inventory-level" means context has { inventory_level: {...} }
+   */
+  contextType?: string
 }
 
 /**

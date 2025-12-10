@@ -19,7 +19,7 @@ export type EventMetadata = {
  */
 export function getEventMetadata(
   eventName: string
-): EventMetadata {
+): Partial<EventMetadata> {
   return EVENT_METADATA_REGISTRY[eventName] || {}
 }
 

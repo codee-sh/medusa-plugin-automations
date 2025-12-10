@@ -11,6 +11,7 @@ export interface SendSlackActionWorkflowInput {
   action: NotificationAction
   context: Record<string, any>
   eventName?: string
+  contextType?: string | null
 }
 
 export interface SendSlackActionWorkflowOutput {
@@ -64,9 +65,9 @@ export const sendSlackActionWorkflowId = "send-slack-action"
 export const sendSlackActionWorkflow = createWorkflow(
   sendSlackActionWorkflowId,
   (input: WorkflowData<SendSlackActionWorkflowInput>) => {
-    // Transform automation action format for sendEmailWorkflow
+    // Transform automation action format for sendSlackWorkflow
     const settings = transform(
-      { action: input.action, eventName: input.eventName },
+      { action: input.action, eventName: input.eventName, contextType: input.contextType },
       (data) => {
         const actionConfig = data?.action?.config || {}
         const eventName = data?.eventName
@@ -87,6 +88,7 @@ export const sendSlackActionWorkflow = createWorkflow(
         settings: settings,
         context: input.context,
         eventName: input.eventName,
+        contextType: input.contextType,
       },
     })
 
