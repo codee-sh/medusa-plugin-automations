@@ -3,18 +3,6 @@ import { FieldConfig } from "./types"
 import { FieldPath, FieldValues } from "react-hook-form"
 
 /**
- * Props for action configuration component
- */
-export interface ActionConfigComponentProps<
-  TFieldValues extends FieldValues = FieldValues,
-> {
-  form: any
-  name: FieldPath<TFieldValues>
-  errors?: Record<string, string>
-  fields?: any
-}
-
-/**
  * Action handler interface - implement this to create custom actions
  */
 export interface ActionHandler {
@@ -52,6 +40,16 @@ export interface ActionHandler {
     message?: string
     data?: any
   }>
+
+  /**
+   * Helper method to add templateName field to fields array
+   * Call this in constructor or fields initialization if you need template selection
+   *
+   * @param options - Template options array (will be populated dynamically by service if eventName is provided)
+   * @param defaultValue - Default template value
+   * @returns FieldConfig for template
+   */
+  addTemplateNameField: () => FieldConfig
 
   /**
    * Optional path to config component for dynamic import

@@ -2,6 +2,16 @@ import { ActionHandler } from "../types"
 import { FieldConfig } from "../types"
 import { Modules } from "@medusajs/framework/utils"
 
+/**
+ * Base action handler class
+ *
+ * @extends ActionHandler
+ * @param id - Action ID (default: "base")
+ * @param label - Action label (default: "Base")
+ * @param description - Action description (default: "")
+ * @param configComponentKey - Action config component key (default: "BaseConfigComponent")
+ * @param fields - Action fields (default: [])
+ */
 export class BaseActionHandler implements ActionHandler {
   id = "base"
   label = "Base"
@@ -15,27 +25,29 @@ export class BaseActionHandler implements ActionHandler {
   /**
    * Helper method to add templateName field to fields array
    * Call this in constructor or fields initialization if you need template selection
-   * 
-   * @param options - Template options array (will be populated dynamically by service if eventName is provided)
-   * @param defaultValue - Default template value
-   * @returns FieldConfig for templateName
+   *
+   * @returns FieldConfig for template
    */
-  protected addTemplateNameField(
-    options: Array<{ value: string; label: string }> = [],
-    defaultValue?: string
-  ): FieldConfig {
+  addTemplateNameField(): FieldConfig {
     return {
       name: "templateName",
       key: "templateName",
-      label: "Template Name",
+      label: "Template",
       type: "select" as const,
       required: true,
-      options: options,
-      defaultValue: defaultValue,
     }
   }
 
-  // Function that executes the action in the workflow actions
+  /**
+   * Function that executes the action in the workflow actions
+   *
+   * @param trigger - Trigger object
+   * @param action - Action object
+   * @param context - Context object
+   * @param container - Container object
+   * @param eventName - Event name
+   * @returns object with actionId, actionType and success status
+   */
   async executeAction({
     trigger,
     action,

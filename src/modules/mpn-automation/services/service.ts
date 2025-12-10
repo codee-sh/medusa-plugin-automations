@@ -85,6 +85,8 @@ class MpnAutomationService extends MedusaService({
 
   /**
    * Get available triggers for the admin panel form
+   * 
+   * @returns Array of triggers
    */
   getAvailableTriggers() {
     return [...TRIGGER_TYPES]
@@ -92,6 +94,8 @@ class MpnAutomationService extends MedusaService({
 
   /**
    * Get action handlers map
+   * 
+   * @returns Map of action handlers
    */
   private getActionHandlers(): Map<
     string,
@@ -101,28 +105,10 @@ class MpnAutomationService extends MedusaService({
   }
 
   /**
-   * Get available events for the admin panel form
-   * Combines Medusa events with custom events
-   * Returns grouped structure: [{ name: string, events: [...] }]
-   */
-  getAvailableEvents() {
-    const medusaEvents = this.buildAvailableEvents()
-    
-    if (!this.events_ || this.events_.length === 0) {
-      return medusaEvents
-    }
-
-    // If there are custom events, add them to the result
-    if (this.events_.length > 0) {
-      return [...medusaEvents, ...this.events_]
-    }
-
-    return medusaEvents
-  }
-
-  /**
    * Build events list using central metadata registry
    * Supports both Medusa events and custom events
+   * 
+   * @returns Array of events
    */
   buildAvailableEvents() {
     const events = [
@@ -131,15 +117,6 @@ class MpnAutomationService extends MedusaService({
         name: "Inventory",
         events: this.buildEvents(InventoryEvents) || [],
       },
-      // {
-      //   name: Modules.PRICING,
-      //   events: buildEvents(PricingEvents),
-      // },
-      // {
-      //   name: Modules.FULFILLMENT,
-      //   events: buildEvents(FulfillmentEvents),
-      // },
-      // Workflow Events (business-level events)
       {
         name: "Cart",
         events: this.buildEvents(CartWorkflowEvents),
@@ -224,16 +201,38 @@ class MpnAutomationService extends MedusaService({
   }
 
   /**
+   * Get available events for the admin panel form
+   * Combines Medusa events with custom events
+   * 
+   * @returns Array of events
+   */
+  getAvailableEvents() {
+    const medusaEvents = this.buildAvailableEvents()
+    
+    if (!this.events_ || this.events_.length === 0) {
+      return medusaEvents
+    }
+
+    // If there are custom events, add them to the result
+    if (this.events_.length > 0) {
+      return [...medusaEvents, ...this.events_]
+    }
+
+    return medusaEvents
+  }
+
+  /**
    * Get available templates for a given event name
    * Uses getAvailableEvents() to find the event and extract template
-   * Returns array of template options: [{ value: string, name: string }]
+   * 
+   * @param eventName - Event name to search for
+   * @returns Array of template options
    */
   getTemplatesForEvent(eventName?: string): Array<{ value: string; name: string }> {
     if (!eventName) {
       return []
     }
 
-    // Use getAvailableEvents() to find the event
     const allEvents = this.getAvailableEvents()
     
     // Search through all event groups
@@ -249,6 +248,8 @@ class MpnAutomationService extends MedusaService({
 
   /**
    * Initialize action handlers from defaults and options
+   * 
+   * @returns void
    */
   private initializeActionHandlers() {
     const defaultActions: ActionHandler[] = [
@@ -287,7 +288,9 @@ class MpnAutomationService extends MedusaService({
 
   /**
    * Get available actions for the admin panel form
+   * 
    * @param eventName - Optional event name to filter templates dynamically
+   * @returns Array of actions
    */
   getAvailableActions(eventName?: string) {
     const handlers = this.getActionHandlers()
@@ -325,6 +328,13 @@ class MpnAutomationService extends MedusaService({
     })
   }
 
+  /**
+   * Build events list from Medusa events
+   * Supports both Medusa events and custom events
+   * 
+   * @param events - Medusa events object
+   * @returns Array of events
+   */
   private buildEvents(events: any) {
     if (!events || typeof events !== 'object') {
       return []
@@ -354,6 +364,9 @@ class MpnAutomationService extends MedusaService({
 
   /**
    * Get action handler by ID for the admin panel form
+   * 
+   * @param actionId - Action ID
+   * @returns Action handler
    */
   getActionHandler(
     actionId: string
