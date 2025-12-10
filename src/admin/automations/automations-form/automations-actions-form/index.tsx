@@ -30,8 +30,6 @@ export function AutomationsActionsForm({
     eventName: eventName, // Pass eventName to fetch dynamic templates
   })
 
-  console.log("availableActionsData", availableActionsData)
-
   // Reset action configs when eventName changes to ensure templates are updated
   useEffect(() => {
     const actions = form.getValues("actions.items") || []

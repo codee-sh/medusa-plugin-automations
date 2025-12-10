@@ -43,16 +43,6 @@ export interface ActionHandler {
   }>
 
   /**
-   * Helper method to add templateName field to fields array
-   * Call this in constructor or fields initialization if you need template selection
-   *
-   * @param options - Template options array (will be populated dynamically by service if eventName is provided)
-   * @param defaultValue - Default template value
-   * @returns FieldConfig for template
-   */
-  addTemplateNameField: () => FieldConfig
-
-  /**
    * Optional path to config component for dynamic import
    */
   configComponentKey?: string

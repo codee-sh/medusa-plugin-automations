@@ -1,6 +1,3 @@
-import { Label, Input, Textarea } from "@medusajs/ui"
-import { Controller } from "react-hook-form"
-import { ActionConfigComponentProps } from "../../../modules/mpn-automation/types/action-handler"
 import { ManagerFields } from "../../components/manager-fields/manager-fields"
 
 function BaseConfigComponent({
@@ -8,7 +5,7 @@ function BaseConfigComponent({
   fields,
   name,
   errors,
-}: ActionConfigComponentProps) {
+}: any) {
   return (
     <ManagerFields
       name={name}
