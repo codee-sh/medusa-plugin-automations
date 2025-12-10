@@ -1,4 +1,4 @@
-import { AbstractFulfillmentProviderService } from "@medusajs/framework/utils"
+import { AbstractNotificationProviderService } from "@medusajs/framework/utils"
 import { ConfigModule } from "@medusajs/framework/config"
 import {
   Logger,
@@ -15,7 +15,7 @@ export type InjectedDependencies = {
   configModule: ConfigModule
 }
 
-export class SlackNotificationProviderService extends AbstractFulfillmentProviderService {
+export class SlackNotificationProviderService extends AbstractNotificationProviderService {
   static identifier = "mpn-slack"
   protected logger_: Logger
   services_types: any

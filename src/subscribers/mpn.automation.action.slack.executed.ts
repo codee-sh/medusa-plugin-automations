@@ -2,7 +2,7 @@ import {
   SubscriberArgs,
   type SubscriberConfig,
 } from "@medusajs/medusa"
-import { sendSlackActionWorkflow } from "../workflows/mpn-automation/send-slack-action"
+import { sendSlackActionWorkflow } from "../workflows/mpn-automation"
 
 /**
  * Event name for the MPN automation action slack executed event.
@@ -48,7 +48,7 @@ export default async function mpnAutomationActionSlackExecutedHandler({
 
   if (!result.success) {
     console.error(
-      `Failed to send email action ${action?.id}:`,
+      `Failed to send slack action ${action?.id}:`,
       result.error
     )
   }

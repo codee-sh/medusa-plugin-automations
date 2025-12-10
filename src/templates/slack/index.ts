@@ -21,7 +21,6 @@ export function renderSlackTemplate(
 
   const result = renderer(data, options)
   
-  // Obsługa async/sync
   if (result instanceof Promise) {
     throw new Error('Async templates not supported yet. Use sync renderer.')
   }

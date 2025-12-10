@@ -7,7 +7,7 @@ export type SlackBlock = {
   [key: string]: any
 }
 
-export type SlackTemplateData = any // Elastyczny typ dla różnych struktur danych
+export type SlackTemplateData = any
 
 export interface SlackTemplateOptions {
   backendUrl?: string
