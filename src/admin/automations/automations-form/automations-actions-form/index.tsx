@@ -31,21 +31,21 @@ export function AutomationsActionsForm({
   })
 
   // Reset action configs when eventName changes to ensure templates are updated
-  useEffect(() => {
-    const actions = form.getValues("actions.items") || []
-    if (actions.length > 0 && eventName) {
-      actions.forEach((_: any, index: number) => {
-        const currentConfig = form.getValues(`actions.items.${index}.config`) || {}
-        // Only reset templateName if it exists and event changed
-        if (currentConfig.templateName) {
-          form.setValue(`actions.items.${index}.config.templateName`, undefined, {
-            shouldValidate: false,
-            shouldDirty: true,
-          })
-        }
-      })
-    }
-  }, [eventName, form])
+  // useEffect(() => {
+  //   const actions = form.getValues("actions.items") || []
+  //   if (actions.length > 0 && eventName) {
+  //     actions.forEach((_: any, index: number) => {
+  //       const currentConfig = form.getValues(`actions.items.${index}.config`) || {}
+  //       // Only reset templateName if it exists and event changed
+  //       if (currentConfig.templateName) {
+  //         // form.setValue(`actions.items.${index}.config.templateName`, undefined, {
+  //         //   shouldValidate: false,
+  //         //   shouldDirty: true,
+  //         // })
+  //       }
+  //     })
+  //   }
+  // }, [eventName, form])
 
   const {
     fields = [],
@@ -83,6 +83,7 @@ export function AutomationsActionsForm({
               create a new action.
             </div>
           )}
+          {JSON.stringify(watchedActions)}
           {fields.map((field, index) => {
             return (
               <Controller
@@ -121,7 +122,10 @@ export function AutomationsActionsForm({
                               actionTypeField.onChange(
                                 value
                               )
-                              // Reset config when action type changes
+                              // Clear validation errors first to prevent showing errors from previous action type
+                              form.clearErrors(`actions.items.${index}`)
+                              // Reset config when action type changes to prevent sending
+                              // fields from previous action type in payload
                               form.setValue(
                                 `actions.items.${index}.config`,
                                 {},

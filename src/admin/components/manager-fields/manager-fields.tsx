@@ -17,7 +17,6 @@ export const ManagerFields = ({
   form,
   errors,
 }: DeclarativeFieldManagerProps) => {
-  console.log("fields", fields)
   const renderField = (groupField: FieldConfig) => {
     switch (groupField.type) {
       case "text":

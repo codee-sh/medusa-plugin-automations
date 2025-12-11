@@ -95,8 +95,8 @@ export const sendSlackStep = createStep(
         context: context,
         contextType: contextType,
         options: {
-          locale: locale,
-          backendUrl: backendUrl,
+        locale: locale,
+        backendUrl: backendUrl,
         },
       })
 

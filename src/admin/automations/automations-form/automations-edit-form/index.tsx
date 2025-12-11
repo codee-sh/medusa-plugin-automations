@@ -261,6 +261,8 @@ export function AutomationsEditForm({
         trigger_id: id,
         actions: data.actions?.items || [],
       }
+      
+      console.log("items", items)
 
       await editAutomationAction(items)
 

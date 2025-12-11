@@ -7,49 +7,45 @@ import {
 import { sendSlackWorkflow } from "../notifications/send-slack"
 import { NotificationAction } from "../../modules/mpn-automation/types/interfaces"
 
-export interface SendSlackActionWorkflowInput {
+export interface RunSlackActionWorkflowInput {
   action: NotificationAction
   context: Record<string, any>
   eventName?: string
   contextType?: string | null
 }
 
-export interface SendSlackActionWorkflowOutput {
+export interface RunSlackActionWorkflowOutput {
   success: boolean
   notificationId?: string
   error?: string
 }
 
-export const sendSlackActionWorkflowId = "send-slack-action"
+export const runSlackActionWorkflowId = "run-slack-action"
 
 /**
- * Workflow wrapper for automation system that sends an email notification.
+ * Workflow wrapper for automation system that runs a slack action.
  *
- * This is a convenience wrapper around the universal sendEmailWorkflow,
+ * This is a convenience wrapper around the universal sendSlackWorkflow,
  * specifically designed for use with automation actions.
  *
  * It extracts configuration from action.config and context, then calls
- * the universal sendEmailWorkflow.
+ * the universal sendSlackWorkflow.
  *
  * Configuration is stored in action.config:
- * - templateName: Required - Name of the email template
- * - to: Required - Recipient email address
- * - locale: Optional - Locale for translations (default: "pl")
- * - customTemplate: Optional - Path to custom template function
- * - subject: Optional - Custom subject (otherwise uses template default)
- * - template: Optional - Template identifier for notification (defaults to templateName)
+ * - template: Optional - Template identifier for notification
+ * - channel: Optional - Slack channel
+ * - backendUrl: Optional - Backend URL for notifications
  *
  * @example
  * ```typescript
- * const { result } = await sendEmailActionWorkflow(container).run({
+ * const { result } = await runSlackActionWorkflow(container).run({
  *   input: {
  *     action: {
  *       id: "action_123",
- *       action_type: "email",
+ *       action_type: "slack",
  *       config: {
- *         templateName: "inventory-level",
- *         to: "admin@example.com",
- *         locale: "pl"
+ *         template: "inventory-level",
+ *         channel: "#notifications"
  *       }
  *     },
  *     context: {
@@ -62,9 +58,9 @@ export const sendSlackActionWorkflowId = "send-slack-action"
  * })
  * ```
  */
-export const sendSlackActionWorkflow = createWorkflow(
-  sendSlackActionWorkflowId,
-  (input: WorkflowData<SendSlackActionWorkflowInput>) => {
+export const runSlackActionWorkflow = createWorkflow(
+  runSlackActionWorkflowId,
+  (input: WorkflowData<RunSlackActionWorkflowInput>) => {
     // Transform automation action format for sendSlackWorkflow
     const settings = transform(
       { action: input.action, eventName: input.eventName, contextType: input.contextType },

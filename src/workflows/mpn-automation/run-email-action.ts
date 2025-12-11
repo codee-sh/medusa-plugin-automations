@@ -7,23 +7,23 @@ import {
 import { sendEmailWorkflow } from "../notifications/send-email"
 import { NotificationAction } from "../../modules/mpn-automation/types/interfaces"
 
-export interface SendEmailActionWorkflowInput {
+export interface RunEmailActionWorkflowInput {
   action: NotificationAction
   context: Record<string, any>
   eventName?: string
   contextType?: string | null
 }
 
-export interface SendEmailActionWorkflowOutput {
+export interface RunEmailActionWorkflowOutput {
   success: boolean
   notificationId?: string
   error?: string
 }
 
-export const sendEmailActionWorkflowId = "send-email-action"
+export const runEmailActionWorkflowId = "run-email-action"
 
 /**
- * Workflow wrapper for automation system that sends an email notification.
+ * Workflow wrapper for automation system that runs an email action.
  *
  * This is a convenience wrapper around the universal sendEmailWorkflow,
  * specifically designed for use with automation actions.
@@ -41,7 +41,7 @@ export const sendEmailActionWorkflowId = "send-email-action"
  *
  * @example
  * ```typescript
- * const { result } = await sendEmailActionWorkflow(container).run({
+ * const { result } = await runEmailActionWorkflow(container).run({
  *   input: {
  *     action: {
  *       id: "action_123",
@@ -62,9 +62,9 @@ export const sendEmailActionWorkflowId = "send-email-action"
  * })
  * ```
  */
-export const sendEmailActionWorkflow = createWorkflow(
-  sendEmailActionWorkflowId,
-  (input: WorkflowData<SendEmailActionWorkflowInput>) => {
+export const runEmailActionWorkflow = createWorkflow(
+  runEmailActionWorkflowId,
+  (input: WorkflowData<RunEmailActionWorkflowInput>) => {
     // Transform automation action format for sendEmailWorkflow
     const settings = transform(
       { action: input.action, eventName: input.eventName, contextType: input.contextType },

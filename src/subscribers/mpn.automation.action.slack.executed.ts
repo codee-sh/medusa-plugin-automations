@@ -2,7 +2,7 @@ import {
   SubscriberArgs,
   type SubscriberConfig,
 } from "@medusajs/medusa"
-import { sendSlackActionWorkflow } from "../workflows/mpn-automation"
+import { runSlackActionWorkflow } from "../workflows/mpn-automation/run-slack-action"
 
 /**
  * Event name for the MPN automation action slack executed event.
@@ -28,7 +28,7 @@ export default async function mpnAutomationActionSlackExecutedHandler({
   const backendUrl = moduleConfig?.options.backend_url
 
   // Execute slack action workflow
-  const { result } = await sendSlackActionWorkflow(
+  const { result } = await runSlackActionWorkflow(
     container
   ).run({
     input: {
@@ -42,8 +42,8 @@ export default async function mpnAutomationActionSlackExecutedHandler({
         },
       },
       context: context,
-      eventName: triggerEventName,
       contextType: contextType,
+      eventName: triggerEventName
     },
   })
 

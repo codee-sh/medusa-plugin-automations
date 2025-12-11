@@ -2,7 +2,7 @@ import {
   SubscriberArgs,
   type SubscriberConfig,
 } from "@medusajs/medusa"
-import { sendEmailActionWorkflow } from "../workflows/mpn-automation/send-email-action"
+import { runEmailActionWorkflow } from "../workflows/mpn-automation/run-email-action"
 
 /**
  * Event name for the MPN automation action email executed event.
@@ -26,7 +26,7 @@ export default async function mpnAutomationActionEmailExecutedHandler({
 
   console.log(eventName, data)
 
-  const { result } = await sendEmailActionWorkflow(
+  const { result } = await runEmailActionWorkflow(
     container
   ).run({
     input: {
@@ -43,8 +43,8 @@ export default async function mpnAutomationActionEmailExecutedHandler({
         },
       },
       context: context,
-      eventName: triggerEventName,
       contextType: contextType,
+      eventName: triggerEventName
     },
   })
 
