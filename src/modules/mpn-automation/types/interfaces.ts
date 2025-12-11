@@ -1,27 +1,27 @@
 import { TriggerType } from "./types"
 
-export interface NotificationRuleValue {
+export interface AutomationRuleValue {
   id?: string
   value: string | null
   metadata: Record<string, any> | null
 }
 
-export interface NotificationRule {
+export interface AutomationRule {
   id?: string
   attribute: string
   operator: string
   description: string | null
   metadata: Record<string, any> | null
-  rule_values: NotificationRuleValue[]
+  rule_values: AutomationRuleValue[]
 }
 
-export interface NotificationAction {
+export interface AutomationAction {
   id?: string
   action_type?: string | null
   config?: Record<string, any> | null
 }
 
-export interface NotificationTrigger {
+export interface AutomationTrigger {
   id?: string
   trigger_id?: string
   name: string
@@ -32,6 +32,6 @@ export interface NotificationTrigger {
   active: boolean
   channels: Record<string, boolean> | null
   metadata: Record<string, any> | null
-  rules?: NotificationRule[]
-  actions?: NotificationAction[]
+  rules?: AutomationRule[]
+  actions?: AutomationAction[]
 }

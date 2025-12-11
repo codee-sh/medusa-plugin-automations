@@ -5,8 +5,8 @@ import {
 import { MedusaError } from "@medusajs/utils"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import {
-  NotificationAction,
-  NotificationTrigger,
+  AutomationAction,
+  AutomationTrigger,
 } from "../../../modules/mpn-automation/types/interfaces"
 import MpnAutomationService from "../../../modules/mpn-automation/services/service"
 import { saveAutomationStateWorkflow } from "../save-automation-state"
@@ -14,8 +14,8 @@ import { saveAutomationStateWorkflow } from "../save-automation-state"
 export interface RunAutomationActionsStepInput {
   validatedTriggers: Array<{
     isValid: boolean
-    trigger: NotificationTrigger
-    actions: NotificationAction[]
+    trigger: AutomationTrigger
+    actions: AutomationAction[]
   }>
   context: Record<string, any>
   contextType?: string | null

@@ -5,10 +5,10 @@ import {
   transform,
 } from "@medusajs/framework/workflows-sdk"
 import { sendSlackWorkflow } from "../notifications/send-slack"
-import { NotificationAction } from "../../modules/mpn-automation/types/interfaces"
+import { AutomationAction } from "../../modules/mpn-automation/types/interfaces"
 
 export interface RunSlackActionWorkflowInput {
-  action: NotificationAction
+  action: AutomationAction
   context: Record<string, any>
   eventName?: string
   contextType?: string | null

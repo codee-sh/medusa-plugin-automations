@@ -8,7 +8,7 @@ import {
 } from "@medusajs/framework/utils"
 import { z } from "zod"
 import { editAutomationRulesWorkflow } from "../../../../../workflows/mpn-automation"
-import { NotificationRule } from "../../../../../modules/mpn-automation/types/interfaces"
+import { AutomationRule } from "../../../../../modules/mpn-automation/types/interfaces"
 
 export const PostAutomationRulesSchema = z.object({
   trigger_id: z.string(),
@@ -49,7 +49,7 @@ export async function POST(
     ).run({
       input: {
         triggerId: req.body.trigger_id,
-        rules: (req.body.rules as NotificationRule[]) || [],
+        rules: (req.body.rules as AutomationRule[]) || [],
       },
     })
 

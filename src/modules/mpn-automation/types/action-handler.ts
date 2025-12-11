@@ -1,4 +1,4 @@
-import { NotificationTrigger } from "./interfaces"
+import { AutomationTrigger } from "./interfaces"
 import { FieldConfig } from "./types"
 import { FieldPath, FieldValues } from "react-hook-form"
 
@@ -30,7 +30,7 @@ export interface ActionHandler {
    * Function that executes the action
    */
   executeAction: (params: {
-    trigger: NotificationTrigger
+    trigger: AutomationTrigger
     action: Record<string, any>
     context: any
     container: any

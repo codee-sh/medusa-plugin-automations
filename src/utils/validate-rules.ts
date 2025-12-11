@@ -3,7 +3,7 @@ import {
   MathBN,
   isString,
 } from "@medusajs/framework/utils"
-import { NotificationRule } from "../modules/mpn-automation/types/interfaces"
+import { AutomationRule } from "../modules/mpn-automation/types/interfaces"
 
 /**
  * Validates a single rule value condition based on operator
@@ -90,7 +90,7 @@ export function validateRuleValueCondition(
  * Validates rules for the given context.
  */
 export function validateRulesForContext(
-  rules: NotificationRule[],
+  rules: AutomationRule[],
   context: Record<string, any>
 ): boolean {
   if (!rules?.length) {

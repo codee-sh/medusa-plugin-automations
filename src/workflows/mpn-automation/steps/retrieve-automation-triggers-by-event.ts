@@ -5,9 +5,9 @@ import {
 import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
 import type MpnAutomationService from "../../../modules/mpn-automation/services/service"
 import {
-  NotificationTrigger,
+  AutomationTrigger,
   TriggerType,
-} from "../../../utils/types"
+} from "../../../modules/mpn-automation/types/interfaces"
 
 export interface GetAutomationTriggersByEventStepInput {
   eventName: string
@@ -31,7 +31,7 @@ export const getAutomationTriggersByEventStep = createStep(
   async (
     input: GetAutomationTriggersByEventStepInput,
     { container }
-  ): Promise<StepResponse<NotificationTrigger[]>> => {
+  ): Promise<StepResponse<AutomationTrigger[]>> => {
     const automationService =
       container.resolve<MpnAutomationService>(
         MPN_AUTOMATION_MODULE

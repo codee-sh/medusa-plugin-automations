@@ -4,11 +4,11 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import MpnAutomationService from "../../../modules/mpn-automation/services/service"
 import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
-import { NotificationAction } from "../../../modules/mpn-automation/types/interfaces"
+import { AutomationAction } from "../../../modules/mpn-automation/types/interfaces"
 
 type EditAutomationActionsStepInput = {
   trigger_id: string
-  actions: NotificationAction[]
+  actions: AutomationAction[]
 }
 
 const configWithUndefined = (config: any) => {
