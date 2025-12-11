@@ -102,6 +102,13 @@ The plugin exports the following:
 - `@codee-sh/medusa-plugin-automations/modules/mpn-automation` - Automation module service
 - `@codee-sh/medusa-plugin-automations/utils` - Utility functions
 
+## Screenshots
+
+### Gif
+![Automations Admin Panel](./docs/images/video.gif)
+
+*Automations management interface in Medusa Admin*
+
 ## Related Plugins
 
 For email templates and rendering functionality, see [@codee-sh/medusa-plugin-automations-emails](https://github.com/codee-sh/medusa-plugin-notification-emails).
