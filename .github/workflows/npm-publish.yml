@@ -1,12 +1,26 @@
-# This workflow is now handled by changeset-version.yml
-# Changesets will automatically version and publish when changesets are merged
-# This workflow is kept for backward compatibility but can be removed
+# ⚠️ THIS WORKFLOW IS DISABLED ⚠️
+# 
+# Versioning and publishing is now handled automatically by changeset-version.yml
+# Changesets workflow automatically:
+# 1. Creates version bump PR when changesets are merged to master
+# 2. Publishes to npm when version bump PR is merged
+#
+# This workflow is kept for reference but will NOT run automatically.
+# If you need manual release via GitHub Release, you can:
+# 1. Delete changeset-version.yml
+# 2. Uncomment the "on:" section below
+# 3. Remove workflow_dispatch
 
-name: Node.js Package (Legacy)
+name: Node.js Package (Legacy - Disabled)
 
+# DISABLED - uncomment to enable manual release via GitHub Release
+# on:
+#   release:
+#     types: [created]
+
+# Only allows manual trigger, prevents automatic execution
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
 
 jobs:
   build:
