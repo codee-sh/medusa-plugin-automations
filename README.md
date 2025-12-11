@@ -104,7 +104,7 @@ The plugin exports the following:
 
 ## Screenshots
 
-### Gif
+### How to edit trigger?
 ![Automations Admin Panel](./docs/images/video.gif)
 
 *Automations management interface in Medusa Admin*
