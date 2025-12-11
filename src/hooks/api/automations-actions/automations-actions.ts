@@ -57,8 +57,6 @@ export const useListAutomationsActions = (
 
   const queryKey: QueryKey = [
     "automations-actions",
-    limit,
-    offset,
     ...extraKey,
   ]
 

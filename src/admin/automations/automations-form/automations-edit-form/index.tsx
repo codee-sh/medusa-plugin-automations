@@ -2,8 +2,8 @@ import {
   Button,
   FocusModal,
   ProgressTabs,
-  ProgressStatus,
   toast,
+  Heading,
 } from "@medusajs/ui"
 import { Pencil } from "@medusajs/icons"
 import { useState, useEffect, useMemo } from "react"
@@ -46,6 +46,7 @@ export function AutomationsEditForm({
     [Tab.ACTIONS]: "not-started",
   })
   const [buttonText, setButtonText] = useState<string>("")
+  const [eventName, setEventName] = useState<string | undefined>(undefined)
 
   useEffect(() => {
     if (Tab.GENERAL === tab) {
@@ -79,16 +80,18 @@ export function AutomationsEditForm({
 
   const {
     data: automationsActionsData,
-    isLoading: isAutomationsActionsLoading,
+    isLoading: isAutomationsActionsLoading
   } = useListAutomationsActions({
     trigger_id: id,
     extraKey: [id],
     enabled: open && !!id,
   })
 
+  // Fetch available actions - initially without eventName, then update when eventName changes
   const { data: availableActionsData } =
     useAvailableActions({
       enabled: open,
+      eventName: eventName
     })
 
   const {
@@ -131,7 +134,7 @@ export function AutomationsEditForm({
     },
   })
 
-  // Reset form when data is loaded and modal is open
+  // Update form when data is loaded and modal is open
   useEffect(() => {
     if (
       automationsTriggerData &&
@@ -140,6 +143,8 @@ export function AutomationsEditForm({
       const trigger = automationsTriggerData.triggers[0]
       const rules = automationsRulesData?.rules || []
       const actions = automationsActionsData?.actions || []
+
+      setEventName(trigger.event_name || undefined)
 
       form.reset({
         general: {
@@ -176,10 +181,14 @@ export function AutomationsEditForm({
         },
       })
     }
-  }, [open, automationsTriggerData, automationsRulesData])
+  }, [open, automationsTriggerData, automationsRulesData, automationsActionsData])
 
+  // Reset form when modal is closed
   useEffect(() => {
     if (open === false) {
+      setEventName(undefined)
+      setTab(Tab.GENERAL)
+
       form.reset({
         general: {
           name: "",
@@ -242,7 +251,7 @@ export function AutomationsEditForm({
       }
 
       await editAutomationRule(items)
-
+      
       queryClient.invalidateQueries({
         queryKey: ["automations-rules", id],
       })
@@ -261,7 +270,7 @@ export function AutomationsEditForm({
         trigger_id: id,
         actions: data.actions?.items || [],
       }
-
+      
       await editAutomationAction(items)
 
       queryClient.invalidateQueries({
@@ -323,9 +332,7 @@ export function AutomationsEditForm({
       </FocusModal.Trigger>
       <FocusModal.Content>
         <FocusModal.Header>
-          <FocusModal.Title>
-            Edit Automation
-          </FocusModal.Title>
+          <Heading level="h3" className="shrink-0">Edit Automation</Heading>
           <div className="-my-2 w-full border-l">
             <ProgressTabs
               dir="ltr"
@@ -373,6 +380,7 @@ export function AutomationsEditForm({
                 <AutomationsGeneralForm
                   form={form}
                   isOpen={open}
+                  isEditMode={!!id}
                 />
               )}
               {tab === Tab.RULES && (
@@ -385,6 +393,7 @@ export function AutomationsEditForm({
                 <AutomationsActionsForm
                   form={form}
                   isOpen={open}
+                  availableActionsData={availableActionsData}
                 />
               )}
             </form>

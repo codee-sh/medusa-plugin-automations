@@ -4,11 +4,11 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import MpnAutomationService from "../../../modules/mpn-automation/services/service"
 import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
-import { NotificationRule } from "../../../modules/mpn-automation/types/interfaces"
+import { AutomationRule } from "../../../modules/mpn-automation/types/interfaces"
 
 type EditAutomationRulesStepInput = {
   trigger_id: string
-  rules: NotificationRule[]
+  rules: AutomationRule[]
 }
 
 export const editAutomationRulesStep = createStep(

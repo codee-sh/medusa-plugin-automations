@@ -45,7 +45,9 @@ export const AutomationsList = () => {
 
   const columnHelper = createDataTableColumnHelper<any>()
 
-  const columns = [
+  // Memoize columns to prevent re-creation on every render
+  // This prevents unmounting of cells when data updates, which would close modals
+  const columns = useMemo(() => [
     columnHelper.accessor("to", {
       header: "Name and description",
       cell: ({ row }) => {
@@ -162,7 +164,7 @@ export const AutomationsList = () => {
         )
       },
     }),
-  ]
+  ], []) // Empty dependency array - columns don't depend on any props/state
 
   const table = useDataTable({
     columns,

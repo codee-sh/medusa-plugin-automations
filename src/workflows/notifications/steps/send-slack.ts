@@ -3,6 +3,13 @@ import {
   createStep,
 } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
+import { renderSlackTemplate } from "../../../templates/slack"
+import type { NotificationContent } from "@medusajs/framework/types"
+import type { SlackBlock } from "../../../templates/slack/types"
+
+type SlackNotificationContent = NotificationContent & {
+  blocks?: SlackBlock[]
+}
 
 export interface SendSlackConfig {
   template: string
@@ -10,6 +17,7 @@ export interface SendSlackConfig {
   resourceType?: string
   channel?: string
   triggerType?: string
+  backendUrl?: string
   [key: string]: any // Allow additional config options
 }
 
@@ -17,6 +25,7 @@ export interface SendSlackStepInput {
   settings: SendSlackConfig
   context: any
   eventName?: string
+  contextType?: string | null
 }
 
 export interface SendSlackStepOutput {
@@ -56,7 +65,7 @@ export const sendSlackStep = createStep(
     input: SendSlackStepInput,
     { container }
   ): Promise<StepResponse<SendSlackStepOutput>> => {
-    const { settings, context, eventName } = input
+    const { settings, context, contextType, eventName } = input
 
     // Validate required config
     if (!settings.template) {
@@ -74,12 +83,22 @@ export const sendSlackStep = createStep(
       const template = settings.template
       const to = settings.to || "slack-channel"
       const locale = settings.locale || "pl"
-      const customSubject = settings.subject
       const resourceId = settings.resourceId || "unknown"
       const resourceType =
-        settings.resourceType || "email.notification"
+        settings.resourceType || "slack.notification"
       const channel = settings.channel || "slack"
       const triggerType = settings.triggerType || "system"
+      const backendUrl = settings.backendUrl || ""
+
+      const { text, blocks } = renderSlackTemplate({
+        templateName: template,
+        context: context,
+        contextType: contextType,
+        options: {
+        locale: locale,
+        backendUrl: backendUrl,
+        },
+      })
 
       // Send notification
       const notificationResult =
@@ -90,10 +109,14 @@ export const sendSlackStep = createStep(
             template: template,
             trigger_type: triggerType,
             resource_id: resourceId,
-            resource_type: eventName,
+            resource_type: resourceType,
             data: {
               ...context,
             },
+            content: {
+              text: text,
+              blocks,
+            } as SlackNotificationContent,
           }
         )
 

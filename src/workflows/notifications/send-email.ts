@@ -11,6 +11,7 @@ export interface SendEmailWorkflowInput {
   settings: any
   templateData: TemplateData
   eventName?: string
+  contextType?: string | null
 }
 
 export interface SendEmailWorkflowOutput {
@@ -64,6 +65,7 @@ export const sendEmailWorkflow = createWorkflow(
       settings: input.settings,
       templateData: input.templateData,
       eventName: input.eventName,
+      contextType: input.contextType,
     })
 
     return new WorkflowResponse(result)

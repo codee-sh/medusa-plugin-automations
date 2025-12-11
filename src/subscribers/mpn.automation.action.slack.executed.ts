@@ -2,8 +2,7 @@ import {
   SubscriberArgs,
   type SubscriberConfig,
 } from "@medusajs/medusa"
-import { Modules } from "@medusajs/framework/utils"
-import { sendSlackActionWorkflow } from "../workflows/mpn-automation/send-slack-action"
+import { runSlackActionWorkflow } from "../workflows/mpn-automation/run-slack-action"
 
 /**
  * Event name for the MPN automation action slack executed event.
@@ -23,12 +22,13 @@ export default async function mpnAutomationActionSlackExecutedHandler({
   event: { data },
   container,
 }: SubscriberArgs<any>) {
-  const { action, context, eventName } = data
+  const { action, context, eventName: triggerEventName, contextType } = data
+  const config = container.resolve("configModule") as any
+  const moduleConfig = config?.modules.mpnAutomation
+  const backendUrl = moduleConfig?.options.backend_url
 
-  console.log(eventName, data)
-
-  // Execute email action workflow
-  const { result } = await sendSlackActionWorkflow(
+  // Execute slack action workflow
+  const { result } = await runSlackActionWorkflow(
     container
   ).run({
     input: {
@@ -38,16 +38,18 @@ export default async function mpnAutomationActionSlackExecutedHandler({
           ...action.config,
           template:
             action.config.templateName ?? "inventory-level",
+          backendUrl: backendUrl
         },
       },
       context: context,
-      eventName: eventName,
+      contextType: contextType,
+      eventName: triggerEventName
     },
   })
 
   if (!result.success) {
     console.error(
-      `Failed to send email action ${action?.id}:`,
+      `Failed to send slack action ${action?.id}:`,
       result.error
     )
   }

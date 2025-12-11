@@ -8,8 +8,8 @@ import { getAutomationTriggersByEventStep } from "./steps/retrieve-automation-tr
 import { validateAutomationTriggersStep } from "./steps/validate-automation-triggers"
 import { TriggerType } from "../../utils/types"
 import {
-  NotificationTrigger,
-  NotificationAction,
+  AutomationTrigger,
+  AutomationAction,
 } from "../../modules/mpn-automation/types/interfaces"
 
 export interface ValidateAutomationTriggersByEventWorkflowInput {
@@ -21,8 +21,8 @@ export interface ValidateAutomationTriggersByEventWorkflowInput {
 export interface ValidateAutomationTriggersByEventWorkflowOutput {
   validated: Array<{
     isValid: boolean
-    trigger: NotificationTrigger
-    actions: NotificationAction[]
+    trigger: AutomationTrigger
+    actions: AutomationAction[]
   }>
   triggersCount: number
 }

@@ -1,18 +1,6 @@
-import { NotificationTrigger } from "./interfaces"
+import { AutomationTrigger } from "./interfaces"
 import { FieldConfig } from "./types"
 import { FieldPath, FieldValues } from "react-hook-form"
-
-/**
- * Props for action configuration component
- */
-export interface ActionConfigComponentProps<
-  TFieldValues extends FieldValues = FieldValues,
-> {
-  form: any
-  name: FieldPath<TFieldValues>
-  errors?: Record<string, string>
-  fields?: any
-}
 
 /**
  * Action handler interface - implement this to create custom actions
@@ -42,11 +30,12 @@ export interface ActionHandler {
    * Function that executes the action
    */
   executeAction: (params: {
-    trigger: NotificationTrigger
+    trigger: AutomationTrigger
     action: Record<string, any>
     context: any
     container: any
     eventName: string
+    contextType?: string | null
   }) => Promise<{
     success: boolean
     message?: string

@@ -109,7 +109,7 @@ export function AutomationsRulesForm({
                                     attribute.value || "ss"
                                   }
                                 >
-                                  {attribute.label}
+                                  {attribute.label} <span className="text-xs text-gray-500">({attribute.value})</span>
                                 </Select.Item>
                               )
                             )}

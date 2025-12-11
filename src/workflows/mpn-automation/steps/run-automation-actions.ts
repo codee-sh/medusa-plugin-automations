@@ -5,8 +5,8 @@ import {
 import { MedusaError } from "@medusajs/utils"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import {
-  NotificationAction,
-  NotificationTrigger,
+  AutomationAction,
+  AutomationTrigger,
 } from "../../../modules/mpn-automation/types/interfaces"
 import MpnAutomationService from "../../../modules/mpn-automation/services/service"
 import { saveAutomationStateWorkflow } from "../save-automation-state"
@@ -14,10 +14,11 @@ import { saveAutomationStateWorkflow } from "../save-automation-state"
 export interface RunAutomationActionsStepInput {
   validatedTriggers: Array<{
     isValid: boolean
-    trigger: NotificationTrigger
-    actions: NotificationAction[]
+    trigger: AutomationTrigger
+    actions: AutomationAction[]
   }>
   context: Record<string, any>
+  contextType?: string | null
 }
 
 export interface RunAutomationActionsStepOutput {
@@ -58,7 +59,7 @@ export const runAutomationActionsStep = createStep(
       ContainerRegistrationKeys.LOGGER
     )
 
-    const { validatedTriggers, context } = input
+    const { validatedTriggers, context, contextType } = input
 
     if (
       !validatedTriggers ||
@@ -122,6 +123,7 @@ export const runAutomationActionsStep = createStep(
                 trigger,
                 action,
                 context,
+                contextType: contextType,
                 eventName: `mpn.automation.action.${action.action_type}.executed`,
               })
             } catch (error) {

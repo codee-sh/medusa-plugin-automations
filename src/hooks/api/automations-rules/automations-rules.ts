@@ -57,8 +57,6 @@ export const useListAutomationsRules = (
 
   const queryKey: QueryKey = [
     "automations-rules",
-    limit,
-    offset,
     ...extraKey,
   ]
 

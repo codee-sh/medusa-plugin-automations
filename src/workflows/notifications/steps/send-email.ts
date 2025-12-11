@@ -29,6 +29,7 @@ export interface SendEmailStepInput {
   settings: SendEmailConfig
   templateData: TemplateData
   eventName?: string
+  contextType?: string | null
 }
 
 export interface SendEmailStepOutput {
@@ -75,7 +76,7 @@ export const sendEmailStep = createStep(
     input: SendEmailStepInput,
     { container }
   ): Promise<StepResponse<SendEmailStepOutput>> => {
-    const { settings, templateData, eventName } = input
+    const { settings, templateData, contextType, eventName } = input
 
     // Validate required config
     if (!settings.templateName) {
@@ -117,6 +118,7 @@ export const sendEmailStep = createStep(
         theme: pluginOptions?.theme,
         customTranslations:
           pluginOptions?.customTranslations?.[templateName],
+        contextType: contextType,
       }
 
       // Load custom template function if specified

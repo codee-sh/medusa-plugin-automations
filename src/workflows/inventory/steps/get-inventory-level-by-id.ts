@@ -1,8 +1,9 @@
 import type {
-  IInventoryService,
   InventoryTypes,
 } from "@medusajs/framework/types"
-import { Modules } from "@medusajs/framework/utils"
+import {
+  ContainerRegistrationKeys,
+} from "@medusajs/framework/utils"
 import {
   StepResponse,
   createStep,
@@ -37,20 +38,34 @@ export const getInventoryLevelByIdStep = createStep(
   ): Promise<
     StepResponse<GetInventoryLevelByIdStepOutput>
   > => {
-    const inventoryService: IInventoryService =
-      container.resolve(Modules.INVENTORY)
+    const query = container.resolve(
+      ContainerRegistrationKeys.QUERY
+    )
 
-    // Retrieve inventory level with inventory_item relation
-    const inventoryLevel =
-      await inventoryService.retrieveInventoryLevel(
-        input.inventory_level_id,
-        {
-          relations: ["inventory_item"],
-        }
-      )
+    const { data: inventoryLevels } = await query.graph({
+      entity: "inventory_level",
+      fields: [
+        "id",
+        "inventory_item.*",
+        "stocked_quantity",
+        "reserved_quantity",
+        "incoming_quantity",
+        "available_quantity",
+        "location_id",
+        "stock_locations.id",
+        "stock_locations.name",
+        "stock_locations.address",
+        "stock_locations.metadata",
+      ],
+      filters: {
+        id: {
+          $in: [input.inventory_level_id],
+        },
+      },
+    })
 
     return new StepResponse({
-      inventory_level: inventoryLevel,
+      inventory_level: inventoryLevels[0],
     })
   }
 )

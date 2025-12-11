@@ -11,7 +11,6 @@ export async function loadTemplateComponent(
     throw new Error(`Unknown template key: ${key}`)
   }
 
-  // Zakładamy export default komponentu React
   const module = await loader()
   return module.default
 }

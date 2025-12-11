@@ -6,21 +6,33 @@ import {
 } from "react-hook-form"
 import { Trash, Plus } from "@medusajs/icons"
 import LoadActionComponent from "../../../utils/dynamic-component"
-import { useAvailableActions } from "../../../../hooks/api/available-actions"
 
 export function AutomationsActionsForm({
   form,
   isOpen,
+  availableActionsData,
 }: {
   form: any
   isOpen?: boolean
+  availableActionsData?: any
 }) {
-  const {
-    data: availableActionsData,
-    isLoading: isAvailableActionsLoading,
-  } = useAvailableActions({
-    enabled: isOpen !== false,
-  })
+
+  // Reset action configs when eventName changes to ensure templates are updated
+  // useEffect(() => {
+  //   const actions = form.getValues("actions.items") || []
+  //   if (actions.length > 0 && eventName) {
+  //     actions.forEach((_: any, index: number) => {
+  //       const currentConfig = form.getValues(`actions.items.${index}.config`) || {}
+  //       // Only reset templateName if it exists and event changed
+  //       if (currentConfig.templateName) {
+  //         // form.setValue(`actions.items.${index}.config.templateName`, undefined, {
+  //         //   shouldValidate: false,
+  //         //   shouldDirty: true,
+  //         // })
+  //       }
+  //     })
+  //   }
+  // }, [eventName, form])
 
   const {
     fields = [],
@@ -46,6 +58,45 @@ export function AutomationsActionsForm({
 
   const handleRemoveRule = (index: number) => {
     remove(index)
+  }
+
+  const actionTypeValueChange = (
+    index: number,
+    value: string,
+    isExistingAction: boolean
+  ) => {
+    // Don't allow changing action type for existing actions
+    if (isExistingAction) {
+      return
+    }
+
+    form.setValue(`actions.items.${index}.action_type`, value, {
+      shouldValidate: false,
+      shouldDirty: true,
+    })
+    
+    // Clear validation errors first to prevent showing errors from previous action type
+    form.clearErrors(`actions.items.${index}`)
+
+    const actionData: any =
+      availableActionsData?.actions?.find(
+        (a) => a.value === value
+      )
+    const fields = actionData?.fields
+    
+    // Reset config when action type changes to prevent sending
+    // fields from previous action type in payload
+    form.setValue(
+      `actions.items.${index}.config`,
+      fields?.reduce((acc: any, field: any) => {
+        acc[field.name || field.key] = ""
+        return acc
+      }, {}),
+      {
+        shouldValidate: false,
+        shouldDirty: true,
+      }
+    )
   }
 
   return (
@@ -80,32 +131,36 @@ export function AutomationsActionsForm({
                     ? actionData?.enabled
                     : true
 
+                  // Check if this is an existing action (has id from database)
+                  // watchedActions contains actual form values, including id from DB
+                  const currentAction =
+                    watchedActions?.[index]
+                  const isExistingAction =
+                    !!currentAction?.id
+
                   return (
                     <div
-                      className={`flex flex-col gap-4 p-4 border rounded-lg ${isEnabled ? "opacity-100" : "opacity-50"}`}
+                      className={`flex flex-col gap-4 p-4 border rounded-lg ${
+                        isEnabled
+                          ? "opacity-100"
+                          : "opacity-50"
+                      }`}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 flex flex-col gap-2">
                           <Label>Action Type</Label>
                           <Select
-                            key={`action-type-${index}-${availableActionsData?.actions?.length || 0}`}
+                            key={`action-type-${index}-${
+                              availableActionsData?.actions
+                                ?.length || 0
+                            }`}
                             value={
                               actionTypeField.value ?? ""
                             }
                             onValueChange={(value) => {
-                              actionTypeField.onChange(
-                                value
-                              )
-                              // Reset config when action type changes
-                              form.setValue(
-                                `actions.items.${index}.config`,
-                                {},
-                                {
-                                  shouldValidate: false,
-                                  shouldDirty: true,
-                                }
-                              )
+                              actionTypeValueChange(index, value, isExistingAction)
                             }}
+                            disabled={isExistingAction}
                           >
                             <Select.Trigger>
                               <Select.Value placeholder="Select the action type" />
@@ -154,10 +209,10 @@ export function AutomationsActionsForm({
                       {actionType && configComponentKey && (
                         <div className="mt-4 pt-4 border-t">
                           <LoadActionComponent
-                            actionType={actionType}
                             configComponentKey={
                               configComponentKey
                             }
+                            actionType={actionType}
                             form={form}
                             name={
                               `actions.items.${index}.config` as any

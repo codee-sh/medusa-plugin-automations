@@ -4,11 +4,24 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import MpnAutomationService from "../../../modules/mpn-automation/services/service"
 import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
-import { NotificationAction } from "../../../modules/mpn-automation/types/interfaces"
+import { AutomationAction } from "../../../modules/mpn-automation/types/interfaces"
 
 type EditAutomationActionsStepInput = {
   trigger_id: string
-  actions: NotificationAction[]
+  actions: AutomationAction[]
+}
+
+const configWithUndefined = (config: any) => {
+  return config
+    ? Object.entries(config).reduce((acc, [key, value]) => {
+        if (value === "") {
+          acc[key] = undefined
+        } else if (value !== null && value !== undefined) {
+          acc[key] = value
+        }
+        return acc
+      }, {} as Record<string, any>)
+    : null
 }
 
 export const editAutomationActionsStep = createStep(
@@ -59,25 +72,25 @@ export const editAutomationActionsStep = createStep(
             )
           }
 
-          // Update existing action
           const updatedAction =
             await mpnAutomationService.updateMpnAutomationActions(
               [
                 {
                   id: action.id,
                   action_type: action.action_type,
-                  config: action.config,
+                  config: configWithUndefined(
+                    action.config
+                  ),
                 },
               ]
             )
 
           return updatedAction[0]
         } else {
-          // Create new action
           const actionData = {
             trigger_id: trigger_id,
             action_type: action.action_type,
-            config: action.config,
+            config: configWithUndefined(action.config),
           }
           const newAction =
             await mpnAutomationService.createMpnAutomationActions(

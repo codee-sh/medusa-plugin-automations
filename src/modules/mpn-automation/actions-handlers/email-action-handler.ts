@@ -48,19 +48,7 @@ export class EmailActionHandler extends BaseActionHandler {
       type: "email" as const,
       required: false,
     },
-    {
-      name: "templateName",
-      key: "templateName",
-      label: "Template Name",
-      type: "select" as const,
-      required: true,
-      options: [
-        {
-          label: "Inventory Level",
-          value: "inventory-level",
-        },
-      ],
-      defaultValue: "inventory-level",
-    },
+    // Add templateName field - options will be populated dynamically by service based on eventName
+    this.addTemplateNameField(),
   ]
 }

@@ -22,8 +22,8 @@ export default async function inventoryReservationItemUpdatedHandler({
   // )
   // const query = container.resolve(ContainerRegistrationKeys.QUERY)
   // const triggerType = trigger_type || 'system'
-  // console.log("inventoryReservationItemUpdatedHandler");
-  // console.log(data);
+  console.log("inventoryReservationItemUpdatedHandler");
+  console.log(data);
 }
 
 export const config: SubscriberConfig = {

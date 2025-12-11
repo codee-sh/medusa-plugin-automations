@@ -13,7 +13,10 @@ export async function GET(
     MPN_AUTOMATION_MODULE
   ) as MpnAutomationService
 
-  const actions = automationService.getAvailableActions()
+  // Get eventName from query params if provided
+  const eventName = req.query.eventName as string | undefined
+
+  const actions = automationService.getAvailableActions(eventName)
 
   res.json({
     actions: actions,
