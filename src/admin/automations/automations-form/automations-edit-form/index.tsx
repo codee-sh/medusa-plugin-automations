@@ -45,6 +45,8 @@ export function AutomationsEditForm({
     [Tab.ACTIONS]: "not-started",
   })
   const [buttonText, setButtonText] = useState<string>("")
+  // State to track eventName for fetching available actions
+  const [eventName, setEventName] = useState<string | undefined>(undefined)
 
   useEffect(() => {
     if (Tab.GENERAL === tab) {
@@ -86,11 +88,13 @@ export function AutomationsEditForm({
     enabled: open && !!id,
   })
 
+  // Fetch available actions - initially without eventName, then update when eventName changes
   const { data: availableActionsData } =
     useAvailableActions({
       enabled: open,
+      eventName: eventName, // Pass eventName to fetch dynamic templates
     })
-    
+
   const {
     mutateAsync: editAutomation,
     isPending: isEditAutomationPending,
@@ -141,6 +145,8 @@ export function AutomationsEditForm({
       const rules = automationsRulesData?.rules || []
       const actions = automationsActionsData?.actions || []
 
+      setEventName(trigger.event_name || undefined)
+
       form.reset({
         general: {
           name: trigger.name || "",
@@ -181,6 +187,8 @@ export function AutomationsEditForm({
   // Reset form when modal is closed
   useEffect(() => {
     if (open === false) {
+      setEventName(undefined)
+
       form.reset({
         general: {
           name: "",
@@ -378,6 +386,7 @@ export function AutomationsEditForm({
                 <AutomationsGeneralForm
                   form={form}
                   isOpen={open}
+                  isEditMode={!!id}
                 />
               )}
               {tab === Tab.RULES && (
@@ -390,6 +399,7 @@ export function AutomationsEditForm({
                 <AutomationsActionsForm
                   form={form}
                   isOpen={open}
+                  availableActionsData={availableActionsData}
                 />
               )}
             </form>

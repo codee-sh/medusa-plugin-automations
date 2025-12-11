@@ -13,9 +13,11 @@ import { useMemo } from "react"
 export function AutomationsGeneralForm({
   form,
   isOpen,
+  isEditMode = false,
 }: {
   form: any
   isOpen?: boolean
+  isEditMode?: boolean
 }) {
   const {
     data: availableEventsData,
@@ -183,8 +185,13 @@ export function AutomationsGeneralForm({
                     key={`event-name-${availableEvents.length}-${field.value}`}
                     value={field.value ?? ""}
                     onValueChange={(value) => {
+                      // Don't allow changing event name in edit mode
+                      if (isEditMode) {
+                        return
+                      }
                       field.onChange(value)
                     }}
+                    disabled={isEditMode}
                   >
                     <Select.Trigger>
                       <Select.Value placeholder="Select the event name" />

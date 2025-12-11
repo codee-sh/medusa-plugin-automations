@@ -288,6 +288,7 @@ class MpnAutomationService extends MedusaService({
 
   /**
    * Get available actions for the admin panel form
+   * If Handler has fields, we can push templateName field to fields array, then in the admin panel form we can render the templateName field as a select field with the templates options.
    * 
    * @param eventName - Optional event name to filter templates dynamically
    * @returns Array of actions
