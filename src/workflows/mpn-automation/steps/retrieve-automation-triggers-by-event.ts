@@ -7,7 +7,7 @@ import type MpnAutomationService from "../../../modules/mpn-automation/services/
 import {
   AutomationTrigger,
   TriggerType,
-} from "../../../modules/mpn-automation/types/interfaces"
+} from "../../../modules/mpn-automation/types"
 
 export interface GetAutomationTriggersByEventStepInput {
   eventName: string
