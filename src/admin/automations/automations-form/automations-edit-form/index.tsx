@@ -80,8 +80,7 @@ export function AutomationsEditForm({
 
   const {
     data: automationsActionsData,
-    isLoading: isAutomationsActionsLoading,
-    refetch: refetchActions,
+    isLoading: isAutomationsActionsLoading
   } = useListAutomationsActions({
     trigger_id: id,
     extraKey: [id],
@@ -226,7 +225,6 @@ export function AutomationsEditForm({
         items: [items],
       })
 
-      // Invalidate but don't auto-refetch to prevent table re-render which closes modal
       queryClient.invalidateQueries({
         queryKey: ["automations"],
       })
@@ -253,7 +251,7 @@ export function AutomationsEditForm({
       }
 
       await editAutomationRule(items)
-
+      
       queryClient.invalidateQueries({
         queryKey: ["automations-rules", id],
       })
@@ -274,8 +272,6 @@ export function AutomationsEditForm({
       }
       
       await editAutomationAction(items)
-
-      await refetchActions()
 
       queryClient.invalidateQueries({
         queryKey: ["automations-actions", id],

@@ -353,19 +353,20 @@ class MpnAutomationService extends MedusaService({
 
         const metadata = getEventMetadata(eventName)
         
-          return {
-            value: eventName,
-            label: eventName,
-            attributes: metadata.attributes || event.attributes || [],
-            templates: metadata.templates || event.templates || [],
-            contextType: event.contextType || null, // Only from custom events, not from registry
-          }
+        return {
+          value: eventName,
+          label: eventName,
+          attributes: metadata.attributes || event.attributes || [],
+          templates: metadata.templates || event.templates || [],
+          contextType: event.contextType || null, // Only from custom events, not from registry
+        }
       })
       .filter((event: any) => event != null) // Filter out null results
   }
 
   /**
    * Get action handler by ID for the admin panel form
+   * Used to get the action handler by ID in the Run Automation Actions workflow step
    * 
    * @param actionId - Action ID
    * @returns Action handler

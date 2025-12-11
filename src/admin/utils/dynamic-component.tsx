@@ -35,7 +35,7 @@ export default function LoadActionComponent({
     loadTemplateComponent(configComponentKey as any)
       .then((module) => {
         const Component = module
-        console.log("Component", Component)
+        
         if (Component) {
           setComponent(() => Component as any)
         } else {
