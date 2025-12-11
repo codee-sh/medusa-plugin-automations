@@ -8,10 +8,11 @@ export type CustomEvent = {
   group?: string
   attributes?: Array<Attribute>
   /**
-   * Template object with value and name
-   * Example: { value: "inventory-level", name: "Inventory Level" }
+   * Templates array with value and name
+   * Example: [{ value: "inventory-level", name: "Inventory Level" }]
+   * Allows multiple templates per event (e.g., different templates for email, slack, etc.)
    */
-  template?: { value: string; name: string }
+  templates?: Array<{ value: string; name: string }>
   /**
    * Context type determines the structure of data in context
    * Example: "inventory-level" means context has { inventory_level: {...} }

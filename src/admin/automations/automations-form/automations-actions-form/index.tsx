@@ -22,6 +22,7 @@ export function AutomationsActionsForm({
     name: "general.event_name",
   })
 
+  // Fetch available actions based on eventName and get fields for each action
   const {
     data: availableActionsData,
     isLoading: isAvailableActionsLoading,
@@ -73,6 +74,45 @@ export function AutomationsActionsForm({
     remove(index)
   }
 
+  const actionTypeValueChange = (
+    index: number,
+    value: string,
+    isExistingAction: boolean
+  ) => {
+    // Don't allow changing action type for existing actions
+    if (isExistingAction) {
+      return
+    }
+
+    form.setValue(`actions.items.${index}.action_type`, value, {
+      shouldValidate: false,
+      shouldDirty: true,
+    })
+    
+    // Clear validation errors first to prevent showing errors from previous action type
+    form.clearErrors(`actions.items.${index}`)
+
+    const actionData: any =
+      availableActionsData?.actions?.find(
+        (a) => a.value === value
+      )
+    const fields = actionData?.fields
+    
+    // Reset config when action type changes to prevent sending
+    // fields from previous action type in payload
+    form.setValue(
+      `actions.items.${index}.config`,
+      fields?.reduce((acc: any, field: any) => {
+        acc[field.name || field.key] = ""
+        return acc
+      }, {}),
+      {
+        shouldValidate: false,
+        shouldDirty: true,
+      }
+    )
+  }
+
   return (
     <div className="w-full">
       <div className="p-6 max-w-2xl mx-auto">
@@ -83,7 +123,6 @@ export function AutomationsActionsForm({
               create a new action.
             </div>
           )}
-          {JSON.stringify(watchedActions)}
           {fields.map((field, index) => {
             return (
               <Controller
@@ -106,35 +145,36 @@ export function AutomationsActionsForm({
                     ? actionData?.enabled
                     : true
 
+                  // Check if this is an existing action (has id from database)
+                  // watchedActions contains actual form values, including id from DB
+                  const currentAction =
+                    watchedActions?.[index]
+                  const isExistingAction =
+                    !!currentAction?.id
+
                   return (
                     <div
-                      className={`flex flex-col gap-4 p-4 border rounded-lg ${isEnabled ? "opacity-100" : "opacity-50"}`}
+                      className={`flex flex-col gap-4 p-4 border rounded-lg ${
+                        isEnabled
+                          ? "opacity-100"
+                          : "opacity-50"
+                      }`}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 flex flex-col gap-2">
                           <Label>Action Type</Label>
                           <Select
-                            key={`action-type-${index}-${availableActionsData?.actions?.length || 0}`}
+                            key={`action-type-${index}-${
+                              availableActionsData?.actions
+                                ?.length || 0
+                            }`}
                             value={
                               actionTypeField.value ?? ""
                             }
                             onValueChange={(value) => {
-                              actionTypeField.onChange(
-                                value
-                              )
-                              // Clear validation errors first to prevent showing errors from previous action type
-                              form.clearErrors(`actions.items.${index}`)
-                              // Reset config when action type changes to prevent sending
-                              // fields from previous action type in payload
-                              form.setValue(
-                                `actions.items.${index}.config`,
-                                {},
-                                {
-                                  shouldValidate: false,
-                                  shouldDirty: true,
-                                }
-                              )
+                              actionTypeValueChange(index, value, isExistingAction)
                             }}
+                            disabled={isExistingAction}
                           >
                             <Select.Trigger>
                               <Select.Value placeholder="Select the action type" />
@@ -183,10 +223,10 @@ export function AutomationsActionsForm({
                       {actionType && configComponentKey && (
                         <div className="mt-4 pt-4 border-t">
                           <LoadActionComponent
-                            actionType={actionType}
                             configComponentKey={
                               configComponentKey
                             }
+                            actionType={actionType}
                             form={form}
                             name={
                               `actions.items.${index}.config` as any

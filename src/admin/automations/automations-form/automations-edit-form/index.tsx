@@ -2,7 +2,6 @@ import {
   Button,
   FocusModal,
   ProgressTabs,
-  ProgressStatus,
   toast,
 } from "@medusajs/ui"
 import { Pencil } from "@medusajs/icons"
@@ -80,6 +79,7 @@ export function AutomationsEditForm({
   const {
     data: automationsActionsData,
     isLoading: isAutomationsActionsLoading,
+    refetch: refetchActions,
   } = useListAutomationsActions({
     trigger_id: id,
     extraKey: [id],
@@ -90,7 +90,7 @@ export function AutomationsEditForm({
     useAvailableActions({
       enabled: open,
     })
-
+    
   const {
     mutateAsync: editAutomation,
     isPending: isEditAutomationPending,
@@ -131,7 +131,7 @@ export function AutomationsEditForm({
     },
   })
 
-  // Reset form when data is loaded and modal is open
+  // Update form when data is loaded and modal is open
   useEffect(() => {
     if (
       automationsTriggerData &&
@@ -176,8 +176,9 @@ export function AutomationsEditForm({
         },
       })
     }
-  }, [open, automationsTriggerData, automationsRulesData])
+  }, [open, automationsTriggerData, automationsRulesData, automationsActionsData])
 
+  // Reset form when modal is closed
   useEffect(() => {
     if (open === false) {
       form.reset({
@@ -262,13 +263,15 @@ export function AutomationsEditForm({
         actions: data.actions?.items || [],
       }
       
-      console.log("items", items)
-
       await editAutomationAction(items)
 
+      // Invalidate and refetch actions to get updated IDs
       queryClient.invalidateQueries({
         queryKey: ["automations-actions", id],
       })
+      
+      // Refetch actions to get updated data with IDs
+      await refetchActions()
 
       toast.success(
         "Automation actions added/updated successfully",

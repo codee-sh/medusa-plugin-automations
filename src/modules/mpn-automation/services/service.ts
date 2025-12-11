@@ -238,8 +238,8 @@ class MpnAutomationService extends MedusaService({
     // Search through all event groups
     for (const group of allEvents) {
       const event = group.events?.find((e: any) => e.value === eventName)
-      if (event?.template) {
-        return [event.template]
+      if (event?.templates && event.templates.length > 0) {
+        return event.templates
       }
     }
 
@@ -356,7 +356,7 @@ class MpnAutomationService extends MedusaService({
             value: eventName,
             label: eventName,
             attributes: metadata.attributes || event.attributes || [],
-            template: metadata.template || event.template || null,
+            templates: metadata.templates || event.templates || [],
             contextType: event.contextType || null, // Only from custom events, not from registry
           }
       })

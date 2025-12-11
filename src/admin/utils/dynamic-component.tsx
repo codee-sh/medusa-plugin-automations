@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react"
-import { ActionConfigComponentProps } from "../../modules/mpn-automation/types/action-handler"
 import { loadTemplateComponent } from "./template"
 
 export default function LoadActionComponent({
@@ -18,7 +17,7 @@ export default function LoadActionComponent({
   fields?: any
 }) {
   const [Component, setComponent] =
-    useState<React.ComponentType<ActionConfigComponentProps> | null>(
+    useState<React.ComponentType<any> | null>(
       null
     )
   const [loading, setLoading] = useState(false)
