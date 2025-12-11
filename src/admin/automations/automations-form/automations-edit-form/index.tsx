@@ -3,6 +3,7 @@ import {
   FocusModal,
   ProgressTabs,
   toast,
+  Heading,
 } from "@medusajs/ui"
 import { Pencil } from "@medusajs/icons"
 import { useState, useEffect, useMemo } from "react"
@@ -45,7 +46,6 @@ export function AutomationsEditForm({
     [Tab.ACTIONS]: "not-started",
   })
   const [buttonText, setButtonText] = useState<string>("")
-  // State to track eventName for fetching available actions
   const [eventName, setEventName] = useState<string | undefined>(undefined)
 
   useEffect(() => {
@@ -92,7 +92,7 @@ export function AutomationsEditForm({
   const { data: availableActionsData } =
     useAvailableActions({
       enabled: open,
-      eventName: eventName, // Pass eventName to fetch dynamic templates
+      eventName: eventName
     })
 
   const {
@@ -188,6 +188,7 @@ export function AutomationsEditForm({
   useEffect(() => {
     if (open === false) {
       setEventName(undefined)
+      setTab(Tab.GENERAL)
 
       form.reset({
         general: {
@@ -225,6 +226,7 @@ export function AutomationsEditForm({
         items: [items],
       })
 
+      // Invalidate but don't auto-refetch to prevent table re-render which closes modal
       queryClient.invalidateQueries({
         queryKey: ["automations"],
       })
@@ -273,13 +275,11 @@ export function AutomationsEditForm({
       
       await editAutomationAction(items)
 
-      // Invalidate and refetch actions to get updated IDs
+      await refetchActions()
+
       queryClient.invalidateQueries({
         queryKey: ["automations-actions", id],
       })
-      
-      // Refetch actions to get updated data with IDs
-      await refetchActions()
 
       toast.success(
         "Automation actions added/updated successfully",
@@ -336,9 +336,7 @@ export function AutomationsEditForm({
       </FocusModal.Trigger>
       <FocusModal.Content>
         <FocusModal.Header>
-          <FocusModal.Title>
-            Edit Automation
-          </FocusModal.Title>
+          <Heading level="h3" className="shrink-0">Edit Automation</Heading>
           <div className="-my-2 w-full border-l">
             <ProgressTabs
               dir="ltr"

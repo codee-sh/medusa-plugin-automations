@@ -44,19 +44,17 @@ export function createAutomationFormSchema(
                 !fieldValue ||
                 !String(fieldValue).trim()
               ) {
-                console.log("field", field)
-                console.log("fieldValue", fieldValue)
-                // ctx.addIssue({
-                //   code: z.ZodIssueCode.custom,
-                //   message: `${field.label} is required`,
-                //   path: [
-                //     "actions",
-                //     "items",
-                //     index,
-                //     "config",
-                //     field.name || field.key,
-                //   ],
-                // })
+                ctx.addIssue({
+                  code: z.ZodIssueCode.custom,
+                  message: `${field.label} is required`,
+                  path: [
+                    "actions",
+                    "items",
+                    index,
+                    "config",
+                    field.name || field.key,
+                  ],
+                })
               }
             }
           })

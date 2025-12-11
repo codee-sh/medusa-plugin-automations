@@ -2,8 +2,8 @@ import {
   Button,
   FocusModal,
   ProgressTabs,
-  ProgressStatus,
   toast,
+  Heading,
 } from "@medusajs/ui"
 import { Plus } from "@medusajs/icons"
 import { useState, useEffect, useMemo } from "react"
@@ -23,11 +23,7 @@ import {
 } from "../types"
 import { createAutomationFormSchema } from "../utils/automation-form-schema"
 
-export function AutomationsCreateForm({
-  id,
-}: {
-  id: string
-}) {
+export function AutomationsCreateForm() {
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<Tab>(Tab.GENERAL)
   const [tabState, setTabState] = useState<TabState>({
@@ -53,9 +49,8 @@ export function AutomationsCreateForm({
     data: automationsTriggerData,
     isLoading: isAutomationsTriggerLoading,
   } = useListAutomations({
-    id: id,
     extraKey: [],
-    enabled: open && !!id,
+    enabled: open,
   })
 
   const { data: availableActionsData } =
@@ -95,33 +90,33 @@ export function AutomationsCreateForm({
     },
   })
 
-  // Reset form when data is loaded and modal is open
-  useEffect(() => {
-    if (
-      automationsTriggerData &&
-      automationsTriggerData.triggers?.[0]
-    ) {
-      const trigger = automationsTriggerData.triggers[0]
+  // // Reset form when data is loaded and modal is open
+  // useEffect(() => {
+  //   if (
+  //     automationsTriggerData &&
+  //     automationsTriggerData.triggers?.[0]
+  //   ) {
+  //     const trigger = automationsTriggerData.triggers[0]
 
-      form.reset({
-        general: {
-          name: trigger.name || "",
-          description: trigger.description || "",
-          trigger_type: trigger.trigger_type || "event",
-          event_name: trigger.event_name || "",
-          interval_minutes:
-            trigger.interval_minutes || null,
-          active: trigger.active || false,
-        },
-        rules: {
-          items: [],
-        },
-        actions: {
-          items: [],
-        },
-      })
-    }
-  }, [open, automationsTriggerData])
+  //     form.reset({
+  //       general: {
+  //         name: trigger.name || "",
+  //         description: trigger.description || "",
+  //         trigger_type: trigger.trigger_type || "event",
+  //         event_name: trigger.event_name || "",
+  //         interval_minutes:
+  //           trigger.interval_minutes || null,
+  //         active: trigger.active || false,
+  //       },
+  //       rules: {
+  //         items: [],
+  //       },
+  //       actions: {
+  //         items: [],
+  //       },
+  //     })
+  //   }
+  // }, [open, automationsTriggerData])
 
   useEffect(() => {
     if (open === false) {
@@ -196,9 +191,7 @@ export function AutomationsCreateForm({
       </FocusModal.Trigger>
       <FocusModal.Content>
         <FocusModal.Header>
-          <FocusModal.Title>
-            Create Automation
-          </FocusModal.Title>
+          <Heading level="h3" className="shrink-0">Create Automation</Heading>
           <div className="-my-2 w-full border-l">
             <ProgressTabs
               dir="ltr"
