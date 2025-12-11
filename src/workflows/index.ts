@@ -1,3 +1,5 @@
 export * from "./inventory"
 export * from "./mpn-automation"
 export * from "./notifications"
+export * from "./product"
+export * from "./product-variant"

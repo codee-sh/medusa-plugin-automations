@@ -1,8 +1,10 @@
 import type {
   InventoryTypes,
+  StockLocationTypes,
 } from "@medusajs/framework/types"
 import {
   ContainerRegistrationKeys,
+  MedusaError,
 } from "@medusajs/framework/utils"
 import {
   StepResponse,
@@ -16,6 +18,7 @@ export interface GetInventoryLevelByIdStepInput {
 export interface GetInventoryLevelByIdStepOutput {
   inventory_level: InventoryTypes.InventoryLevelDTO & {
     inventory_item?: InventoryTypes.InventoryItemDTO
+    stock_locations?: StockLocationTypes.StockLocationDTO[]
   }
 }
 
@@ -41,6 +44,13 @@ export const getInventoryLevelByIdStep = createStep(
     const query = container.resolve(
       ContainerRegistrationKeys.QUERY
     )
+
+    if (!input.inventory_level_id) {
+      throw new MedusaError(
+        MedusaError.Types.INVALID_ARGUMENT,
+        "Inventory level ID is required"
+      )
+    }
 
     const { data: inventoryLevels } = await query.graph({
       entity: "inventory_level",

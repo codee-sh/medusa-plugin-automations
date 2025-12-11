@@ -37,7 +37,7 @@ export default async function mpnAutomationActionSlackExecutedHandler({
         config: {
           ...action.config,
           template:
-            action.config.templateName ?? "inventory-level",
+            action.config.templateName,
           backendUrl: backendUrl
         },
       },

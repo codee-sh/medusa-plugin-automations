@@ -2,6 +2,8 @@ import {
   INVENTORY_LEVEL_ATTRIBUTES,
   INVENTORY_ITEM_ATTRIBUTES,
 } from "./inventory"
+import { PRODUCT_ATTRIBUTES } from "./product"
+import { PRODUCT_VARIANT_ATTRIBUTES } from "./product-variant"
 import { Attribute } from "../types"
 
 /**
@@ -86,6 +88,24 @@ const EVENT_METADATA_REGISTRY: Record<
       {
         value: "inventory-item",
         name: "Inventory Item",
+      },
+    ],
+  },
+  "product-variant.updated": {
+    attributes: PRODUCT_VARIANT_ATTRIBUTES,
+    templates: [
+      {
+        value: "product-variant",
+        name: "Product Variant",
+      },
+    ],
+  },
+  "product.updated": {
+    attributes: PRODUCT_ATTRIBUTES,
+    templates: [
+      {
+        value: "product",
+        name: "Product",
       },
     ],
   },

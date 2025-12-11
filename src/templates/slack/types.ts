@@ -1,5 +1,7 @@
 export const SLACK_TEMPLATES_NAMES = {
   INVENTORY_LEVEL: "inventory-level",
+  PRODUCT_VARIANT: "product-variant",
+  PRODUCT: "product",
 } as const;
 
 export type SlackBlock = {

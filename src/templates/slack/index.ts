@@ -1,11 +1,15 @@
 import { SlackTemplateRenderer, SlackTemplateData, SlackTemplateOptions, SlackBlock, SLACK_TEMPLATES_NAMES } from './types'
 import { renderInventoryLevel } from './inventory-level'
+import { renderProductVariant } from './product-variant/product-variant'
+import { renderProduct } from './product/product'
 
 /**
  * Template registry mapping template names to their renderers
  */
 const templateRegistry: Record<string, SlackTemplateRenderer> = {
-  [SLACK_TEMPLATES_NAMES.INVENTORY_LEVEL]: renderInventoryLevel
+  [SLACK_TEMPLATES_NAMES.INVENTORY_LEVEL]: renderInventoryLevel,
+  [SLACK_TEMPLATES_NAMES.PRODUCT_VARIANT]: renderProductVariant,
+  [SLACK_TEMPLATES_NAMES.PRODUCT]: renderProduct
 }
 
 export interface RenderSlackTemplateParams {
