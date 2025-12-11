@@ -25,13 +25,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Configure Git for tag creation
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Create Release Pull Request or Publish
         id: changesets
         uses: changesets/action@v1
         with:
+          # changeset publish automatically creates git tags in format: package-name@version
+          # For single package repo, it creates: v1.0.0 format
           publish: |
             npm run build
-            npm publish --access public
+            npm run release
+            # Push tags created by changeset publish
+            git push --follow-tags
           version: npm run version
           commit: "chore: version packages"
           title: "chore: version packages"
