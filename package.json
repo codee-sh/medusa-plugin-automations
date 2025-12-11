@@ -39,9 +39,14 @@
     "publish-local": "npx medusa plugin:publish",
     "publish-package": "dotenv npm publish --access public",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx}\""
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish",
+    "release:manual": "npm run build && npm publish --access public"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.8",
     "@medusajs/admin-sdk": "2.8.8",
     "@medusajs/cli": "2.8.8",
     "@medusajs/framework": "2.8.8",
