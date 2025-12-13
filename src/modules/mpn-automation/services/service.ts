@@ -332,9 +332,8 @@ class MpnAutomationService extends MedusaService({
 
               try {
                 const templateModule = await import(templateValue)
-                const name = `render${templateName.charAt(0).toUpperCase() + templateName.slice(1)}`
-
-                renderer = templateModule[name] || templateModule.default
+                const template = templateModule.default
+                renderer = template?.default || template
 
                 if (!renderer) {
                   this.logger_.warn(
@@ -351,6 +350,7 @@ class MpnAutomationService extends MedusaService({
 
               if (templateName) {
                 handler.registerTemplate!(templateName, renderer)
+
                 this.logger_.info(
                   `Custom template "${templateName}" registered for handler "${actionConfig.id}"`
                 )
