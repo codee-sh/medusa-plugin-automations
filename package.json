@@ -1,6 +1,6 @@
 {
   "name": "@codee-sh/medusa-plugin-automations",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Medusa plugin for automations.",
   "author": "Codee (https://codee.dev)",
   "license": "MIT",
