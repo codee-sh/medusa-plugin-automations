@@ -40,7 +40,7 @@ export class SlackActionService extends BaseActionService {
     options?: any
   }): Promise<{ text: string; blocks: SlackBlock[] }> {
     const renderer = this.getTemplate(params.templateName) as SlackTemplateRenderer | undefined
-    
+
     if (!renderer) {
       throw new Error(
         `Slack template "${params.templateName}" not found. Available templates: ${Array.from(this.templates_.keys()).join(", ")}`
