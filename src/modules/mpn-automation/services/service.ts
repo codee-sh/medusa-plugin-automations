@@ -15,10 +15,8 @@ import {
   CustomEventGroup,
   TRIGGER_TYPES,
 } from "../types"
-import {
-  EmailActionHandler,
-  SlackActionHandler,
-} from "../actions-handlers"
+import { EmailActionService } from "./email-action-service"
+import { SlackActionService } from "./slack-action-service"
 import { Logger } from "@medusajs/framework/types"
 import {
   InventoryEvents,
@@ -58,10 +56,7 @@ class MpnAutomationService extends MedusaService({
   private logger_: Logger
   private events_: CustomEventGroup[]
   private actionsEnabled_: any
-  private actionHandlers_: Map<
-    string,
-    { handler: ActionHandler; enabled: boolean }
-  > = new Map()
+  private actionHandlers_: Map<string, any> = new Map()
 
   constructor(
     { logger }: InjectedDependencies,
@@ -72,7 +67,7 @@ class MpnAutomationService extends MedusaService({
     this.logger_ = logger
     this.options_ = options || {}
     this.events_ =
-      this.options_.automations?.customEvents || []
+      this.options_.automations?.extend?.events || []
     this.actionsEnabled_ = this.options_.automations
       ?.actionsEnabled || {
       slack: false,
@@ -81,6 +76,12 @@ class MpnAutomationService extends MedusaService({
 
     // Initialize default action handlers
     this.initializeActionHandlers()
+
+    // Initialize extended actions (custom handlers and templates)
+    // Note: templates with import paths will be loaded asynchronously
+    this.initializeExtendedActions().catch((error) => {
+      this.logger_.error(`Failed to initialize extended actions: ${error?.message || "Unknown error"}`)
+    })
   }
 
   /**
@@ -253,8 +254,8 @@ class MpnAutomationService extends MedusaService({
    */
   private initializeActionHandlers() {
     const defaultActions: ActionHandler[] = [
-      new EmailActionHandler(),
-      new SlackActionHandler(),
+      new EmailActionService(),
+      new SlackActionService(),
     ]
 
     defaultActions.forEach((action) => {
@@ -269,21 +270,96 @@ class MpnAutomationService extends MedusaService({
         `Action handler for ${action.id} registered - ${isEnabled ? "enabled" : "disabled"} in config`
       )
     })
+  }
 
-    const customHandlers =
-      this.options_.automations?.actionHandlers || []
-    customHandlers.forEach((action) => {
-      if (!this.actionHandlers_.has(action.id)) {
-        const isEnabled = this.actionsEnabled_[action.id]
-        this.actionHandlers_.set(action.id, {
-          handler: action,
-          enabled: isEnabled,
-        })
-        this.logger_.info(
-          `Action handler for ${action.id} registered - ${isEnabled ? "enabled" : "disabled"} in config`
-        )
-      }
-    })
+  /**
+   * Initialize extended actions (custom handlers and templates)
+   * Handles both custom handler registration and template loading
+   * 
+   * @returns Promise<void>
+   */
+  private async initializeExtendedActions(): Promise<void> {
+    const extendedActions = this.options_.automations?.extend?.actions || []
+    
+    await Promise.all(
+      extendedActions.map(async (actionConfig: any) => {
+        // 1. Register custom handler if provided
+        if (actionConfig.handler) {
+          if (!this.actionHandlers_.has(actionConfig.id)) {
+            const isEnabled = this.actionsEnabled_[actionConfig.id]
+
+            this.actionHandlers_.set(actionConfig.id, {
+              handler: actionConfig.handler,
+              enabled: isEnabled,
+            })
+
+            this.logger_.info(
+              `Custom action handler "${actionConfig.id}" registered - ${isEnabled ? "enabled" : "disabled"}`
+            )
+          } else {
+            this.logger_.warn(
+              `Action handler "${actionConfig.id}" already exists, skipping custom handler registration`
+            )
+          }
+        }
+
+        // 2. Register templates (for existing or newly registered handler)
+        if (actionConfig.templates && Array.isArray(actionConfig.templates)) {
+          const handlerData = this.getActionHandler(actionConfig.id)
+          
+          if (!handlerData) {
+            this.logger_.warn(
+              `Cannot register templates for "${actionConfig.id}" - handler not found`
+            )
+            return
+          }
+
+          const { handler } = handlerData
+
+          if (!handler.registerTemplate) {
+            this.logger_.warn(
+              `Handler "${actionConfig.id}" does not support template registration`
+            )
+            return
+          }
+
+          await Promise.all(
+            actionConfig.templates.map(async (template: any) => {
+              const templateName = template.name
+              const templateValue = template.path
+
+              let renderer = templateValue
+
+              try {
+                const templateModule = await import(templateValue)
+                const name = `render${templateName.charAt(0).toUpperCase() + templateName.slice(1)}`
+
+                renderer = templateModule[name] || templateModule.default
+
+                if (!renderer) {
+                  this.logger_.warn(
+                    `Template module from "${templateValue}" does not export a default function or expected named export`
+                  )
+                  return
+                }
+              } catch (error: any) {
+                this.logger_.warn(
+                  `Failed to load template from "${templateValue}": ${error?.message || "Unknown error"}`
+                )
+                return
+              }
+
+              if (templateName) {
+                handler.registerTemplate!(templateName, renderer)
+                this.logger_.info(
+                  `Custom template "${templateName}" registered for handler "${actionConfig.id}"`
+                )
+              }
+            })
+          )
+        }
+      })
+    )
   }
 
   /**

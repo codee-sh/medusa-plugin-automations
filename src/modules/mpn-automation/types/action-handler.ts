@@ -1,6 +1,14 @@
 import { AutomationTrigger } from "./interfaces"
 import { FieldConfig } from "./types"
-import { FieldPath, FieldValues } from "react-hook-form"
+
+/**
+ * Template renderer function type - can be sync or async
+ */
+export type TemplateRenderer = (params: {
+  context: any
+  contextType?: string | null
+  options?: any
+}) => any | Promise<any>
 
 /**
  * Action handler interface - implement this to create custom actions
@@ -51,4 +59,30 @@ export interface ActionHandler {
    * Optional template loaders for dynamic import
    */
   templateLoaders?: Record<string, any>
+
+  /**
+   * Register a template for this action handler
+   * @param name - Template name
+   * @param renderer - Template renderer function
+   */
+  registerTemplate?: (name: string, renderer: TemplateRenderer) => void
+
+  /**
+   * Get template renderer by name
+   * @param name - Template name
+   * @returns Template renderer or undefined
+   */
+  getTemplate?: (name: string) => TemplateRenderer | undefined
+
+  /**
+   * Render template (wrapper method)
+   * @param params - Template rendering parameters
+   * @returns Rendered template result
+   */
+  renderTemplate?: (params: {
+    templateName: string
+    context: any
+    contextType?: string | null
+    options?: any
+  }) => Promise<any> | any
 }

@@ -3,9 +3,10 @@ import {
   createStep,
 } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
-import { renderSlackTemplate } from "../../../templates/slack"
 import type { NotificationContent } from "@medusajs/framework/types"
 import type { SlackBlock } from "../../../templates/slack/types"
+import MpnAutomationService from "../../../modules/mpn-automation/services/service"
+import { MedusaError } from "@medusajs/utils"
 
 type SlackNotificationContent = NotificationContent & {
   blocks?: SlackBlock[]
@@ -90,13 +91,26 @@ export const sendSlackStep = createStep(
       const triggerType = settings.triggerType || "system"
       const backendUrl = settings.backendUrl || ""
 
-      const { text, blocks } = renderSlackTemplate({
+      // Use action handler for template rendering
+      const mpnAutomationService = container.resolve<MpnAutomationService>(
+        "mpnAutomation"
+      )
+      const slackHandler = mpnAutomationService.getActionHandler("slack")
+      
+      if (!slackHandler?.handler?.renderTemplate) {
+        throw new MedusaError(
+          MedusaError.Types.NOT_FOUND,
+          `Slack action handler not found or does not support template rendering`
+        )
+      }
+
+      const { text, blocks } = await slackHandler.handler.renderTemplate({
         templateName: template,
         context: context,
         contextType: contextType,
         options: {
-        locale: locale,
-        backendUrl: backendUrl,
+          locale: locale,
+          backendUrl: backendUrl,
         },
       })
 

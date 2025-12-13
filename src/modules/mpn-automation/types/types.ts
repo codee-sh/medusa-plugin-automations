@@ -74,29 +74,92 @@ export type ModuleOptions = {
   automations?: {
     enabled?: boolean
     /**
-     * Custom events organized in groups
+     * Extend automations functionality
      * Example:
-     * customEvents: [
-     *   {
-     *     name: "POS events",
-     *     events: [
-     *       {
-     *         value: "pos.system.healthy",
-     *         label: "System Heartbeat",
-     *         attributes: [
-     *           { value: "system.device.id", label: "Device ID" }
-     *         ]
-     *       }
-     *     ]
-     *   }
-     * ]
+     * extend: {
+     *   events: [
+     *     {
+     *       name: "POS events",
+     *       events: [
+     *         {
+     *           value: "pos.system.healthy",
+     *           label: "System Heartbeat",
+     *           attributes: [
+     *             { value: "system.device.id", label: "Device ID" }
+     *           ]
+     *         }
+     *       ]
+     *     }
+     *   ],
+     *   actions: [
+     *     {
+     *       id: "slack",
+     *       templates: [
+     *         {
+     *           name: "custom-template",
+     *           path: require.resolve("@plugin/templates/slack/custom-template")
+     *         }
+     *       ]
+     *     }
+     *   ]
+     * }
      */
-    customEvents?: CustomEventGroup[]
-    actionHandlers?: ActionHandler[]
+    extend?: {
+      /**
+       * Custom events organized in groups
+       */
+      events?: CustomEventGroup[]
+      /**
+       * Extend or register action handlers
+       * Can register custom handlers and/or add templates to existing handlers
+       */
+      actions?: Array<{
+        id: string
+        /**
+         * Custom action handler instance (optional)
+         * If provided, registers a new custom handler
+         */
+        handler?: ActionHandler
+        /**
+         * Custom templates for this action handler (optional)
+         * Can extend existing handler or newly registered handler
+         */
+        templates?: Array<{
+          name: string
+          path: string
+        }>
+      }>
+    }
     actionsEnabled?: {
       slack?: boolean
       email?: boolean
     }
+    /**
+     * Extend existing action handlers with custom templates
+     * Templates can be provided as functions or as import paths (similar to initializeTemplates)
+     * Example:
+     * extendHandlers: [
+     *   {
+     *     id: "slack",
+     *     templates: {
+     *       // Direct function
+     *       "custom-template": async (params) => ({ text: "...", blocks: [...] }),
+     *       // Or import path (will be dynamically imported)
+     *       "another-template": "../../templates/slack/custom/custom-template"
+     *     }
+     *   },
+     *   {
+     *     id: "email",
+     *     templates: {
+     *       "custom-email": async (params) => ({ html: "...", text: "...", subject: "..." })
+     *     }
+     *   }
+     * ]
+     */
+    extendHandlers?: Array<{
+      id: string
+      templates?: Record<string, any | string> // Function or import path string
+    }>
   }
 }
 

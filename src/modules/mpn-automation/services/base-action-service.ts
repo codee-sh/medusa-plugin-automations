@@ -1,9 +1,9 @@
-import { ActionHandler } from "../types"
+import { ActionHandler, TemplateRenderer } from "../types"
 import { FieldConfig } from "../types"
 import { Modules } from "@medusajs/framework/utils"
 
 /**
- * Base action handler class
+ * Base action service class
  *
  * @param id - Action ID (default: "base")
  * @param label - Action label (default: "Base")
@@ -11,7 +11,7 @@ import { Modules } from "@medusajs/framework/utils"
  * @param configComponentKey - Action config component key (default: "BaseConfigComponent")
  * @param fields - Action fields (default: [])
  */
-export class BaseActionHandler implements ActionHandler {
+export class BaseActionService implements ActionHandler {
   id = "base"
   label = "Base"
   description = ""
@@ -20,6 +20,35 @@ export class BaseActionHandler implements ActionHandler {
 
   // Fields for the action configuration rendered in the admin panel then saved in the action config
   fields: FieldConfig[] = []
+
+  // Template registry - each service manages its own templates
+  protected templates_: Map<string, TemplateRenderer> = new Map()
+
+  /**
+   * Register a template for this service
+   * @param name - Template name
+   * @param renderer - Template renderer function
+   */
+  registerTemplate(name: string, renderer: TemplateRenderer): void {
+    this.templates_.set(name, renderer)
+  }
+
+  /**
+   * Get template renderer by name
+   * @param name - Template name
+   * @returns Template renderer or undefined
+   */
+  getTemplate(name: string): TemplateRenderer | undefined {
+    return this.templates_.get(name)
+  }
+
+  /**
+   * Initialize default templates (override in subclasses)
+   * Called automatically in constructor
+   */
+  protected initializeTemplates(): void {
+    // Override in subclasses to register default templates
+  }
 
   /**
    * Helper method to add templateName field to fields array

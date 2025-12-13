@@ -1,15 +1,7 @@
-export const SLACK_TEMPLATES_NAMES = {
-  INVENTORY_LEVEL: "inventory-level",
-  PRODUCT_VARIANT: "product-variant",
-  PRODUCT: "product",
-} as const;
-
 export type SlackBlock = {
   type: string
   [key: string]: any
 }
-
-export type SlackTemplateData = any
 
 export interface SlackTemplateOptions {
   backendUrl?: string
@@ -19,7 +11,7 @@ export interface SlackTemplateOptions {
 }
 
 export interface SlackTemplateRendererParams {
-  context: SlackTemplateData
+  context: any
   contextType?: string | null
   options?: SlackTemplateOptions
 }

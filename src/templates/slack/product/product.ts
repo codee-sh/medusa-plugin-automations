@@ -1,5 +1,4 @@
 import {
-  SlackTemplateData,
   SlackTemplateOptions,
   SlackBlock,
 } from "../types"
@@ -10,7 +9,7 @@ import {
 } from "../../../utils"
 
 export interface RenderProductParams {
-  context: SlackTemplateData
+  context: any
   contextType?: string | null
   options?: SlackTemplateOptions
 }
