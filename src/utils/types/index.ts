@@ -1,2 +1,2 @@
-export * from "../../modules/mpn-automation/types/types"
-export * from "../../modules/mpn-automation/types/interfaces"
+export * from "../../modules/mpn-automation/types"
+export * from "../../templates/slack/types"

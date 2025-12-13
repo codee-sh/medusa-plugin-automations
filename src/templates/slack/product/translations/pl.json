@@ -1,0 +1,14 @@
+{
+  "general": {
+    "header": {
+      "title": "Produkt {{productTitle}} został zaktualizowany"
+    },
+    "labels": {
+      "title": "Tytuł"
+    },
+    "actions": {
+      "openInPanel": "Otwórz w panelu"
+    }
+  }
+}
+

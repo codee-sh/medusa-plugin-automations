@@ -4,12 +4,13 @@ import {
   createStep,
 } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
-import { renderTemplate } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
 import { getPluginOptions } from "@codee-sh/medusa-plugin-automations/utils/plugins"
 import type {
   TemplateData,
   TemplateOptionsType,
 } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
+import MpnAutomationService from "../../../modules/mpn-automation/services/service"
+import { MedusaError } from "@medusajs/utils"
 
 export interface SendEmailConfig {
   templateName: string
@@ -143,26 +144,41 @@ export const sendEmailStep = createStep(
             customTemplateModule.createTemplate
 
           if (!customTemplateFunction) {
-            console.warn(
+            throw new MedusaError(
+              MedusaError.Types.INVALID_DATA,
               `Custom template module from ${settings.customTemplate} does not export a default function or createCustomTemplate/createTemplate`
             )
           }
-        } catch (error) {
-          console.warn(
-            `Failed to load custom template from ${settings.customTemplate}:`,
-            error
+        } catch (error: any) {
+          if (error instanceof MedusaError) {
+            throw error
+          }
+          throw new MedusaError(
+            MedusaError.Types.INVALID_DATA,
+            `Failed to load custom template from ${settings.customTemplate}: ${error?.message || "Unknown error"}`
           )
-          // Continue with default template
         }
       }
 
-      // Render email template
-      const { html, text, subject } = await renderTemplate(
-        templateName,
-        templateData,
-        renderOptions,
-        customTemplateFunction
+      // Use action handler for template rendering
+      const mpnAutomationService = container.resolve<MpnAutomationService>(
+        "mpnAutomation"
       )
+      const emailHandler = mpnAutomationService.getActionHandler("email")
+      
+      if (!emailHandler?.handler?.renderTemplate) {
+        throw new MedusaError(
+          MedusaError.Types.NOT_FOUND,
+          `Email action handler not found or does not support template rendering`
+        )
+      }
+
+      const { html, text, subject } = await emailHandler.handler.renderTemplate({
+        templateName: templateName,
+        context: templateData,
+        contextType: contextType,
+        options: renderOptions,
+      })
 
       // Send notification
       const notificationResult =
