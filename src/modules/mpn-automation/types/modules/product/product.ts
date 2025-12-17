@@ -79,10 +79,6 @@ export const PRODUCT_ATTRIBUTES = [
     value: "product.width",
     label: "Width",
   },
-  // {
-  //   value: "product.metadata",
-  //   label: "Metadata",
-  // },
   {
     value: "product.created_at",
     label: "Created At",
@@ -95,7 +91,6 @@ export const PRODUCT_ATTRIBUTES = [
     value: "product.deleted_at",
     label: "Deleted At",
   },
-  // Relations - Tags
   {
     value: "product.tags.id",
     label: "Tag ID",
@@ -110,7 +105,6 @@ export const PRODUCT_ATTRIBUTES = [
     isRelation: true,
     relationType: "tags",
   },
-  // Relations - Categories
   {
     value: "product.categories.id",
     label: "Category ID",
@@ -132,7 +126,6 @@ export const PRODUCT_ATTRIBUTES = [
     isRelation: true,
     relationType: "categories",
   },
-  // Relations - Variants
   {
     value: "product.variants.id",
     label: "Variant ID",
@@ -154,7 +147,6 @@ export const PRODUCT_ATTRIBUTES = [
     isRelation: true,
     relationType: "variants",
   },
-  // Relations - Type
   {
     value: "product.type.id",
     label: "Type ID",
@@ -169,7 +161,6 @@ export const PRODUCT_ATTRIBUTES = [
     isRelation: true,
     relationType: "type",
   },
-  // Relations - Collection
   {
     value: "product.collection.id",
     label: "Collection ID",
