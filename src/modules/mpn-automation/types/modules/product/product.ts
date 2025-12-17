@@ -43,4 +43,152 @@ export const PRODUCT_ATTRIBUTES = [
     value: "product.upc",
     label: "UPC",
   },
+  {
+    value: "product.thumbnail",
+    label: "Thumbnail",
+  },
+  {
+    value: "product.hs_code",
+    label: "HS Code",
+  },
+  {
+    value: "product.origin_country",
+    label: "Origin Country",
+  },
+  {
+    value: "product.mid_code",
+    label: "MID Code",
+  },
+  {
+    value: "product.material",
+    label: "Material",
+  },
+  {
+    value: "product.weight",
+    label: "Weight",
+  },
+  {
+    value: "product.length",
+    label: "Length",
+  },
+  {
+    value: "product.height",
+    label: "Height",
+  },
+  {
+    value: "product.width",
+    label: "Width",
+  },
+  // {
+  //   value: "product.metadata",
+  //   label: "Metadata",
+  // },
+  {
+    value: "product.created_at",
+    label: "Created At",
+  },
+  {
+    value: "product.updated_at",
+    label: "Updated At",
+  },
+  {
+    value: "product.deleted_at",
+    label: "Deleted At",
+  },
+  // Relations - Tags
+  {
+    value: "product.tags.id",
+    label: "Tag ID",
+    type: "array",
+    isRelation: true,
+    relationType: "tags",
+  },
+  {
+    value: "product.tags.value",
+    label: "Tag Value",
+    type: "array",
+    isRelation: true,
+    relationType: "tags",
+  },
+  // Relations - Categories
+  {
+    value: "product.categories.id",
+    label: "Category ID",
+    type: "array",
+    isRelation: true,
+    relationType: "categories",
+  },
+  {
+    value: "product.categories.name",
+    label: "Category Name",
+    type: "array",
+    isRelation: true,
+    relationType: "categories",
+  },
+  {
+    value: "product.categories.handle",
+    label: "Category Handle",
+    type: "array",
+    isRelation: true,
+    relationType: "categories",
+  },
+  // Relations - Variants
+  {
+    value: "product.variants.id",
+    label: "Variant ID",
+    type: "array",
+    isRelation: true,
+    relationType: "variants",
+  },
+  {
+    value: "product.variants.sku",
+    label: "Variant SKU",
+    type: "array",
+    isRelation: true,
+    relationType: "variants",
+  },
+  {
+    value: "product.variants.title",
+    label: "Variant Title",
+    type: "array",
+    isRelation: true,
+    relationType: "variants",
+  },
+  // Relations - Type
+  {
+    value: "product.type.id",
+    label: "Type ID",
+    type: "object",
+    isRelation: true,
+    relationType: "type",
+  },
+  {
+    value: "product.type.value",
+    label: "Type Value",
+    type: "object",
+    isRelation: true,
+    relationType: "type",
+  },
+  // Relations - Collection
+  {
+    value: "product.collection.id",
+    label: "Collection ID",
+    type: "object",
+    isRelation: true,
+    relationType: "collection",
+  },
+  {
+    value: "product.collection.title",
+    label: "Collection Title",
+    type: "object",
+    isRelation: true,
+    relationType: "collection",
+  },
+  {
+    value: "product.collection.handle",
+    label: "Collection Handle",
+    type: "object",
+    isRelation: true,
+    relationType: "collection",
+  },
 ]
