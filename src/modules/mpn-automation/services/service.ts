@@ -37,7 +37,7 @@ import {
   InviteWorkflowEvents,
   RegionWorkflowEvents,
   FulfillmentWorkflowEvents,
-  PaymentEvents
+  PaymentEvents,
 } from "@medusajs/framework/utils"
 import { getEventMetadata } from "../types/modules"
 
@@ -80,13 +80,15 @@ class MpnAutomationService extends MedusaService({
     // Initialize extended actions (custom handlers and templates)
     // Note: templates with import paths will be loaded asynchronously
     this.initializeExtendedActions().catch((error) => {
-      this.logger_.error(`Failed to initialize extended actions: ${error?.message || "Unknown error"}`)
+      this.logger_.error(
+        `Failed to initialize extended actions: ${error?.message || "Unknown error"}`
+      )
     })
   }
 
   /**
    * Get available triggers for the admin panel form
-   * 
+   *
    * @returns Array of triggers
    */
   getAvailableTriggers() {
@@ -95,7 +97,7 @@ class MpnAutomationService extends MedusaService({
 
   /**
    * Get action handlers map
-   * 
+   *
    * @returns Map of action handlers
    */
   private getActionHandlers(): Map<
@@ -108,7 +110,7 @@ class MpnAutomationService extends MedusaService({
   /**
    * Build events list using central metadata registry
    * Supports both Medusa events and custom events
-   * 
+   *
    * @returns Array of events
    */
   buildAvailableEvents() {
@@ -144,19 +146,27 @@ class MpnAutomationService extends MedusaService({
       },
       {
         name: "Sales Channel",
-        events: this.buildEvents(SalesChannelWorkflowEvents),
+        events: this.buildEvents(
+          SalesChannelWorkflowEvents
+        ),
       },
       {
         name: "Product Category",
-        events: this.buildEvents(ProductCategoryWorkflowEvents),
+        events: this.buildEvents(
+          ProductCategoryWorkflowEvents
+        ),
       },
       {
         name: "Product Collection",
-        events: this.buildEvents(ProductCollectionWorkflowEvents),
+        events: this.buildEvents(
+          ProductCollectionWorkflowEvents
+        ),
       },
       {
         name: "Product Variant",
-        events: this.buildEvents(ProductVariantWorkflowEvents),
+        events: this.buildEvents(
+          ProductVariantWorkflowEvents
+        ),
       },
       {
         name: "Product",
@@ -172,7 +182,9 @@ class MpnAutomationService extends MedusaService({
       },
       {
         name: "Product Option",
-        events: this.buildEvents(ProductOptionWorkflowEvents),
+        events: this.buildEvents(
+          ProductOptionWorkflowEvents
+        ),
       },
       {
         name: "Invite",
@@ -194,9 +206,15 @@ class MpnAutomationService extends MedusaService({
 
     // Filter out empty groups and ensure all groups have events array
     return events
-      .filter((group) => group && group.events && Array.isArray(group.events) && group.events.length > 0)
+      .filter(
+        (group) =>
+          group &&
+          group.events &&
+          Array.isArray(group.events) &&
+          group.events.length > 0
+      )
       .map((group) => ({
-        name: String(group.name || ''),
+        name: String(group.name || ""),
         events: group.events || [],
       }))
   }
@@ -204,12 +222,12 @@ class MpnAutomationService extends MedusaService({
   /**
    * Get available events for the admin panel form
    * Combines Medusa events with custom events
-   * 
+   *
    * @returns Array of events
    */
   getAvailableEvents() {
     const medusaEvents = this.buildAvailableEvents()
-    
+
     if (!this.events_ || this.events_.length === 0) {
       return medusaEvents
     }
@@ -225,20 +243,24 @@ class MpnAutomationService extends MedusaService({
   /**
    * Get available templates for a given event name
    * Uses getAvailableEvents() to find the event and extract template
-   * 
+   *
    * @param eventName - Event name to search for
    * @returns Array of template options
    */
-  getTemplatesForEvent(eventName?: string): Array<{ value: string; name: string }> {
+  getTemplatesForEvent(
+    eventName?: string
+  ): Array<{ value: string; name: string }> {
     if (!eventName) {
       return []
     }
 
     const allEvents = this.getAvailableEvents()
-    
+
     // Search through all event groups
     for (const group of allEvents) {
-      const event = group.events?.find((e: any) => e.value === eventName)
+      const event = group.events?.find(
+        (e: any) => e.value === eventName
+      )
       if (event?.templates && event.templates.length > 0) {
         return event.templates
       }
@@ -249,7 +271,7 @@ class MpnAutomationService extends MedusaService({
 
   /**
    * Initialize action handlers from defaults and options
-   * 
+   *
    * @returns void
    */
   private initializeActionHandlers() {
@@ -275,18 +297,20 @@ class MpnAutomationService extends MedusaService({
   /**
    * Initialize extended actions (custom handlers and templates)
    * Handles both custom handler registration and template loading
-   * 
+   *
    * @returns Promise<void>
    */
   private async initializeExtendedActions(): Promise<void> {
-    const extendedActions = this.options_.automations?.extend?.actions || []
-    
+    const extendedActions =
+      this.options_.automations?.extend?.actions || []
+
     await Promise.all(
       extendedActions.map(async (actionConfig: any) => {
         // 1. Register custom handler if provided
         if (actionConfig.handler) {
           if (!this.actionHandlers_.has(actionConfig.id)) {
-            const isEnabled = this.actionsEnabled_[actionConfig.id]
+            const isEnabled =
+              this.actionsEnabled_[actionConfig.id]
 
             this.actionHandlers_.set(actionConfig.id, {
               handler: actionConfig.handler,
@@ -304,9 +328,14 @@ class MpnAutomationService extends MedusaService({
         }
 
         // 2. Register templates (for existing or newly registered handler)
-        if (actionConfig.templates && Array.isArray(actionConfig.templates)) {
-          const handlerData = this.getActionHandler(actionConfig.id)
-          
+        if (
+          actionConfig.templates &&
+          Array.isArray(actionConfig.templates)
+        ) {
+          const handlerData = this.getActionHandler(
+            actionConfig.id
+          )
+
           if (!handlerData) {
             this.logger_.warn(
               `Cannot register templates for "${actionConfig.id}" - handler not found`
@@ -324,38 +353,45 @@ class MpnAutomationService extends MedusaService({
           }
 
           await Promise.all(
-            actionConfig.templates.map(async (template: any) => {
-              const templateName = template.name
-              const templateValue = template.path
+            actionConfig.templates.map(
+              async (template: any) => {
+                const templateName = template.name
+                const templateValue = template.path
 
-              let renderer = templateValue
+                let renderer = templateValue
 
-              try {
-                const templateModule = await import(templateValue)
-                const template = templateModule.default
-                renderer = template?.default || template
+                try {
+                  const templateModule = await import(
+                    templateValue
+                  )
+                  const template = templateModule.default
+                  renderer = template?.default || template
 
-                if (!renderer) {
+                  if (!renderer) {
+                    this.logger_.warn(
+                      `Template module from "${templateValue}" does not export a default function or expected named export`
+                    )
+                    return
+                  }
+                } catch (error: any) {
                   this.logger_.warn(
-                    `Template module from "${templateValue}" does not export a default function or expected named export`
+                    `Failed to load template from "${templateValue}": ${error?.message || "Unknown error"}`
                   )
                   return
                 }
-              } catch (error: any) {
-                this.logger_.warn(
-                  `Failed to load template from "${templateValue}": ${error?.message || "Unknown error"}`
-                )
-                return
-              }
 
-              if (templateName) {
-                handler.registerTemplate!(templateName, renderer)
+                if (templateName) {
+                  handler.registerTemplate!(
+                    templateName,
+                    renderer
+                  )
 
-                this.logger_.info(
-                  `Custom template "${templateName}" registered for handler "${actionConfig.id}"`
-                )
+                  this.logger_.info(
+                    `Custom template "${templateName}" registered for handler "${actionConfig.id}"`
+                  )
+                }
               }
-            })
+            )
           )
         }
       })
@@ -365,7 +401,7 @@ class MpnAutomationService extends MedusaService({
   /**
    * Get available actions for the admin panel form
    * If Handler has fields, we can push templateName field to fields array, then in the admin panel form we can render the templateName field as a select field with the templates options.
-   * 
+   *
    * @param eventName - Optional event name to filter templates dynamically
    * @returns Array of actions
    */
@@ -378,15 +414,25 @@ class MpnAutomationService extends MedusaService({
 
       // If eventName is provided, update templateName fields dynamically
       if (eventName && fields.length > 0) {
-        const templates = this.getTemplatesForEvent(eventName)
-        
+        const templates =
+          this.getTemplatesForEvent(eventName)
+
         fields = fields.map((field) => {
           // If this is a templateName field, update its options
-          if (field.key === "templateName" && field.type === "select") {
+          if (
+            field.key === "templateName" &&
+            field.type === "select"
+          ) {
             return {
               ...field,
-              options: templates.length > 0 ? templates : field.options || [],
-              defaultValue: templates.length > 0 ? templates[0]?.value : field.defaultValue,
+              options:
+                templates.length > 0
+                  ? templates
+                  : field.options || [],
+              defaultValue:
+                templates.length > 0
+                  ? templates[0]?.value
+                  : field.defaultValue,
             }
           }
           return field
@@ -397,7 +443,8 @@ class MpnAutomationService extends MedusaService({
         value: handler.handler.id,
         label: handler.handler.label,
         description: handler.handler.description,
-        configComponentKey: handler.handler.configComponentKey,
+        configComponentKey:
+          handler.handler.configComponentKey,
         templateLoaders: handler.handler.templateLoaders,
         fields: fields,
         enabled: handler.enabled,
@@ -408,32 +455,38 @@ class MpnAutomationService extends MedusaService({
   /**
    * Build events list from Medusa events
    * Supports both Medusa events and custom events
-   * 
+   *
    * @param events - Medusa events object
    * @returns Array of events
    */
   private buildEvents(events: any) {
-    if (!events || typeof events !== 'object') {
+    if (!events || typeof events !== "object") {
       return []
     }
-    
+
     return Object.values(events)
       .filter((event: any) => event != null) // Filter out null/undefined
       .map((event: any) => {
         const eventName = String(event)
-        
+
         // Skip invalid event names
-        if (!eventName || eventName === 'undefined' || eventName === 'null') {
+        if (
+          !eventName ||
+          eventName === "undefined" ||
+          eventName === "null"
+        ) {
           return null
         }
 
         const metadata = getEventMetadata(eventName)
-        
+
         return {
           value: eventName,
           label: eventName,
-          attributes: metadata.attributes || event.attributes || [],
-          templates: metadata.templates || event.templates || [],
+          attributes:
+            metadata.attributes || event.attributes || [],
+          templates:
+            metadata.templates || event.templates || [],
           contextType: event.contextType || null, // Only from custom events, not from registry
         }
       })
@@ -443,7 +496,7 @@ class MpnAutomationService extends MedusaService({
   /**
    * Get action handler by ID for the admin panel form
    * Used to get the action handler by ID in the Run Automation Actions workflow step
-   * 
+   *
    * @param actionId - Action ID
    * @returns Action handler
    */

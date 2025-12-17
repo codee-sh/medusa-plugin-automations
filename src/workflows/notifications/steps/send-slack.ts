@@ -66,7 +66,8 @@ export const sendSlackStep = createStep(
     input: SendSlackStepInput,
     { container }
   ): Promise<StepResponse<SendSlackStepOutput>> => {
-    const { settings, context, contextType, eventName } = input
+    const { settings, context, contextType, eventName } =
+      input
 
     // Validate required config
     if (!settings.template) {
@@ -92,11 +93,13 @@ export const sendSlackStep = createStep(
       const backendUrl = settings.backendUrl || ""
 
       // Use action handler for template rendering
-      const mpnAutomationService = container.resolve<MpnAutomationService>(
-        "mpnAutomation"
-      )
-      const slackHandler = mpnAutomationService.getActionHandler("slack")
-      
+      const mpnAutomationService =
+        container.resolve<MpnAutomationService>(
+          "mpnAutomation"
+        )
+      const slackHandler =
+        mpnAutomationService.getActionHandler("slack")
+
       if (!slackHandler?.handler?.renderTemplate) {
         throw new MedusaError(
           MedusaError.Types.NOT_FOUND,
@@ -104,15 +107,16 @@ export const sendSlackStep = createStep(
         )
       }
 
-      const { text, blocks } = await slackHandler.handler.renderTemplate({
-        templateName: template,
-        context: context,
-        contextType: contextType,
-        options: {
-          locale: locale,
-          backendUrl: backendUrl,
-        },
-      })
+      const { text, blocks } =
+        await slackHandler.handler.renderTemplate({
+          templateName: template,
+          context: context,
+          contextType: contextType,
+          options: {
+            locale: locale,
+            backendUrl: backendUrl,
+          },
+        })
 
       // Send notification
       const notificationResult =

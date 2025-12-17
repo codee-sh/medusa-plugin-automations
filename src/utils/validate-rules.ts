@@ -132,7 +132,10 @@ export function validateRulesForContext(
 
     const validRuleValues: string[] = []
     for (const value of rule.rule_values) {
-      if (value.value !== null && value.value !== undefined) {
+      if (
+        value.value !== null &&
+        value.value !== undefined
+      ) {
         // Handle different value types
         if (isString(value.value)) {
           validRuleValues.push(value.value)

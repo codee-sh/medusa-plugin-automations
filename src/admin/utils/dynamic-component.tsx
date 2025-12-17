@@ -17,9 +17,7 @@ export default function LoadActionComponent({
   fields?: any
 }) {
   const [Component, setComponent] =
-    useState<React.ComponentType<any> | null>(
-      null
-    )
+    useState<React.ComponentType<any> | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -35,7 +33,7 @@ export default function LoadActionComponent({
     loadTemplateComponent(configComponentKey as any)
       .then((module) => {
         const Component = module
-        
+
         if (Component) {
           setComponent(() => Component as any)
         } else {

@@ -110,7 +110,10 @@ export function AutomationsRulesForm({
                                     attribute.value || "ss"
                                   }
                                 >
-                                  {attribute.label} <span className="text-xs text-gray-500">({attribute.value})</span>
+                                  {attribute.label}{" "}
+                                  <span className="text-xs text-gray-500">
+                                    ({attribute.value})
+                                  </span>
                                 </Select.Item>
                               )
                             )}
@@ -167,7 +170,9 @@ export function AutomationsRulesForm({
                   <RuleValueInput
                     control={form.control}
                     name={`rules.items.${index}.rule_values.0.value`}
-                    operator={form.watch(`rules.items.${index}.operator`)}
+                    operator={form.watch(
+                      `rules.items.${index}.operator`
+                    )}
                   />
                 </div>
                 <Button

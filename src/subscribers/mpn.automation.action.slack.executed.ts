@@ -22,7 +22,12 @@ export default async function mpnAutomationActionSlackExecutedHandler({
   event: { data },
   container,
 }: SubscriberArgs<any>) {
-  const { action, context, eventName: triggerEventName, contextType } = data
+  const {
+    action,
+    context,
+    eventName: triggerEventName,
+    contextType,
+  } = data
   const config = container.resolve("configModule") as any
   const moduleConfig = config?.modules.mpnAutomation
   const backendUrl = moduleConfig?.options.backend_url
@@ -36,14 +41,13 @@ export default async function mpnAutomationActionSlackExecutedHandler({
         ...action,
         config: {
           ...action.config,
-          template:
-            action.config.templateName,
-          backendUrl: backendUrl
+          template: action.config.templateName,
+          backendUrl: backendUrl,
         },
       },
       context: context,
       contextType: contextType,
-      eventName: triggerEventName
+      eventName: triggerEventName,
     },
   })
 

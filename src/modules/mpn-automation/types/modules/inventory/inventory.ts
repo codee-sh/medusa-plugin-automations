@@ -1,4 +1,3 @@
-
 export const INVENTORY_ITEM_ATTRIBUTES = [
   {
     value: "inventory_item.stocked_quantity",
@@ -64,5 +63,5 @@ export const INVENTORY_LEVEL_ATTRIBUTES = [
     type: "array",
     isRelation: true,
     relationType: "stock_locations",
-  }
+  },
 ]
