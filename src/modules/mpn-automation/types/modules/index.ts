@@ -35,10 +35,7 @@ export function getEventMetadata(
  * - Map events to template names (multiple templates per event)
  * - Support both Medusa events and custom events
  */
-const EVENT_METADATA_REGISTRY: Record<
-  string,
-  any
-> = {
+const EVENT_METADATA_REGISTRY: Record<string, any> = {
   // Inventory Events
   "inventory.inventory-level.created": {
     attributes: INVENTORY_LEVEL_ATTRIBUTES,

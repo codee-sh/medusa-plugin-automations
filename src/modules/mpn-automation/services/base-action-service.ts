@@ -22,14 +22,18 @@ export class BaseActionService implements ActionHandler {
   fields: FieldConfig[] = []
 
   // Template registry - each service manages its own templates
-  protected templates_: Map<string, TemplateRenderer> = new Map()
+  protected templates_: Map<string, TemplateRenderer> =
+    new Map()
 
   /**
    * Register a template for this service
    * @param name - Template name
    * @param renderer - Template renderer function
    */
-  registerTemplate(name: string, renderer: TemplateRenderer): void {
+  registerTemplate(
+    name: string,
+    renderer: TemplateRenderer
+  ): void {
     this.templates_.set(name, renderer)
   }
 

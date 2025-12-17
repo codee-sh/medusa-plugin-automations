@@ -67,7 +67,11 @@ export const runEmailActionWorkflow = createWorkflow(
   (input: WorkflowData<RunEmailActionWorkflowInput>) => {
     // Transform automation action format for sendEmailWorkflow
     const settings = transform(
-      { action: input.action, eventName: input.eventName, contextType: input.contextType },
+      {
+        action: input.action,
+        eventName: input.eventName,
+        contextType: input.contextType,
+      },
       (data) => {
         const actionConfig = data?.action?.config || {}
         const eventName = data?.eventName

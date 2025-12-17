@@ -26,8 +26,12 @@ export function RuleValueInput({
     OperatorType.NOT_EMPTY,
   ]
 
-  const isArrayOperator = arrayOperators.includes(operator as OperatorType)
-  const isNoValueOperator = noValueOperators.includes(operator as OperatorType)
+  const isArrayOperator = arrayOperators.includes(
+    operator as OperatorType
+  )
+  const isNoValueOperator = noValueOperators.includes(
+    operator as OperatorType
+  )
 
   if (isNoValueOperator) {
     return null
@@ -50,7 +54,9 @@ export function RuleValueInput({
               <Label>Values</Label>
               <ChipInput
                 value={arrayValue}
-                onChange={(values) => field.onChange(values)}
+                onChange={(values) =>
+                  field.onChange(values)
+                }
                 onBlur={field.onBlur}
                 placeholder="Add values (press Enter or comma)"
                 allowDuplicates={false}
@@ -66,14 +72,16 @@ export function RuleValueInput({
 
         const stringValue = Array.isArray(field.value)
           ? field.value[0] || ""
-          : field.value ?? ""
+          : (field.value ?? "")
 
         return (
           <>
             <Label>Value</Label>
             <Input
               value={stringValue}
-              onChange={(e) => field.onChange(e.target.value)}
+              onChange={(e) =>
+                field.onChange(e.target.value)
+              }
               onBlur={field.onBlur}
               ref={field.ref}
               placeholder="Enter value"
@@ -89,4 +97,3 @@ export function RuleValueInput({
     />
   )
 }
-

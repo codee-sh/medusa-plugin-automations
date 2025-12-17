@@ -1,5 +1,8 @@
 import { BaseActionService } from "./base-action-service"
-import { SlackTemplateRenderer, SlackBlock } from "../../../templates/slack/types"
+import {
+  SlackTemplateRenderer,
+  SlackBlock,
+} from "../../../templates/slack/types"
 import { renderInventoryLevel } from "../../../templates/slack/inventory-level"
 import { renderProductVariant } from "../../../templates/slack/product-variant/product-variant"
 import { renderProduct } from "../../../templates/slack/product/product"
@@ -15,7 +18,7 @@ export class SlackActionService extends BaseActionService {
 
   fields = [
     // Add templateName field - options will be populated dynamically by service based on eventName
-    this.addTemplateNameField()
+    this.addTemplateNameField(),
   ]
 
   /**
@@ -23,8 +26,14 @@ export class SlackActionService extends BaseActionService {
    */
   protected initializeTemplates(): void {
     // Register default templates
-    this.registerTemplate("inventory-level", renderInventoryLevel as any)
-    this.registerTemplate("product-variant", renderProductVariant as any)
+    this.registerTemplate(
+      "inventory-level",
+      renderInventoryLevel as any
+    )
+    this.registerTemplate(
+      "product-variant",
+      renderProductVariant as any
+    )
     this.registerTemplate("product", renderProduct as any)
   }
 
@@ -39,7 +48,9 @@ export class SlackActionService extends BaseActionService {
     contextType?: string | null
     options?: any
   }): Promise<{ text: string; blocks: SlackBlock[] }> {
-    const renderer = this.getTemplate(params.templateName) as SlackTemplateRenderer | undefined
+    const renderer = this.getTemplate(
+      params.templateName
+    ) as SlackTemplateRenderer | undefined
 
     if (!renderer) {
       throw new Error(

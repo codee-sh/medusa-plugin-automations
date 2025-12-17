@@ -40,4 +40,3 @@ export const PRODUCT_CATEGORY_ATTRIBUTES = [
     label: "Updated At",
   },
 ]
-

@@ -77,7 +77,12 @@ export const sendEmailStep = createStep(
     input: SendEmailStepInput,
     { container }
   ): Promise<StepResponse<SendEmailStepOutput>> => {
-    const { settings, templateData, contextType, eventName } = input
+    const {
+      settings,
+      templateData,
+      contextType,
+      eventName,
+    } = input
 
     // Validate required config
     if (!settings.templateName) {
@@ -161,11 +166,13 @@ export const sendEmailStep = createStep(
       }
 
       // Use action handler for template rendering
-      const mpnAutomationService = container.resolve<MpnAutomationService>(
-        "mpnAutomation"
-      )
-      const emailHandler = mpnAutomationService.getActionHandler("email")
-      
+      const mpnAutomationService =
+        container.resolve<MpnAutomationService>(
+          "mpnAutomation"
+        )
+      const emailHandler =
+        mpnAutomationService.getActionHandler("email")
+
       if (!emailHandler?.handler?.renderTemplate) {
         throw new MedusaError(
           MedusaError.Types.NOT_FOUND,
@@ -173,12 +180,13 @@ export const sendEmailStep = createStep(
         )
       }
 
-      const { html, text, subject } = await emailHandler.handler.renderTemplate({
-        templateName: templateName,
-        context: templateData,
-        contextType: contextType,
-        options: renderOptions,
-      })
+      const { html, text, subject } =
+        await emailHandler.handler.renderTemplate({
+          templateName: templateName,
+          context: templateData,
+          contextType: contextType,
+          options: renderOptions,
+        })
 
       // Send notification
       const notificationResult =

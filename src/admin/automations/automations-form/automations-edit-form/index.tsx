@@ -46,7 +46,9 @@ export function AutomationsEditForm({
     [Tab.ACTIONS]: "not-started",
   })
   const [buttonText, setButtonText] = useState<string>("")
-  const [eventName, setEventName] = useState<string | undefined>(undefined)
+  const [eventName, setEventName] = useState<
+    string | undefined
+  >(undefined)
 
   useEffect(() => {
     if (Tab.GENERAL === tab) {
@@ -80,7 +82,7 @@ export function AutomationsEditForm({
 
   const {
     data: automationsActionsData,
-    isLoading: isAutomationsActionsLoading
+    isLoading: isAutomationsActionsLoading,
   } = useListAutomationsActions({
     trigger_id: id,
     extraKey: [id],
@@ -91,7 +93,7 @@ export function AutomationsEditForm({
   const { data: availableActionsData } =
     useAvailableActions({
       enabled: open,
-      eventName: eventName
+      eventName: eventName,
     })
 
   const {
@@ -181,7 +183,12 @@ export function AutomationsEditForm({
         },
       })
     }
-  }, [open, automationsTriggerData, automationsRulesData, automationsActionsData])
+  }, [
+    open,
+    automationsTriggerData,
+    automationsRulesData,
+    automationsActionsData,
+  ])
 
   // Reset form when modal is closed
   useEffect(() => {
@@ -251,7 +258,7 @@ export function AutomationsEditForm({
       }
 
       await editAutomationRule(items)
-      
+
       queryClient.invalidateQueries({
         queryKey: ["automations-rules", id],
       })
@@ -270,7 +277,7 @@ export function AutomationsEditForm({
         trigger_id: id,
         actions: data.actions?.items || [],
       }
-      
+
       await editAutomationAction(items)
 
       queryClient.invalidateQueries({
@@ -332,7 +339,9 @@ export function AutomationsEditForm({
       </FocusModal.Trigger>
       <FocusModal.Content>
         <FocusModal.Header>
-          <Heading level="h3" className="shrink-0">Edit Automation</Heading>
+          <Heading level="h3" className="shrink-0">
+            Edit Automation
+          </Heading>
           <div className="-my-2 w-full border-l">
             <ProgressTabs
               dir="ltr"
@@ -393,7 +402,9 @@ export function AutomationsEditForm({
                 <AutomationsActionsForm
                   form={form}
                   isOpen={open}
-                  availableActionsData={availableActionsData}
+                  availableActionsData={
+                    availableActionsData
+                  }
                 />
               )}
             </form>

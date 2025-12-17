@@ -58,7 +58,9 @@ export class SlackNotificationProviderService extends AbstractNotificationProvid
   }
 
   async send(
-    notification: NotificationTypes.ProviderSendNotificationDTO & { content: any }
+    notification: NotificationTypes.ProviderSendNotificationDTO & {
+      content: any
+    }
   ): Promise<any> {
     const { template, data, content } = notification as {
       template: string

@@ -1,7 +1,4 @@
-import {
-  SlackTemplateOptions,
-  SlackBlock,
-} from "../types"
+import { SlackTemplateOptions, SlackBlock } from "../types"
 import { translations } from "./translations"
 import {
   createTranslator,
@@ -18,7 +15,10 @@ export function renderProductVariant({
   context,
   contextType,
   options = {},
-}: RenderProductVariantParams): { text: string; blocks: SlackBlock[] } {
+}: RenderProductVariantParams): {
+  text: string
+  blocks: SlackBlock[]
+} {
   const backendUrl = options?.backendUrl || ""
   const locale = options?.locale || "pl"
   const productVariant = context?.product_variant
@@ -44,8 +44,7 @@ export function renderProductVariant({
         type: "plain_text",
         text: t("header.title", {
           productVariantTitle:
-            productVariant?.title ||
-            "unknown",
+            productVariant?.title || "unknown",
         }),
         emoji: true,
       },

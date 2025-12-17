@@ -56,7 +56,9 @@ export const getInventoryLevelByIdStep = createStep(
 
     // Generate fields from INVENTORY_LEVEL_ATTRIBUTES to keep them in sync
     const fields = getFieldsFromAttributes(
-      INVENTORY_LEVEL_ATTRIBUTES as Array<{ value?: string }>,
+      INVENTORY_LEVEL_ATTRIBUTES as Array<{
+        value?: string
+      }>,
       "inventory_level"
     )
 
