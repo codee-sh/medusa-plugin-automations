@@ -6,7 +6,8 @@ export const MpnAutomationRuleValue = model.define(
   {
     id: model.id().primaryKey(),
 
-    value: model.text().nullable(),
+    // Value can be string, number, or array (for array operators like contains)
+    value: model.json().nullable(),
 
     metadata: model.json().nullable(),
 

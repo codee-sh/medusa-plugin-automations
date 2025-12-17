@@ -32,9 +32,14 @@ export const baseAutomationFormSchema = z.object({
             .array(
               z.object({
                 id: z.string().optional(),
+                // Value can be string, number, or array (for array operators like contains, in, etc.)
                 value: z
-                  .string()
-                  .min(1, "Value is required"),
+                  .union([
+                    z.string().min(1, "Value is required"),
+                    z.number(),
+                    z.array(z.string().min(1)),
+                    z.array(z.number()),
+                  ]),
               })
             )
             .optional(),
