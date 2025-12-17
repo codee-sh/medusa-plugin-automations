@@ -57,6 +57,34 @@ export function validateRuleValueCondition(
         (val) => !ruleValueSet.has(`${val}`)
       )
     }
+    case "nin": {
+      const ruleValueSet = new Set(ruleValues)
+      return valuesToCheck.every(
+        (val) => !ruleValueSet.has(`${val}`)
+      )
+    }
+    case "contains": {
+      // Check if array contains any of the rule values
+      const ruleValueSet = new Set(ruleValues)
+      return valuesToCheck.some((val) =>
+        ruleValueSet.has(`${val}`)
+      )
+    }
+    case "not_contains": {
+      // Check if array does NOT contain any of the rule values
+      const ruleValueSet = new Set(ruleValues)
+      return !valuesToCheck.some((val) =>
+        ruleValueSet.has(`${val}`)
+      )
+    }
+    case "empty": {
+      // Check if array is empty
+      return valuesToCheck.length === 0
+    }
+    case "not_empty": {
+      // Check if array is not empty
+      return valuesToCheck.length > 0
+    }
     case "gt":
       return valuesToCheck.every((val) =>
         ruleValues.some((ruleVal) =>
@@ -104,8 +132,20 @@ export function validateRulesForContext(
 
     const validRuleValues: string[] = []
     for (const value of rule.rule_values) {
-      if (value.value && isString(value.value)) {
-        validRuleValues.push(value.value)
+      if (value.value !== null && value.value !== undefined) {
+        // Handle different value types
+        if (isString(value.value)) {
+          validRuleValues.push(value.value)
+        } else if (typeof value.value === "number") {
+          validRuleValues.push(`${value.value}`)
+        } else if (Array.isArray(value.value)) {
+          // If value is an array, convert all elements to strings
+          value.value.forEach((item) => {
+            if (item !== null && item !== undefined) {
+              validRuleValues.push(`${item}`)
+            }
+          })
+        }
       }
     }
 

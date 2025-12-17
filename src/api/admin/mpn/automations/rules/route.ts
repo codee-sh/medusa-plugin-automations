@@ -23,7 +23,16 @@ export const PostAutomationRulesSchema = z.object({
         .array(
           z.object({
             id: z.string().optional(),
-            value: z.string().nullable().optional(),
+            // Value can be string, number, or array (for array operators like contains, in, etc.)
+            value: z
+              .union([
+                z.string(),
+                z.number(),
+                z.array(z.string()),
+                z.array(z.number()),
+              ])
+              .nullable()
+              .optional(),
             metadata: z
               .record(z.any())
               .nullable()

@@ -473,12 +473,12 @@
         },
         "value": {
           "name": "value",
-          "type": "text",
+          "type": "jsonb",
           "unsigned": false,
           "autoincrement": false,
           "primary": false,
           "nullable": true,
-          "mappedType": "text"
+          "mappedType": "json"
         },
         "metadata": {
           "name": "metadata",

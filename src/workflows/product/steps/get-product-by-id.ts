@@ -7,18 +7,15 @@ import {
   StepResponse,
   createStep,
 } from "@medusajs/framework/workflows-sdk"
+import { PRODUCT_ATTRIBUTES } from "../../../modules/mpn-automation/types/modules/product"
+import { getFieldsFromAttributes } from "../../../utils"
 
 export interface GetProductByIdStepInput {
   product_id: string
 }
 
 export interface GetProductByIdStepOutput {
-  product: ProductTypes.ProductDTO & {
-    variants?: ProductTypes.ProductVariantDTO[]
-    images?: ProductTypes.ProductImageDTO[]
-    tags?: ProductTypes.ProductTagDTO[]
-    categories?: ProductTypes.ProductCategoryDTO[]
-  }
+  product: ProductTypes.ProductDTO
 }
 
 export const getProductByIdStepId = "get-product-by-id"
@@ -48,53 +45,15 @@ export const getProductByIdStep = createStep(
       )
     }
 
+    // Generate fields from PRODUCT_ATTRIBUTES to keep them in sync
+    const fields = getFieldsFromAttributes(
+      PRODUCT_ATTRIBUTES,
+      "product"
+    )
+
     const { data: products } = await query.graph({
       entity: "product",
-      fields: [
-        "id",
-        "title",
-        "subtitle",
-        "description",
-        "handle",
-        "is_giftcard",
-        "status",
-        "thumbnail",
-        "weight",
-        "length",
-        "height",
-        "width",
-        "origin_country",
-        "hs_code",
-        "mid_code",
-        "material",
-        "metadata",
-        "created_at",
-        "updated_at",
-        "variants.id",
-        "variants.title",
-        "variants.sku",
-        "variants.barcode",
-        "variants.ean",
-        "variants.upc",
-        "variants.inventory_quantity",
-        "variants.allow_backorder",
-        "variants.manage_inventory",
-        "variants.weight",
-        "variants.length",
-        "variants.height",
-        "variants.width",
-        "variants.metadata",
-        "images.id",
-        "images.url",
-        "images.metadata",
-        "tags.id",
-        "tags.value",
-        "categories.id",
-        "categories.name",
-        "categories.handle",
-        "categories.description",
-        "categories.metadata",
-      ],
+      fields,
       filters: {
         id: {
           $in: [input.product_id],

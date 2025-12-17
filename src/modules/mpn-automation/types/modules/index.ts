@@ -4,6 +4,9 @@ import {
 } from "./inventory"
 import { PRODUCT_ATTRIBUTES } from "./product"
 import { PRODUCT_VARIANT_ATTRIBUTES } from "./product-variant"
+import { PRODUCT_TAG_ATTRIBUTES } from "./product-tag"
+import { PRODUCT_TYPE_ATTRIBUTES } from "./product-type"
+import { PRODUCT_CATEGORY_ATTRIBUTES } from "./product-category"
 import { Attribute } from "../types"
 
 /**
@@ -91,6 +94,15 @@ const EVENT_METADATA_REGISTRY: Record<
       },
     ],
   },
+  "product.updated": {
+    attributes: PRODUCT_ATTRIBUTES,
+    templates: [
+      {
+        value: "product",
+        name: "Product",
+      },
+    ],
+  },
   "product-variant.updated": {
     attributes: PRODUCT_VARIANT_ATTRIBUTES,
     templates: [
@@ -100,12 +112,30 @@ const EVENT_METADATA_REGISTRY: Record<
       },
     ],
   },
-  "product.updated": {
-    attributes: PRODUCT_ATTRIBUTES,
+  "product-tag.updated": {
+    attributes: PRODUCT_TAG_ATTRIBUTES,
     templates: [
       {
-        value: "product",
-        name: "Product",
+        value: "product-tag",
+        name: "Product Tag",
+      },
+    ],
+  },
+  "product-type.updated": {
+    attributes: PRODUCT_TYPE_ATTRIBUTES,
+    templates: [
+      {
+        value: "product-type",
+        name: "Product Type",
+      },
+    ],
+  },
+  "product-category.updated": {
+    attributes: PRODUCT_CATEGORY_ATTRIBUTES,
+    templates: [
+      {
+        value: "product-category",
+        name: "Product Category",
       },
     ],
   },
