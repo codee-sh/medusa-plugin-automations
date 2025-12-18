@@ -112,7 +112,7 @@ export const editAutomationRulesStep = createStep(
               await mpnAutomationService.updateMpnAutomationRuleValues(
                 valuesToUpdate.map((value) => ({
                   id: value.id!,
-                  value: value.value,
+                  value: value.value as any,
                 }))
               )
             }
@@ -121,7 +121,7 @@ export const editAutomationRulesStep = createStep(
               await mpnAutomationService.createMpnAutomationRuleValues(
                 valuesToCreate.map((value) => ({
                   rule_id: rule.id!,
-                  value: value.value,
+                  value: value.value as any,
                 }))
               )
             }
@@ -148,7 +148,7 @@ export const editAutomationRulesStep = createStep(
             await mpnAutomationService.createMpnAutomationRuleValues(
               rule.rule_values.map((value) => ({
                 rule_id: newRule[0].id,
-                value: value.value,
+                value: value.value as any,
               }))
             )
           }

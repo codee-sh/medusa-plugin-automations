@@ -58,35 +58,23 @@ export const getAutomationTriggersByEventStep = createStep(
       id: trigger.id,
       name: trigger.name,
       description: trigger.description,
-      trigger_type: trigger.trigger_type as TriggerType,
+      trigger_type: trigger.trigger_type,
       event_name: trigger.event_name,
       interval_minutes: trigger.interval_minutes,
       active: trigger.active,
-      channels: trigger.channels as Record<
-        string,
-        boolean
-      > | null,
-      metadata: trigger.metadata as Record<
-        string,
-        any
-      > | null,
+      channels: trigger.channels,
+      metadata: trigger.metadata,
       rules: (trigger.rules || []).map((rule) => ({
         id: rule.id,
         attribute: rule.attribute,
         operator: rule.operator,
         description: rule.description,
-        metadata: rule.metadata as Record<
-          string,
-          any
-        > | null,
+        metadata: rule.metadata,
         rule_values: (rule.rule_values || []).map(
           (value) => ({
             id: value.id,
-            value: value.value,
-            metadata: value.metadata as Record<
-              string,
-              any
-            > | null,
+            value: value.value as any,
+            metadata: value.metadata,
           })
         ),
       })),
@@ -95,7 +83,7 @@ export const getAutomationTriggersByEventStep = createStep(
         action_type: action.action_type,
         config: action.config,
       })),
-    }))
+    })) as AutomationTrigger[]
 
     return new StepResponse(triggersData, triggersData)
   }
