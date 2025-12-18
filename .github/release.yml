@@ -9,27 +9,15 @@ changelog:
     - title: Features
       labels:
         - "type: feature"
-        - "type: enhancement"
-        - enhancement
-        - feature
-    - title: Bug Fixes
+    - title: Bugs
       labels:
         - "type: bug"
-        - "type: bugfix"
-        - bug
-        - fix
-        - bugfix
     - title: Improvements
       labels:
         - "type: improvement"
-        - "type: refactor"
-        - improvement
-        - refactor
     - title: Documentation
       labels:
         - "type: docs"
-        - "type: documentation"
-        - documentation
         - docs
     - title: Dependencies
       labels:
