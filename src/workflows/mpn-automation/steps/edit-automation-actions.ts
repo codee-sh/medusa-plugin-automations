@@ -13,14 +13,20 @@ type EditAutomationActionsStepInput = {
 
 const configWithUndefined = (config: any) => {
   return config
-    ? Object.entries(config).reduce((acc, [key, value]) => {
-        if (value === "") {
-          acc[key] = undefined
-        } else if (value !== null && value !== undefined) {
-          acc[key] = value
-        }
-        return acc
-      }, {} as Record<string, any>)
+    ? Object.entries(config).reduce(
+        (acc, [key, value]) => {
+          if (value === "") {
+            acc[key] = undefined
+          } else if (
+            value !== null &&
+            value !== undefined
+          ) {
+            acc[key] = value
+          }
+          return acc
+        },
+        {} as Record<string, any>
+      )
     : null
 }
 

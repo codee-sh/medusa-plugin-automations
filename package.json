@@ -4,6 +4,10 @@
   "description": "Medusa plugin for automations.",
   "author": "Codee (https://codee.dev)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/codee-sh/medusa-plugin-automations.git"
+  },
   "publishConfig": {
     "access": "public"
   },
@@ -67,6 +71,7 @@
     "@types/react-dom": "^18.2.25",
     "awilix": "^8.0.1",
     "dotenv": "^17.2.3",
+    "prettier": "^3.0.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

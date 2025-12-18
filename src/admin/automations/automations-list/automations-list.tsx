@@ -47,124 +47,128 @@ export const AutomationsList = () => {
 
   // Memoize columns to prevent re-creation on every render
   // This prevents unmounting of cells when data updates, which would close modals
-  const columns = useMemo(() => [
-    columnHelper.accessor("to", {
-      header: "Name and description",
-      cell: ({ row }) => {
-        const tooltip = `Device (DB) ID: \n ${row?.original?.id}`
-        return (
-          <>
-            <div className="py-2">
-              <div className="flex items-center gap-2 mb-2">
-                <span>{row?.original?.name}</span>
-                <Tooltip
-                  content={
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: tooltip,
-                      }}
-                    />
-                  }
-                  maxWidth={400}
-                >
-                  <InformationCircleSolid />
-                </Tooltip>
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("to", {
+        header: "Name and description",
+        cell: ({ row }) => {
+          const tooltip = `Device (DB) ID: \n ${row?.original?.id}`
+          return (
+            <>
+              <div className="py-2">
+                <div className="flex items-center gap-2 mb-2">
+                  <span>{row?.original?.name}</span>
+                  <Tooltip
+                    content={
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: tooltip,
+                        }}
+                      />
+                    }
+                    maxWidth={400}
+                  >
+                    <InformationCircleSolid />
+                  </Tooltip>
+                </div>
+                <div className="min-w-[180px] whitespace-normal text-xs">
+                  <span>{row?.original?.description}</span>
+                </div>
               </div>
-              <div className="min-w-[180px] whitespace-normal text-xs">
-                <span>{row?.original?.description}</span>
-              </div>
-            </div>
-          </>
-        )
-      },
-    }),
-    columnHelper.accessor("trigger_type", {
-      header: "Trigger Type",
-      cell: ({ row }) => {
-        return <span>{row?.original?.trigger_type}</span>
-      },
-    }),
-    columnHelper.accessor("event_name", {
-      header: "Event Name",
-      cell: ({ row }) => {
-        return <span>{row?.original?.event_name}</span>
-      },
-    }),
-    columnHelper.accessor("last_run_at", {
-      header: "Last Run At",
-      cell: ({ row }) => {
-        const lastRunAtAll = row?.original?.states
-          ?.map((state: any) => state.last_triggered_at)
-          .sort(
-            (a: any, b: any) =>
-              new Date(b).getTime() - new Date(a).getTime()
+            </>
           )
-        return (
-          <span>
-            {lastRunAtAll.length > 0
-              ? new Date(lastRunAtAll[0]).toLocaleString()
-              : "-"}
-          </span>
-        )
-      },
-    }),
-    columnHelper.accessor("active", {
-      header: "Active",
-      cell: ({ row }) => {
-        const color = row?.original?.active
-          ? "green"
-          : "red"
-        const text = row?.original?.active ? "Yes" : "No"
+        },
+      }),
+      columnHelper.accessor("trigger_type", {
+        header: "Trigger Type",
+        cell: ({ row }) => {
+          return <span>{row?.original?.trigger_type}</span>
+        },
+      }),
+      columnHelper.accessor("event_name", {
+        header: "Event Name",
+        cell: ({ row }) => {
+          return <span>{row?.original?.event_name}</span>
+        },
+      }),
+      columnHelper.accessor("last_run_at", {
+        header: "Last Run At",
+        cell: ({ row }) => {
+          const lastRunAtAll = row?.original?.states
+            ?.map((state: any) => state.last_triggered_at)
+            .sort(
+              (a: any, b: any) =>
+                new Date(b).getTime() -
+                new Date(a).getTime()
+            )
+          return (
+            <span>
+              {lastRunAtAll.length > 0
+                ? new Date(lastRunAtAll[0]).toLocaleString()
+                : "-"}
+            </span>
+          )
+        },
+      }),
+      columnHelper.accessor("active", {
+        header: "Active",
+        cell: ({ row }) => {
+          const color = row?.original?.active
+            ? "green"
+            : "red"
+          const text = row?.original?.active ? "Yes" : "No"
 
-        return (
-          <Badge size="small" color={color}>
-            {text}
-          </Badge>
-        )
-      },
-    }),
-    columnHelper.accessor("created_at", {
-      header: "Created At",
-      cell: ({ row }) => {
-        return (
-          <span>
-            {row?.original?.created_at
-              ? new Date(
-                  row.original.created_at
-                ).toLocaleString()
-              : "-"}
-          </span>
-        )
-      },
-    }),
-    columnHelper.accessor("updated_at", {
-      header: "Updated At",
-      cell: ({ row }) => {
-        return (
-          <span>
-            {row?.original?.updated_at
-              ? new Date(
-                  row.original.updated_at
-                ).toLocaleString()
-              : "-"}
-          </span>
-        )
-      },
-    }),
-    columnHelper.accessor("actions", {
-      header: "Actions",
-      cell: ({ row }) => {
-        return (
-          <div className="flex items-center gap-2">
-            <AutomationsEditForm id={row?.original?.id} />
-            <AutomationDeleteButton
-              id={row?.original?.id}
-            />
-          </div>
-        )
-      },
-    }),
-  ], []) // Empty dependency array - columns don't depend on any props/state
+          return (
+            <Badge size="small" color={color}>
+              {text}
+            </Badge>
+          )
+        },
+      }),
+      columnHelper.accessor("created_at", {
+        header: "Created At",
+        cell: ({ row }) => {
+          return (
+            <span>
+              {row?.original?.created_at
+                ? new Date(
+                    row.original.created_at
+                  ).toLocaleString()
+                : "-"}
+            </span>
+          )
+        },
+      }),
+      columnHelper.accessor("updated_at", {
+        header: "Updated At",
+        cell: ({ row }) => {
+          return (
+            <span>
+              {row?.original?.updated_at
+                ? new Date(
+                    row.original.updated_at
+                  ).toLocaleString()
+                : "-"}
+            </span>
+          )
+        },
+      }),
+      columnHelper.accessor("actions", {
+        header: "Actions",
+        cell: ({ row }) => {
+          return (
+            <div className="flex items-center gap-2">
+              <AutomationsEditForm id={row?.original?.id} />
+              <AutomationDeleteButton
+                id={row?.original?.id}
+              />
+            </div>
+          )
+        },
+      }),
+    ],
+    []
+  ) // Empty dependency array - columns don't depend on any props/state
 
   const table = useDataTable({
     columns,

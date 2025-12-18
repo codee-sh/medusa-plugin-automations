@@ -1,9 +1,10 @@
-import { Input, Label, Select, Button } from "@medusajs/ui"
+import { Label, Select, Button } from "@medusajs/ui"
 import { useAvailableEvents } from "../../../../hooks/api/available-events"
 import { OPERATOR_TYPES } from "../../../../modules/mpn-automation/types/types"
 import { Controller, useFieldArray } from "react-hook-form"
 import { useMemo } from "react"
 import { Trash, Plus } from "@medusajs/icons"
+import { RuleValueInput } from "./rule-value-input"
 
 export function AutomationsRulesForm({
   form,
@@ -109,7 +110,10 @@ export function AutomationsRulesForm({
                                     attribute.value || "ss"
                                   }
                                 >
-                                  {attribute.label} <span className="text-xs text-gray-500">({attribute.value})</span>
+                                  {attribute.label}{" "}
+                                  <span className="text-xs text-gray-500">
+                                    ({attribute.value})
+                                  </span>
                                 </Select.Item>
                               )
                             )}
@@ -163,26 +167,11 @@ export function AutomationsRulesForm({
                       </>
                     )}
                   />
-                  <Controller
-                    name={`rules.items.${index}.rule_values.0.value`}
+                  <RuleValueInput
                     control={form.control}
-                    render={({ field, fieldState }) => (
-                      <>
-                        <Label>Value</Label>
-                        <Input
-                          value={field.value ?? ""}
-                          onChange={(e) => {
-                            field.onChange(e.target.value)
-                          }}
-                          onBlur={field.onBlur}
-                          ref={field.ref}
-                        />
-                        {fieldState.error && (
-                          <span className="text-red-500 text-sm">
-                            {fieldState.error.message}
-                          </span>
-                        )}
-                      </>
+                    name={`rules.items.${index}.rule_values.0.value`}
+                    operator={form.watch(
+                      `rules.items.${index}.operator`
                     )}
                   />
                 </div>
@@ -205,7 +194,7 @@ export function AutomationsRulesForm({
             className="w-full"
           >
             <Plus />
-            Add Item
+            Add condition
           </Button>
         </div>
       </div>

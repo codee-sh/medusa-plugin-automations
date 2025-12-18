@@ -191,7 +191,9 @@ export function AutomationsCreateForm() {
       </FocusModal.Trigger>
       <FocusModal.Content>
         <FocusModal.Header>
-          <Heading level="h3" className="shrink-0">Create Automation</Heading>
+          <Heading level="h3" className="shrink-0">
+            Create Automation
+          </Heading>
           <div className="-my-2 w-full border-l">
             <ProgressTabs
               dir="ltr"

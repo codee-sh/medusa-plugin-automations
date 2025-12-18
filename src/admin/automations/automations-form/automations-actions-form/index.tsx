@@ -16,7 +16,6 @@ export function AutomationsActionsForm({
   isOpen?: boolean
   availableActionsData?: any
 }) {
-
   // Reset action configs when eventName changes to ensure templates are updated
   // useEffect(() => {
   //   const actions = form.getValues("actions.items") || []
@@ -70,11 +69,15 @@ export function AutomationsActionsForm({
       return
     }
 
-    form.setValue(`actions.items.${index}.action_type`, value, {
-      shouldValidate: false,
-      shouldDirty: true,
-    })
-    
+    form.setValue(
+      `actions.items.${index}.action_type`,
+      value,
+      {
+        shouldValidate: false,
+        shouldDirty: true,
+      }
+    )
+
     // Clear validation errors first to prevent showing errors from previous action type
     form.clearErrors(`actions.items.${index}`)
 
@@ -83,7 +86,7 @@ export function AutomationsActionsForm({
         (a) => a.value === value
       )
     const fields = actionData?.fields
-    
+
     // Reset config when action type changes to prevent sending
     // fields from previous action type in payload
     form.setValue(
@@ -158,7 +161,11 @@ export function AutomationsActionsForm({
                               actionTypeField.value ?? ""
                             }
                             onValueChange={(value) => {
-                              actionTypeValueChange(index, value, isExistingAction)
+                              actionTypeValueChange(
+                                index,
+                                value,
+                                isExistingAction
+                              )
                             }}
                             disabled={isExistingAction}
                           >

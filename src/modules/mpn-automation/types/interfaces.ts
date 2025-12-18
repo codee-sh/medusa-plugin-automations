@@ -2,7 +2,8 @@ import { TriggerType } from "./types"
 
 export interface AutomationRuleValue {
   id?: string
-  value: string | null
+  // Value can be string, number, or array (for array operators like contains, in, etc.)
+  value: string | number | string[] | number[] | null
   metadata: Record<string, any> | null
 }
 

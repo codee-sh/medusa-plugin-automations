@@ -65,14 +65,19 @@ export interface ActionHandler {
    * @param name - Template name
    * @param renderer - Template renderer function
    */
-  registerTemplate?: (name: string, renderer: TemplateRenderer) => void
+  registerTemplate?: (
+    name: string,
+    renderer: TemplateRenderer
+  ) => void
 
   /**
    * Get template renderer by name
    * @param name - Template name
    * @returns Template renderer or undefined
    */
-  getTemplate?: (name: string) => TemplateRenderer | undefined
+  getTemplate?: (
+    name: string
+  ) => TemplateRenderer | undefined
 
   /**
    * Render template (wrapper method)

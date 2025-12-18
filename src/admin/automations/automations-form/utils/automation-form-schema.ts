@@ -1,5 +1,5 @@
-import { baseAutomationFormSchema } from "../types"
 import { z } from "zod"
+import { baseAutomationFormSchema } from "../types"
 
 // Function to create schema with dynamic validation based on availableActions
 export function createAutomationFormSchema(

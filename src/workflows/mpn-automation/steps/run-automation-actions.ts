@@ -59,7 +59,8 @@ export const runAutomationActionsStep = createStep(
       ContainerRegistrationKeys.LOGGER
     )
 
-    const { validatedTriggers, context, contextType } = input
+    const { validatedTriggers, context, contextType } =
+      input
 
     if (
       !validatedTriggers ||

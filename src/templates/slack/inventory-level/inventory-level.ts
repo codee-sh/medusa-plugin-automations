@@ -1,7 +1,4 @@
-import {
-  SlackTemplateOptions,
-  SlackBlock,
-} from "../types"
+import { SlackTemplateOptions, SlackBlock } from "../types"
 import { translations } from "./translations"
 import {
   createTranslator,
@@ -18,7 +15,10 @@ export function renderInventoryLevel({
   context,
   contextType,
   options = {},
-}: RenderInventoryLevelParams): { text: string; blocks: SlackBlock[] } {
+}: RenderInventoryLevelParams): {
+  text: string
+  blocks: SlackBlock[]
+} {
   const backendUrl = options?.backendUrl || ""
   const locale = options?.locale || "pl"
   const inventoryLevel = context?.inventory_level

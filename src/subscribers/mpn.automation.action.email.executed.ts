@@ -22,7 +22,12 @@ export default async function mpnAutomationActionEmailExecutedHandler({
   event: { data },
   container,
 }: SubscriberArgs<any>) {
-  const { action, context, eventName: triggerEventName, contextType } = data
+  const {
+    action,
+    context,
+    eventName: triggerEventName,
+    contextType,
+  } = data
 
   console.log(eventName, data)
 
@@ -44,7 +49,7 @@ export default async function mpnAutomationActionEmailExecutedHandler({
       },
       context: context,
       contextType: contextType,
-      eventName: triggerEventName
+      eventName: triggerEventName,
     },
   })
 

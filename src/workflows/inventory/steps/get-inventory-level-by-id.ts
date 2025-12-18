@@ -10,6 +10,8 @@ import {
   StepResponse,
   createStep,
 } from "@medusajs/framework/workflows-sdk"
+import { INVENTORY_LEVEL_ATTRIBUTES } from "../../../modules/mpn-automation/types/modules/inventory"
+import { getFieldsFromAttributes } from "../../../utils"
 
 export interface GetInventoryLevelByIdStepInput {
   inventory_level_id: string
@@ -52,21 +54,17 @@ export const getInventoryLevelByIdStep = createStep(
       )
     }
 
+    // Generate fields from INVENTORY_LEVEL_ATTRIBUTES to keep them in sync
+    const fields = getFieldsFromAttributes(
+      INVENTORY_LEVEL_ATTRIBUTES as Array<{
+        value?: string
+      }>,
+      "inventory_level"
+    )
+
     const { data: inventoryLevels } = await query.graph({
       entity: "inventory_level",
-      fields: [
-        "id",
-        "inventory_item.*",
-        "stocked_quantity",
-        "reserved_quantity",
-        "incoming_quantity",
-        "available_quantity",
-        "location_id",
-        "stock_locations.id",
-        "stock_locations.name",
-        "stock_locations.address",
-        "stock_locations.metadata",
-      ],
+      fields,
       filters: {
         id: {
           $in: [input.inventory_level_id],

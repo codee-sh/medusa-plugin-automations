@@ -43,6 +43,21 @@ export type CustomAction = {
 export type Attribute = {
   value?: string
   label?: string
+  /**
+   * Type of the attribute value
+   * - "primitive": single value (string, number, boolean)
+   * - "array": array of values (e.g., tags, categories)
+   * - "object": nested object
+   */
+  type?: "primitive" | "array" | "object"
+  /**
+   * Whether this attribute represents a relation
+   */
+  isRelation?: boolean
+  /**
+   * Type of relation (e.g., "tags", "categories", "variants")
+   */
+  relationType?: string
 }
 
 export interface FieldConfig {
@@ -171,11 +186,17 @@ export enum TriggerType {
 
 export enum OperatorType {
   EQUAL = "eq",
-  NOT_EQUAL = "neq",
+  NOT_EQUAL = "ne",
+  IN = "in",
+  NOT_IN = "nin",
   GREATER_THAN = "gt",
   LESS_THAN = "lt",
   GREATER_THAN_OR_EQUAL = "gte",
   LESS_THAN_OR_EQUAL = "lte",
+  CONTAINS = "contains",
+  NOT_CONTAINS = "not_contains",
+  EMPTY = "empty",
+  NOT_EMPTY = "not_empty",
 }
 
 export const OPERATOR_TYPES = [
@@ -186,6 +207,14 @@ export const OPERATOR_TYPES = [
   {
     value: OperatorType.NOT_EQUAL,
     label: "Not Equal",
+  },
+  {
+    value: OperatorType.IN,
+    label: "In",
+  },
+  {
+    value: OperatorType.NOT_IN,
+    label: "Not In",
   },
   {
     value: OperatorType.GREATER_THAN,
@@ -202,6 +231,22 @@ export const OPERATOR_TYPES = [
   {
     value: OperatorType.LESS_THAN_OR_EQUAL,
     label: "Less Than or Equal",
+  },
+  {
+    value: OperatorType.CONTAINS,
+    label: "Contains",
+  },
+  {
+    value: OperatorType.NOT_CONTAINS,
+    label: "Not Contains",
+  },
+  {
+    value: OperatorType.EMPTY,
+    label: "Empty",
+  },
+  {
+    value: OperatorType.NOT_EMPTY,
+    label: "Not Empty",
   },
 ]
 

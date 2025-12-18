@@ -68,15 +68,7 @@ export const getProductVariantByIdStep = createStep(
         "mid_code",
         "hs_code",
         "material",
-        "metadata",
-        "product.id",
-        "product.title",
-        "product.description",
-        "product.handle",
-        "product.is_giftcard",
-        "product.status",
-        "product.images",
-        "product.metadata",
+        "product.*",
       ],
       filters: {
         id: {

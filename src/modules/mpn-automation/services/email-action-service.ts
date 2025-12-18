@@ -87,8 +87,17 @@ export class EmailActionService extends BaseActionService {
       data: TemplateData,
       options: TemplateOptionsType
     ) => React.ReactElement<any>
-  }): Promise<{ html: string; text: string; subject: string }> {
-    const { templateName, context, options, customTemplateFunction } = params
+  }): Promise<{
+    html: string
+    text: string
+    subject: string
+  }> {
+    const {
+      templateName,
+      context,
+      options,
+      customTemplateFunction,
+    } = params
 
     // Use external plugin's renderTemplate function
     const result = await renderTemplate(
