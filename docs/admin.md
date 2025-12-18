@@ -37,16 +37,25 @@ Automations can be triggered by:
 
 Each automation can have multiple rules that define conditions:
 
-- **Rule Attributes**: Select from available attributes (e.g., `inventory_level.available_quantity`)
-- **Operators**: Choose comparison operators (equals, greater than, less than, contains, in, etc.)
-- **Values**: Set values to compare against
+- **Rule Attributes**: Select from available attributes including:
+  - Primitive fields: `product.title`, `inventory_level.available_quantity`
+  - Relations: `product.tags.id`, `product.categories.name` (arrays)
+  - Nested objects: `inventory_level.inventory_item.*`
+- **Operators**: Choose comparison operators:
+  - **Basic**: `equals`, `not equals`, `greater than`, `less than`, `greater than or equal`, `less than or equal`
+  - **Array operations**: `in`, `not in`, `contains`, `not contains`
+  - **Null checks**: `empty`, `not empty`
+- **Values**: Set values to compare against:
+  - **Single values**: Enter a single string or number (e.g., `10`, `"Electronics"`)
+  - **Array values**: Use the chip input to add multiple values (e.g., tag IDs, category names)
+  - **No value**: For `empty` and `not empty` operators, no value input is required
 
 #### Actions
 
 When all rules pass, actions are executed:
 
-- **Channels**: Configure delivery channels (email, slack, admin, etc.)
-- **Metadata**: Add custom metadata for actions
+- **Channels**: Configure delivery channels (email, slack etc.)
+- **Metadata**: Add custom config for actions
 
 ## Using the Admin Panel
 
@@ -60,13 +69,19 @@ When all rules pass, actions are executed:
    - If schedule: Set interval in minutes
    - Set a name and description
 4. **Add Rules**:
-   - Select rule attributes from available options
-   - Choose operators
-   - Set comparison values
-   - Add multiple rules as needed
+   - Select rule attributes from available options (including relations and nested objects)
+   - Choose operators based on your needs:
+     - Use `in` or `not in` for checking if a value exists in an array
+     - Use `contains` or `not contains` for partial matches in arrays
+     - Use `empty` or `not empty` to check for null/empty values
+   - Set comparison values:
+     - For array operators (`in`, `not in`, `contains`, `not contains`): Use the chip input to add multiple values
+     - For basic operators: Enter a single value
+     - For `empty`/`not empty`: No value input needed
+   - Add multiple rules as needed (all rules must pass for the automation to trigger)
 5. **Configure Actions**:
    - Set delivery channels
-   - Add metadata if needed
+   - Add config if needed
 6. **Save**: Save the automation configuration
 
 ### Editing an Automation
@@ -91,21 +106,37 @@ Create an automation that sends a notification when inventory levels drop below 
 - **Rule**: `inventory_level.available_quantity` is less than `10`
 - **Action**: Send email notification
 
+### Product Tag Automation
+
+Create an automation that triggers when a product has specific tags:
+
+- **Trigger**: Event `product.product.updated`
+- **Rule**: `product.tags.id` is `in` `[tag-premium, tag-featured]` (use chip input for multiple tag IDs)
+- **Action**: Send Slack notification
+
+### Category-Based Automation
+
+Create an automation for products in specific categories:
+
+- **Trigger**: Event `product.product.created`
+- **Rule**: `product.categories.name` contains `"Electronics"` (or use `in` operator with multiple category names)
+- **Action**: Send email notification
+
+### Empty Inventory Check
+
+Create an automation that triggers when inventory is empty:
+
+- **Trigger**: Event `inventory.inventory-level.updated`
+- **Rule**: `inventory_level.available_quantity` is `empty`
+- **Action**: Send Slack notification
+
 ### High Stock Alert
 
 Create an automation for when inventory exceeds a certain level:
 
 - **Trigger**: Event `inventory.inventory-level.updated`
 - **Rule**: `inventory_level.stocked_quantity` is greater than `1000`
-- **Action**: Send admin notification
-
-### Scheduled Inventory Report
-
-Create a scheduled automation that runs periodically:
-
-- **Trigger**: Schedule with interval of `1440` minutes (daily)
-- **Rules**: Configure conditions for what to include in the report
-- **Action**: Generate and send inventory report
+- **Action**: Send Slack notification
 
 ## Best Practices
 
@@ -115,3 +146,9 @@ Create a scheduled automation that runs periodically:
 4. **Use Appropriate Triggers**: Choose the right trigger type for your use case
 5. **Combine Rules**: Use multiple rules to create complex conditions
 6. **Document Automations**: Add descriptions to explain automation purpose
+7. **Choose the Right Operator**: 
+   - Use `in`/`not in` for exact matches in arrays (e.g., checking if product has specific tags)
+   - Use `contains`/`not contains` for partial matches (e.g., checking if category name contains a substring)
+   - Use `empty`/`not empty` for null checks
+8. **Use Array Values Correctly**: When using array operators (`in`, `not in`, `contains`, `not contains`), use the chip input to add multiple values
+9. **Leverage Relations**: Use relation-based attributes (e.g., `product.tags.id`, `product.categories.name`) to create powerful automations based on related data
