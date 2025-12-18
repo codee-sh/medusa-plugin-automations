@@ -4,15 +4,13 @@ A comprehensive automation plugin for Medusa v2 that provides a flexible rule-ba
 
 ## Features
 
-- **Automation Triggers**: Create automations triggered by events, schedules, or manual actions
-- **Automation Management**: Create, edit, and delete automation triggers with automatic cleanup of related data
-- **Rule-Based Conditions**: Define complex conditions using rule attributes (e.g., inventory levels, order status)
-- **Multiple Action Types**: Execute various actions including email notifications, Slack messages, SMS, push notifications, and custom actions
-- **Event Subscribers**: Built-in subscribers for common Medusa events (inventory updates, order events, payment events)
-- **Admin Panel**: Manage automations directly from Medusa Admin
-- **Flexible Rules**: Support for multiple rule types and operators (equals, greater than, less than, contains, etc.)
-- **Slack Notifications**: Rich Slack notifications with Block Kit support including headers, action buttons, and dividers
-- **Extensible Actions**: Add custom action handlers to extend automation capabilities
+- **Automation Triggers**: Create automations triggered by events, schedules, or manual actions ([see details](#automation-triggers))
+- **Rule-Based Conditions**: Define complex conditions with support for arrays, relations, and multiple data types ([see details](#rules-and-conditions))
+- **Rich Attribute Support**: Pre-configured attributes for Products, Variants, Tags, Categories, and Inventory ([see available attributes](./docs/configuration.md#available-attributes-reference))
+- **Multiple Action Types**: Execute various actions including email notifications, Slack messages, SMS, push notifications, and custom actions ([see details](#actions))
+- **Event Subscribers**: Built-in subscribers for common Medusa events ([see available events](./docs/configuration.md#available-subscribers))
+- **Admin Panel**: Manage automations directly from Medusa Admin ([see details](#admin-panel))
+- **Extensible**: Add custom action handlers and extend automation capabilities
 - **Type-Safe**: Full TypeScript support with exported types and workflows
 
 ## Compatibility
@@ -50,6 +48,8 @@ The plugin includes database migrations for automation models. Run migrations to
 medusa migrations run
 ```
 
+See [Database Migrations](./docs/configuration.md#database-migrations) for more details about the created tables.
+
 ### 3. Access Admin Panel
 
 Navigate to **Notifications > Automations** in your Medusa Admin dashboard, or directly access:
@@ -63,17 +63,20 @@ Navigate to **Notifications > Automations** in your Medusa Admin dashboard, or d
 ### Automation Triggers
 
 Automations are triggered by:
-- **Events**: Medusa events (e.g., `inventory.inventory-level.updated`, `order.placed`)
+- **Events**: Medusa events (e.g., `inventory.inventory-level.updated`, `product.updated`)
 - **Schedule**: Time-based triggers with configurable intervals (In progress)
 - **Manual**: Triggered manually from the admin panel
 
+See [Available Subscribers](./docs/configuration.md#available-subscribers) in the configuration documentation for a complete list of supported events.
+
 ### Rules and Conditions
 
-Each automation can have multiple rules that define when actions should be executed:
+Each automation can have multiple rules that define when actions should be executed. Rules support primitive fields, relations (arrays), nested objects, and various operators for complex conditions.
 
-- **Rule Attributes**: Available attributes for conditions
-- **Operators**: Comparison operators (equals, greater than, less than, contains, in, etc.)
-- **Rule Values**: Values to compare against
+For detailed information, see:
+- [Available Attributes Reference](./docs/configuration.md#available-attributes-reference) - Complete list of attributes for each event type
+- [Rule Operators](./docs/configuration.md#rule-operators) - All supported operators with examples
+- [Rule Values](./docs/configuration.md#rule-values) - Supported data types and usage
 
 ### Actions
 
@@ -83,7 +86,7 @@ When automation rules pass, actions are executed. Supported action types include
 - **Slack**: Send Slack messages with Block Kit formatting
 - **Custom**: Extend with custom action handlers
 
-See [Configuration Documentation](./docs/configuration.md) for details on built-in subscribers, available actions, and extending functionality.
+See [Actions](./docs/configuration.md#actions) and [Slack Notification Provider](./docs/configuration.md#slack-notification-provider) in the configuration documentation for details on configuring and extending actions.
 
 ## Admin Panel
 
