@@ -128,7 +128,7 @@ export default defineMiddlewares({
               "trigger_id",
               "trigger_type",
               "event_name",
-              "interval_minutes",
+              "interval_seconds",
               "channels",
               "metadata",
               "active",

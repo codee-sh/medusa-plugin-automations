@@ -23,8 +23,8 @@ export const MpnAutomationTrigger = model
     // Event name — only when trigger_type = "event"
     event_name: model.text().nullable(),
 
-    // Interval in minutes — only when trigger_type = "schedule"
-    interval_minutes: model.number().nullable(),
+    // Interval in seconds — only when trigger_type = "schedule"
+    interval_seconds: model.number().nullable(),
 
     // Whether the trigger is enabled
     active: model.boolean().default(true),

@@ -60,7 +60,7 @@ export const getAutomationTriggersByEventStep = createStep(
       description: trigger.description,
       trigger_type: trigger.trigger_type,
       event_name: trigger.event_name,
-      interval_minutes: trigger.interval_minutes,
+      interval_seconds: trigger.interval_seconds,
       active: trigger.active,
       channels: trigger.channels,
       metadata: trigger.metadata,

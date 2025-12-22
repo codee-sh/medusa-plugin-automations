@@ -3,11 +3,12 @@ import {
   Label,
   Select,
   Checkbox,
+  Text,
 } from "@medusajs/ui"
 import { useAvailableEvents } from "../../../../hooks/api/available-events"
 import { useAvailableTriggers } from "../../../../hooks/api/available-triggers"
 import { useAvailableActions } from "../../../../hooks/api/available-actions"
-import { Controller } from "react-hook-form"
+import { Controller, useWatch } from "react-hook-form"
 import { useMemo } from "react"
 
 export function AutomationsGeneralForm({
@@ -51,6 +52,16 @@ export function AutomationsGeneralForm({
   const availableActions = useMemo(() => {
     return availableActionsData?.actions || []
   }, [availableActionsData])
+
+  // Watch trigger_type to show/hide interval_seconds field
+  const triggerType = useWatch({
+    control: form.control,
+    name: "general.trigger_type",
+  })
+
+  // Show interval field for event and schedule types
+  const showIntervalField =
+    triggerType === "event" || triggerType === "schedule"
 
   return (
     <div className="w-full">
@@ -223,6 +234,53 @@ export function AutomationsGeneralForm({
               )}
             />
           </div>
+          {showIntervalField && (
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="interval_seconds" className="block">
+                {triggerType === "schedule"
+                  ? "Interval (seconds)"
+                  : "Throttle (seconds)"}
+              </Label>
+              <Controller
+                name="general.interval_seconds"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <>
+                    <Input
+                      {...field}
+                      type="number"
+                      min={0}
+                      placeholder={
+                        triggerType === "schedule"
+                          ? "Run every X seconds"
+                          : "Minimum seconds between executions"
+                      }
+                      value={field.value ?? ""}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        field.onChange(
+                          value === "" ? null : Number(value)
+                        )
+                      }}
+                    />
+                    <Text
+                      size="small"
+                      className="text-ui-fg-subtle"
+                    >
+                      {triggerType === "schedule"
+                        ? "How often to run this automation"
+                        : "Optional: Limit how often this automation can run for the same target (e.g., 3600 = max once per hour)"}
+                    </Text>
+                    {fieldState.error && (
+                      <span className="text-red-500 text-sm">
+                        {fieldState.error.message}
+                      </span>
+                    )}
+                  </>
+                )}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

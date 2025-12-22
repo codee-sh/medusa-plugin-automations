@@ -13,7 +13,7 @@ export const baseAutomationFormSchema = z.object({
       .min(3, "Description must be at least 3 characters"),
     trigger_type: z.enum(["event", "schedule", "manual"]),
     event_name: z.string().min(1, "Event name is required"),
-    interval_minutes: z.number().nullable(),
+    interval_seconds: z.number().nullable(),
     active: z.boolean(),
   }),
   rules: z
