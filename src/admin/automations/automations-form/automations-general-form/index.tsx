@@ -236,7 +236,10 @@ export function AutomationsGeneralForm({
           </div>
           {showIntervalField && (
             <div className="flex flex-col gap-2">
-              <Label htmlFor="interval_seconds" className="block">
+              <Label
+                htmlFor="interval_seconds"
+                className="block"
+              >
                 {triggerType === "schedule"
                   ? "Interval (seconds)"
                   : "Throttle (seconds)"}
@@ -259,7 +262,9 @@ export function AutomationsGeneralForm({
                       onChange={(e) => {
                         const value = e.target.value
                         field.onChange(
-                          value === "" ? null : Number(value)
+                          value === ""
+                            ? null
+                            : Number(value)
                         )
                       }}
                     />
