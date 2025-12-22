@@ -50,7 +50,7 @@ export const AutomationsList = () => {
   const columns = useMemo(
     () => [
       columnHelper.accessor("to", {
-        header: "Name and description",
+        header: "Name and descriptions",
         cell: ({ row }) => {
           const tooltip = `Device (DB) ID: \n ${row?.original?.id}`
           return (
@@ -71,7 +71,7 @@ export const AutomationsList = () => {
                     <InformationCircleSolid />
                   </Tooltip>
                 </div>
-                <div className="min-w-[180px] whitespace-normal text-xs">
+                <div className="whitespace-normal text-xs max-w-[180px] min-w-[180px]">
                   <span>{row?.original?.description}</span>
                 </div>
               </div>
