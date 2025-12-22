@@ -104,12 +104,6 @@ export const validateTriggerThrottleStep = createStep(
               trigger.interval_seconds * 1000
           )
 
-          logger.info(
-            `Trigger "${trigger.name}" (${trigger.id}) throttled for target "${targetKey}". ` +
-              `Last triggered ${Math.round(secondsSinceLast)}s ago, interval is ${trigger.interval_seconds}s. ` +
-              `Next available at ${nextAvailableAt.toISOString()}`
-          )
-
           results.push({
             trigger,
             isValid: false,
@@ -128,15 +122,6 @@ export const validateTriggerThrottleStep = createStep(
         isThrottled: false,
       })
     }
-
-    // Filter to only non-throttled, valid triggers
-    const passedTriggers = results.filter(
-      (r) => r.isValid && !r.isThrottled
-    )
-
-    logger.info(
-      `Throttle check: ${validatedTriggers.length} triggers validated, ${passedTriggers.length} passed throttle check`
-    )
 
     return new StepResponse(results, results)
   }

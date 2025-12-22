@@ -9,7 +9,6 @@ import {
   AutomationTrigger,
 } from "../../../modules/mpn-automation/types/interfaces"
 import MpnAutomationService from "../../../modules/mpn-automation/services/service"
-import { saveAutomationStateWorkflow } from "../save-automation-state"
 
 export interface RunAutomationActionsStepInput {
   validatedTriggers: Array<{

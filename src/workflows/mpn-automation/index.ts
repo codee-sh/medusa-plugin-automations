@@ -1,4 +1,4 @@
-export * from "./validate-automation-triggers-by-event"
+export * from "./validate-triggers-by-event"
 export * from "./run-automation"
 export * from "./run-email-action"
 export * from "./run-slack-action"
