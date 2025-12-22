@@ -5,27 +5,27 @@ import {
 import { validateRulesForContext } from "../../../utils/validate-rules"
 import { AutomationTrigger } from "../../../modules/mpn-automation/types/interfaces"
 
-export interface ValidateAutomationTriggersStepInput {
+export interface ValidateTriggersRulesStepInput {
   triggers: AutomationTrigger[]
   context: Record<string, any>
 }
 
-export const validateAutomationTriggersStepId =
-  "validate-automation-triggers"
+export const validateTriggersRulesStepId =
+  "validate-triggers-rules"
 
 /**
  * This step validates multiple automation triggers against context data.
  *
  * @example
- * const data = validateAutomationTriggersStep({
+ * const data = validateTriggersRulesStep({
  *   triggers: [ ... ],
  *   context: { ... }
  * })
  */
-export const validateAutomationTriggersStep = createStep(
-  validateAutomationTriggersStepId,
+export const validateTriggersRulesStep = createStep(
+  validateTriggersRulesStepId,
   async (
-    input: ValidateAutomationTriggersStepInput
+    input: ValidateTriggersRulesStepInput
   ): Promise<StepResponse<any>> => {
     const { triggers, context } = input
 

@@ -26,7 +26,7 @@ export const createAutomationStep = createStep(
           description: item.description,
           trigger_type: item.trigger_type,
           event_name: item.event_name,
-          interval_minutes: item.interval_minutes,
+          interval_seconds: item.interval_seconds,
           active: item.active,
           channels: item.channels,
         }))

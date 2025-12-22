@@ -29,7 +29,7 @@ export interface AutomationTrigger {
   description: string | null
   trigger_type: TriggerType
   event_name: string | null
-  interval_minutes: number | null
+  interval_seconds: number | null
   active: boolean
   channels: Record<string, boolean> | null
   metadata: Record<string, any> | null

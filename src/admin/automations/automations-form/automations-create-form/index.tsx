@@ -78,7 +78,7 @@ export function AutomationsCreateForm() {
         description: "",
         trigger_type: "event",
         event_name: "",
-        interval_minutes: null,
+        interval_seconds: null,
         active: false,
       },
       rules: {
@@ -104,8 +104,8 @@ export function AutomationsCreateForm() {
   //         description: trigger.description || "",
   //         trigger_type: trigger.trigger_type || "event",
   //         event_name: trigger.event_name || "",
-  //         interval_minutes:
-  //           trigger.interval_minutes || null,
+  //         interval_seconds:
+  //           trigger.interval_seconds || null,
   //         active: trigger.active || false,
   //       },
   //       rules: {
@@ -126,7 +126,7 @@ export function AutomationsCreateForm() {
           description: "",
           trigger_type: "event",
           event_name: "",
-          interval_minutes: null,
+          interval_seconds: null,
           active: false,
         },
         rules: {
@@ -146,7 +146,7 @@ export function AutomationsCreateForm() {
         description: data.general.description,
         trigger_type: data.general.trigger_type,
         event_name: data.general.event_name,
-        interval_minutes: data.general.interval_minutes,
+        interval_seconds: data.general.interval_seconds,
         active: data.general.active,
       }
 

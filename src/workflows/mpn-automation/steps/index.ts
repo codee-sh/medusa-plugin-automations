@@ -1,5 +1,6 @@
 export * from "./retrieve-automation-triggers-by-event"
-export * from "./validate-automation-triggers"
+export * from "./validate-triggers-rules"
+export * from "./validate-trigger-throttle"
 export * from "./run-automation-actions"
 export * from "./create-automation"
 export * from "./edit-automation"

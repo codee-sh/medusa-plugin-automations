@@ -56,8 +56,8 @@
           "nullable": true,
           "mappedType": "text"
         },
-        "interval_minutes": {
-          "name": "interval_minutes",
+        "interval_seconds": {
+          "name": "interval_seconds",
           "type": "integer",
           "unsigned": false,
           "autoincrement": false,
