@@ -183,3 +183,19 @@ export const PRODUCT_ATTRIBUTES = [
     relationType: "collection",
   },
 ]
+
+// Fields for use in query.graph() - includes technical relations with *
+// These fields are needed for correct data retrieval including all relation data
+// PRODUCT_QUERY_FIELDS contains all fields from PRODUCT_ATTRIBUTES plus technical relations
+export const PRODUCT_QUERY_FIELDS = [
+  // Basic fields from PRODUCT_ATTRIBUTES
+  ...PRODUCT_ATTRIBUTES.map((attr) => attr.value),
+  
+  // Technical relations required for complete data retrieval
+  // These fields are not available in UI rules, but are needed for correct data retrieval
+  "product.tags.*",
+  "product.categories.*",
+  "product.variants.*",
+  "product.type.*",
+  "product.collection.*",
+]
