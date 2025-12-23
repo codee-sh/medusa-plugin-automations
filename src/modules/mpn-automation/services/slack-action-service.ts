@@ -6,6 +6,11 @@ import {
 import { renderInventoryLevel } from "../../../templates/slack/inventory-level"
 import { renderProductVariant } from "../../../templates/slack/product-variant/product-variant"
 import { renderProduct } from "../../../templates/slack/product/product"
+import { renderOrderPlaced } from "../../../templates/slack/order/order-placed"
+import { renderOrderCompleted } from "../../../templates/slack/order/order-completed"
+import { renderOrderUpdated } from "../../../templates/slack/order/order-updated"
+import { renderOrderCanceled } from "../../../templates/slack/order/order-canceled"
+import { renderOrderArchived } from "../../../templates/slack/order/order-archived"
 
 export class SlackActionService extends BaseActionService {
   id = "slack"
@@ -35,6 +40,12 @@ export class SlackActionService extends BaseActionService {
       renderProductVariant as any
     )
     this.registerTemplate("product", renderProduct as any)
+    
+    this.registerTemplate("order-placed", renderOrderPlaced as any)
+    this.registerTemplate("order-completed", renderOrderCompleted as any)
+    this.registerTemplate("order-updated", renderOrderUpdated as any)
+    this.registerTemplate("order-canceled", renderOrderCanceled as any)
+    this.registerTemplate("order-archived", renderOrderArchived as any)
   }
 
   /**

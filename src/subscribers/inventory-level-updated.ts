@@ -46,7 +46,7 @@ export default async function inventoryLevelUpdatedHandler({
     input: {
       eventName: eventName,
       eventType: TriggerType.EVENT,
-      triggerKey: `inventory_level-${id}`,
+      triggerKey: `inventory_level-updated-${id}`,
       context: contextData,
       contextType: "inventory-level",
     },
