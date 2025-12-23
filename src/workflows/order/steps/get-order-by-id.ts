@@ -7,7 +7,7 @@ import {
   StepResponse,
   createStep,
 } from "@medusajs/framework/workflows-sdk"
-import { ORDER_ATTRIBUTES } from "../../../modules/mpn-automation/types/modules/order"
+import { ORDER_QUERY_FIELDS } from "../../../modules/mpn-automation/types/modules/order"
 import { getFieldsFromAttributes } from "../../../utils"
 
 export interface GetOrderByIdStepInput {
@@ -45,17 +45,15 @@ export const getOrderByIdStep = createStep(
       )
     }
 
-    // Generate fields from ORDER_ATTRIBUTES to keep them in sync
+    // Generate fields from ORDER_QUERY_FIELDS which includes technical relations needed for totals calculation
     const fields = getFieldsFromAttributes(
-      ORDER_ATTRIBUTES as Array<{
-        value?: string
-      }>,
+      ORDER_QUERY_FIELDS.map((field) => ({ value: field })),
       "order"
     )
 
     const { data: orders } = await query.graph({
       entity: "order",
-      fields,
+      fields: fields,
       filters: {
         id: {
           $in: [input.order_id],

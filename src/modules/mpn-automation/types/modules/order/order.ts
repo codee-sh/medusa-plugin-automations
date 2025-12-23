@@ -1,3 +1,5 @@
+// Attributes available in rules (without technical relations with *)
+// These attributes are displayed in the UI for creating conditions in automations
 export const ORDER_ATTRIBUTES = [
   // Basic fields
   {
@@ -15,10 +17,6 @@ export const ORDER_ATTRIBUTES = [
   {
     value: "order.status",
     label: "Status",
-  },
-  {
-    value: "order.version",
-    label: "Version",
   },
   {
     value: "order.locale",
@@ -44,8 +42,7 @@ export const ORDER_ATTRIBUTES = [
     value: "order.updated_at",
     label: "Updated At",
   },
-
-  // Financial fields
+  // Totals
   {
     value: "order.total",
     label: "Total",
@@ -57,14 +54,6 @@ export const ORDER_ATTRIBUTES = [
   {
     value: "order.tax_total",
     label: "Tax Total",
-  },
-  {
-    value: "order.discount_total",
-    label: "Discount Total",
-  },
-  {
-    value: "order.discount_tax_total",
-    label: "Discount Tax Total",
   },
   {
     value: "order.original_total",
@@ -79,67 +68,51 @@ export const ORDER_ATTRIBUTES = [
     label: "Original Tax Total",
   },
   {
-    value: "order.item_total",
-    label: "Item Total",
+    value: "order.discount_total",
+    label: "Discount Total",
   },
   {
-    value: "order.item_subtotal",
-    label: "Item Subtotal",
+    value: "order.discount_tax_total",
+    label: "Discount Tax Total",
+  },
+  // Shipping (specific fields, not *)
+  {
+    value: "order.shipping_methods.amount",
+    label: "Shipping Methods Amount",
   },
   {
-    value: "order.item_tax_total",
-    label: "Item Tax Total",
+    value: "order.shipping_methods.subtotal",
+    label: "Shipping Methods Subtotal",
   },
   {
-    value: "order.original_item_total",
-    label: "Original Item Total",
+    value: "order.shipping_methods.tax_total",
+    label: "Shipping Methods Tax Total",
   },
   {
-    value: "order.original_item_subtotal",
-    label: "Original Item Subtotal",
+    value: "order.shipping_methods.original_total",
+    label: "Shipping Methods Original Total",
   },
   {
-    value: "order.original_item_tax_total",
-    label: "Original Item Tax Total",
+    value: "order.shipping_methods.original_subtotal",
+    label: "Shipping Methods Original Subtotal",
   },
   {
-    value: "order.shipping_total",
-    label: "Shipping Total",
+    value: "order.shipping_methods.original_tax_total",
+    label: "Shipping Methods Original Tax Total",
   },
   {
-    value: "order.shipping_subtotal",
-    label: "Shipping Subtotal",
+    value: "order.shipping_methods.discount_total",
+    label: "Shipping Methods Discount Total",
   },
   {
-    value: "order.shipping_tax_total",
-    label: "Shipping Tax Total",
+    value: "order.shipping_methods.discount_subtotal",
+    label: "Shipping Methods Discount Subtotal",
   },
   {
-    value: "order.original_shipping_total",
-    label: "Original Shipping Total",
+    value: "order.shipping_methods.discount_tax_total",
+    label: "Shipping Methods Discount Tax Total",
   },
-  {
-    value: "order.original_shipping_subtotal",
-    label: "Original Shipping Subtotal",
-  },
-  {
-    value: "order.original_shipping_tax_total",
-    label: "Original Shipping Tax Total",
-  },
-  {
-    value: "order.credit_line_total",
-    label: "Credit Line Total",
-  },
-  {
-    value: "order.credit_line_subtotal",
-    label: "Credit Line Subtotal",
-  },
-  {
-    value: "order.credit_line_tax_total",
-    label: "Credit Line Tax Total",
-  },
-
-  // Summary fields
+  // Summary (specific fields)
   {
     value: "order.summary.total",
     label: "Summary Total",
@@ -160,7 +133,34 @@ export const ORDER_ATTRIBUTES = [
     value: "order.summary.original_order_total",
     label: "Summary Original Order Total",
   },
-
+  {
+    value: "order.summary.current_order_total",
+    label: "Summary Current Order Total",
+  },
+  {
+    value: "order.summary.paid_total",
+    label: "Summary Paid Total",
+  },
+  {
+    value: "order.summary.refunded_total",
+    label: "Summary Refunded Total",
+  },
+  {
+    value: "order.summary.accounting_total",
+    label: "Summary Accounting Total",
+  },
+  {
+    value: "order.summary.credit_line_total",
+    label: "Summary Credit Line Total",
+  },
+  {
+    value: "order.summary.transaction_total",
+    label: "Summary Transaction Total",
+  },
+  {
+    value: "order.summary.pending_difference",
+    label: "Summary Pending Difference",
+  },
   // Customer relation
   {
     value: "order.customer.id",
@@ -186,7 +186,6 @@ export const ORDER_ATTRIBUTES = [
     isRelation: true,
     relationType: "customer",
   },
-
   // Sales channel relation
   {
     value: "order.sales_channel.id",
@@ -200,7 +199,6 @@ export const ORDER_ATTRIBUTES = [
     isRelation: true,
     relationType: "sales_channel",
   },
-
   // Shipping address
   {
     value: "order.shipping_address.first_name",
@@ -238,7 +236,6 @@ export const ORDER_ATTRIBUTES = [
     isRelation: true,
     relationType: "shipping_address",
   },
-
   // Billing address
   {
     value: "order.billing_address.first_name",
@@ -276,8 +273,7 @@ export const ORDER_ATTRIBUTES = [
     isRelation: true,
     relationType: "billing_address",
   },
-
-  // Items (array relation)
+  // Items (specific fields, not *)
   {
     value: "order.items.id",
     label: "Item ID",
@@ -334,8 +330,7 @@ export const ORDER_ATTRIBUTES = [
     isRelation: true,
     relationType: "items",
   },
-
-  // Payment collections (array relation)
+  // Payment collections
   {
     value: "order.payment_collections.id",
     label: "Payment Collection ID",
@@ -357,8 +352,7 @@ export const ORDER_ATTRIBUTES = [
     isRelation: true,
     relationType: "payment_collections",
   },
-
-  // Fulfillments (array relation)
+  // Fulfillments
   {
     value: "order.fulfillments.id",
     label: "Fulfillment ID",
@@ -375,3 +369,21 @@ export const ORDER_ATTRIBUTES = [
   },
 ]
 
+// Fields for use in query.graph() - includes technical relations with *
+// These fields are required for correct totals calculation by OrderModuleService
+// ORDER_QUERY_FIELDS contains all fields from ORDER_ATTRIBUTES plus technical relations
+export const ORDER_QUERY_FIELDS = [
+  // Basic fields from ORDER_ATTRIBUTES
+  ...ORDER_ATTRIBUTES.map((attr) => attr.value),
+  
+  // Technical relations required for totals calculation
+  // These fields are not available in UI rules, but are needed for correct data retrieval
+  "order.items.*",
+  "order.items.tax_lines.*",
+  "order.items.adjustments.*",
+  "order.shipping_methods.*",
+  "order.shipping_methods.tax_lines.*",
+  "order.shipping_methods.adjustments.*",
+  "order.credit_lines.*",
+  "order.summary.*",
+]
