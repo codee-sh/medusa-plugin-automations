@@ -65,3 +65,15 @@ export const INVENTORY_LEVEL_ATTRIBUTES = [
     relationType: "stock_locations",
   },
 ]
+
+// Fields for use in query.graph() - includes technical relations with *
+// These fields are needed for correct data retrieval including all relation data
+// INVENTORY_LEVEL_QUERY_FIELDS contains all fields from INVENTORY_LEVEL_ATTRIBUTES plus technical relations
+export const INVENTORY_LEVEL_QUERY_FIELDS = [
+  // Basic fields from INVENTORY_LEVEL_ATTRIBUTES
+  ...INVENTORY_LEVEL_ATTRIBUTES.map((attr) => attr.value),
+  
+  // Technical relations required for complete data retrieval
+  // These fields are not available in UI rules, but are needed for correct data retrieval
+  "inventory_level.stock_locations.*",
+]

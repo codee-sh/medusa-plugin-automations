@@ -7,6 +7,7 @@ import { PRODUCT_VARIANT_ATTRIBUTES } from "./product-variant"
 import { PRODUCT_TAG_ATTRIBUTES } from "./product-tag"
 import { PRODUCT_TYPE_ATTRIBUTES } from "./product-type"
 import { PRODUCT_CATEGORY_ATTRIBUTES } from "./product-category"
+import { ORDER_ATTRIBUTES } from "./order"
 import { Attribute } from "../types"
 
 /**
@@ -133,6 +134,51 @@ const EVENT_METADATA_REGISTRY: Record<string, any> = {
       {
         value: "product-category",
         name: "Product Category",
+      },
+    ],
+  },
+  "order.updated": {
+    attributes: ORDER_ATTRIBUTES,
+    templates: [
+      {
+        value: "order-updated",
+        name: "Order updated",
+      },
+    ],
+  },
+  "order.placed": {
+    attributes: ORDER_ATTRIBUTES,
+    templates: [
+      {
+        value: "order-placed",
+        name: "Order placed",
+      },
+    ],
+  },
+  "order.canceled": {
+    attributes: ORDER_ATTRIBUTES,
+    templates: [
+      {
+        value: "order-canceled",
+        name: "Order canceled",
+      },
+    ],
+  },
+  "order.completed": {
+    attributes: ORDER_ATTRIBUTES,
+    templates: [
+      {
+        value: "order-completed",
+        name: "Order completed",
+      },
+    ],
+  },
+  "order.archived": {
+    attributes: ORDER_ATTRIBUTES,
+    templates: [
+      {
+        value: "order-archived",
+        name: "Order archived",
       },
     ],
   },
