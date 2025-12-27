@@ -10,7 +10,7 @@ import {
   StepResponse,
   createStep,
 } from "@medusajs/framework/workflows-sdk"
-import { INVENTORY_LEVEL_ATTRIBUTES } from "../../../modules/mpn-automation/types/modules/inventory"
+import { INVENTORY_LEVEL_QUERY_FIELDS } from "../../../modules/mpn-automation/types/modules/inventory"
 import { getFieldsFromAttributes } from "../../../utils"
 
 export interface GetInventoryLevelByIdStepInput {
@@ -54,11 +54,9 @@ export const getInventoryLevelByIdStep = createStep(
       )
     }
 
-    // Generate fields from INVENTORY_LEVEL_ATTRIBUTES to keep them in sync
+    // Generate fields from INVENTORY_LEVEL_QUERY_FIELDS which includes technical relations needed for complete data retrieval
     const fields = getFieldsFromAttributes(
-      INVENTORY_LEVEL_ATTRIBUTES as Array<{
-        value?: string
-      }>,
+      INVENTORY_LEVEL_QUERY_FIELDS.map((field) => ({ value: field })),
       "inventory_level"
     )
 

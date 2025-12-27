@@ -5,9 +5,17 @@
 
 name: Generate Release Notes (Backup)
 
+# DISABLED - Using GitHub's built-in "Generate release notes" instead
+# This workflow is kept for reference but will NOT run automatically.
+# To enable: uncomment the "on:" section below and remove workflow_dispatch
+
+# on:
+#   release:
+#     types: [created]
+
+# Only allows manual trigger, prevents automatic execution
 on:
-  release:
-    types: [created]
+  workflow_dispatch:
 
 jobs:
   generate-release-notes:

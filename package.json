@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
-    "@codee-sh/medusa-plugin-notification-emails": "0.0.2",
+    "@codee-sh/medusa-plugin-notification-emails": "0.1.0",
     "@medusajs/admin-sdk": "2.8.8",
     "@medusajs/cli": "2.8.8",
     "@medusajs/framework": "2.8.8",

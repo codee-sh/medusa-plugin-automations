@@ -44,6 +44,16 @@ export type Attribute = {
   value?: string
   label?: string
   /**
+   * Description of what this attribute represents
+   * Example: "Total amount of the order including taxes and shipping"
+   */
+  description?: string
+  /**
+   * Example values for this attribute
+   * Example: ["completed", "pending", "canceled"] for status fields
+   */
+  examples?: string[]
+  /**
    * Type of the attribute value
    * - "primitive": single value (string, number, boolean)
    * - "array": array of values (e.g., tags, categories)

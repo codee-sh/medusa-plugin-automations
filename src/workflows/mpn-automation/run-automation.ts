@@ -4,35 +4,68 @@ import {
   WorkflowResponse,
   transform,
 } from "@medusajs/framework/workflows-sdk"
-import { validateAutomationTriggersByEventWorkflow } from "./validate-automation-triggers-by-event"
+import { validateTriggersByEventWorkflow } from "./validate-triggers-by-event"
+import { validateTriggerThrottleStep } from "./steps/validate-trigger-throttle"
 import { runAutomationActionsStep } from "./steps/run-automation-actions"
 import { saveAutomationStateWorkflow } from "./save-automation-state"
 import { TriggerType } from "../../utils/types"
 import { logStep } from "../../workflows/steps/log-step"
 
 export interface RunAutomationWorkflowInput {
+  /**
+   * Event name to match triggers (e.g. "order.placed")
+   */
   eventName: string
+  /**
+   * Type of trigger: "event", "schedule", or "manual"
+   */
   eventType: TriggerType
+  /**
+   * Unique key for throttle tracking (e.g. order_id)
+   */
   triggerKey: string
+  /**
+   * Event payload data for rules evaluation and actions
+   */
   context: Record<string, any>
+  /**
+   * Optional context type identifier
+   */
   contextType?: string | null
 }
 
 export interface RunAutomationWorkflowOutput {
-  triggersFound: number
-  triggersValidated: number
-  triggersExecuted: number
-  totalActionsExecuted: number
-  results: Array<{
-    triggerId?: string
-    isValid: boolean
-    actionsExecuted: number
-    actions: Array<{
-      actionId?: string
-      actionType?: string | null
-      success: boolean
-    }>
-  }>
+  /**
+   * All active triggers found for this event
+   */
+  triggers: any[]
+  /**
+   * Triggers that passed rules validation
+   */
+  triggersValidated: any[]
+  /**
+   * Triggers blocked by throttle (interval_seconds not passed)
+   */
+  triggersThrottled: any[]
+  /**
+   * Triggers that passed rules AND throttle check
+   */
+  triggersPassedThrottle: any[]
+  /**
+   * Triggers with actions executed
+   */
+  triggersExecuted: any[]
+  /**
+   * States saved for throttle tracking
+   */
+  statesSaved: any[]
+
+  triggersCount: number
+  triggersValidatedCount: number
+  triggersThrottledCount: number
+  triggersPassedThrottleCount: number
+  triggersExecutedCount: number
+  statesSavedCount: number
 }
 
 export const runAutomationWorkflowId = "run-automation"
@@ -42,8 +75,10 @@ export const runAutomationWorkflowId = "run-automation"
  *
  * This workflow:
  * 1. Retrieves all active triggers for the event
- * 2. Validates triggers against the provided context
- * 3. Executes actions for triggers that passed validation
+ * 2. Validates triggers against rules (conditions)
+ * 3. Checks throttle limits (interval_seconds)
+ * 4. Executes actions for triggers that passed validation and throttle
+ * 5. Saves automation trigger state for throttle tracking
  *
  * @example
  * ```typescript
@@ -67,9 +102,11 @@ export const runAutomationWorkflowId = "run-automation"
 export const runAutomationWorkflow = createWorkflow(
   runAutomationWorkflowId,
   (input: WorkflowData<RunAutomationWorkflowInput>) => {
-    // Step 1: Retrieve and validate triggers by the event
+    /**
+     * Step 1: Retrieve and validate triggers by the event (rules validation)
+     */
     const getValidationResult =
-      validateAutomationTriggersByEventWorkflow.runAsStep({
+      validateTriggersByEventWorkflow.runAsStep({
         input: {
           eventName: input.eventName,
           eventType: input.eventType,
@@ -77,17 +114,47 @@ export const runAutomationWorkflow = createWorkflow(
         },
       })
 
-    // Step 2: Run actions for all validated triggers
+    /**
+     * Step 2: Check throttle limits for validated triggers
+     */
+    const getTriggerThrottleResult = validateTriggerThrottleStep({
+      validatedTriggers:
+        getValidationResult.triggersValidated,
+      targetKey: input.triggerKey,
+    })
+
+    /**
+     * Step 3: Transform throttle results to format expected by runAutomationActionsStep
+     */
+    const triggersAfterThrottle = transform(
+      { getTriggerThrottleResult },
+      (data) => {
+        const results = data.getTriggerThrottleResult || []
+        // Filter to only non-throttled, valid triggers
+        return results
+          .filter((r: any) => r.isValid && !r.isThrottled)
+          .map((r: any) => ({
+            isValid: r.isValid,
+            trigger: r.trigger,
+            actions: r.trigger.actions || [],
+          }))
+      }
+    )
+
+    /**
+     * Step 4: Run actions for triggers that passed throttle check
+     */
     const getActionRunningResult = runAutomationActionsStep(
       {
-        validatedTriggers:
-          getValidationResult.triggersValidated,
+        validatedTriggers: triggersAfterThrottle,
         context: input.context,
         contextType: input.contextType,
       }
     )
 
-    // Step 3: Save automation state
+    /**
+     * Step 5: Save automation state
+     */
     const getSaveAutomationStateResult =
       saveAutomationStateWorkflow.runAsStep({
         input: {
@@ -96,10 +163,13 @@ export const runAutomationWorkflow = createWorkflow(
         },
       })
 
-    // Combine all results
+    /**
+     * Combine all results
+     */
     const finalResult = transform(
       {
         getValidationResult,
+        getTriggerThrottleResult,
         getActionRunningResult,
         getSaveAutomationStateResult,
       },
@@ -108,6 +178,14 @@ export const runAutomationWorkflow = createWorkflow(
           data.getValidationResult.triggers || []
         const triggersValidated =
           data.getValidationResult.triggersValidated || []
+        const throttleResults = data.getTriggerThrottleResult || []
+        const triggersThrottled = throttleResults.filter(
+          (r: any) => r.isThrottled
+        )
+        const triggersPassedThrottle =
+          throttleResults.filter(
+            (r: any) => !r.isThrottled && r.isValid
+          )
         const triggersExecuted =
           data.getActionRunningResult.triggersExecuted || []
         const statesSaved =
@@ -117,11 +195,17 @@ export const runAutomationWorkflow = createWorkflow(
         return {
           triggers,
           triggersValidated,
+          triggersThrottled,
+          triggersPassedThrottle,
           triggersExecuted,
           statesSaved,
           triggersCount: triggers.length || 0,
           triggersValidatedCount:
             triggersValidated.length || 0,
+          triggersThrottledCount:
+            triggersThrottled.length || 0,
+          triggersPassedThrottleCount:
+            triggersPassedThrottle.length || 0,
           triggersExecutedCount:
             triggersExecuted.length || 0,
           statesSavedCount: statesSaved.length || 0,
@@ -129,6 +213,9 @@ export const runAutomationWorkflow = createWorkflow(
       }
     )
 
+    /**
+     * Log the final result
+     */
     logStep(finalResult)
 
     return new WorkflowResponse(finalResult)

@@ -5,20 +5,20 @@ import {
   transform,
 } from "@medusajs/framework/workflows-sdk"
 import { getAutomationTriggersByEventStep } from "./steps/retrieve-automation-triggers-by-event"
-import { validateAutomationTriggersStep } from "./steps/validate-automation-triggers"
+import { validateTriggersRulesStep } from "./steps/validate-triggers-rules"
 import { TriggerType } from "../../utils/types"
 import {
   AutomationTrigger,
   AutomationAction,
 } from "../../modules/mpn-automation/types/interfaces"
 
-export interface ValidateAutomationTriggersByEventWorkflowInput {
+export interface ValidateTriggersByEventWorkflowInput {
   eventName: string
   eventType: TriggerType
   context: Record<string, any>
 }
 
-export interface ValidateAutomationTriggersByEventWorkflowOutput {
+export interface ValidateTriggersByEventWorkflowOutput {
   validated: Array<{
     isValid: boolean
     trigger: AutomationTrigger
@@ -27,8 +27,8 @@ export interface ValidateAutomationTriggersByEventWorkflowOutput {
   triggersCount: number
 }
 
-export const validateAutomationTriggersByEventWorkflowId =
-  "validate-automation-triggers-by-event"
+export const validateTriggersByEventWorkflowId =
+  "validate-triggers-by-event"
 
 /**
  * This workflow retrieves notification triggers for an event and validates them against context data.
@@ -44,11 +44,11 @@ export const validateAutomationTriggersByEventWorkflowId =
  *   }
  * })
  */
-export const validateAutomationTriggersByEventWorkflow =
+export const validateTriggersByEventWorkflow =
   createWorkflow(
-    validateAutomationTriggersByEventWorkflowId,
+    validateTriggersByEventWorkflowId,
     (
-      input: WorkflowData<ValidateAutomationTriggersByEventWorkflowInput>
+      input: WorkflowData<ValidateTriggersByEventWorkflowInput>
     ) => {
       // Retrieve triggers for the event
       const getTriggers = getAutomationTriggersByEventStep({
@@ -58,7 +58,7 @@ export const validateAutomationTriggersByEventWorkflow =
 
       // Validate all triggers against context
       const getValidatedTriggers =
-        validateAutomationTriggersStep({
+        validateTriggersRulesStep({
           triggers: getTriggers || [],
           context: input.context,
         })

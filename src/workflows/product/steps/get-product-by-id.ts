@@ -7,7 +7,7 @@ import {
   StepResponse,
   createStep,
 } from "@medusajs/framework/workflows-sdk"
-import { PRODUCT_ATTRIBUTES } from "../../../modules/mpn-automation/types/modules/product"
+import { PRODUCT_QUERY_FIELDS } from "../../../modules/mpn-automation/types/modules/product"
 import { getFieldsFromAttributes } from "../../../utils"
 
 export interface GetProductByIdStepInput {
@@ -45,9 +45,9 @@ export const getProductByIdStep = createStep(
       )
     }
 
-    // Generate fields from PRODUCT_ATTRIBUTES to keep them in sync
+    // Generate fields from PRODUCT_QUERY_FIELDS which includes technical relations needed for complete data retrieval
     const fields = getFieldsFromAttributes(
-      PRODUCT_ATTRIBUTES,
+      PRODUCT_QUERY_FIELDS.map((field) => ({ value: field })),
       "product"
     )
 
