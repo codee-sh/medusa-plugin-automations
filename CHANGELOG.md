@@ -1,14 +1,5 @@
 # @codee-sh/medusa-plugin-automations
 
-## 1.0.8
-
-### Patch Changes
-
-- 0f4640f: update ORDER_ATTRIBUTES to ORDER_QUERY_FIELDS for improved totals calculation and UI consistency
-- 5eb910c: Update contributing
-- 9d7690f: Update in the column name
-- 03b493a: feat: Add throttle support for event triggers
-
 ## 1.0.7
 
 ### Patch Changes
