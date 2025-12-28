@@ -1,6 +1,8 @@
 import { FieldConfig } from "../types"
 import { BaseActionService } from "./base-action-service"
 import { renderTemplate } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
+import { transformContext } from "@codee-sh/medusa-plugin-notification-emails/utils"
+
 import type {
   TemplateData,
   TemplateOptionsType,
@@ -95,14 +97,16 @@ export class EmailActionService extends BaseActionService {
     const {
       templateName,
       context,
+      contextType,
       options,
       customTemplateFunction,
     } = params
 
-    // Use external plugin's renderTemplate function
+    const transformedContext = transformContext(contextType, context)
+
     const result = await renderTemplate(
       templateName,
-      context,
+      transformedContext,
       options || {},
       customTemplateFunction
     )
