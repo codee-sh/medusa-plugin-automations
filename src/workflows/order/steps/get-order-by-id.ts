@@ -1,4 +1,4 @@
-import type { OrderTypes } from "@medusajs/framework/types"
+import type { OrderTypes, CustomerTypes } from "@medusajs/framework/types"
 import {
   ContainerRegistrationKeys,
   MedusaError,
@@ -15,7 +15,9 @@ export interface GetOrderByIdStepInput {
 }
 
 export interface GetOrderByIdStepOutput {
-  order: OrderTypes.OrderDTO
+  order: OrderTypes.OrderDTO & {
+    customer: CustomerTypes.CustomerDTO
+  }
 }
 
 export const getOrderByIdStepId = "get-order-by-id"
