@@ -20,7 +20,6 @@ export class BaseActionService implements ActionHandler {
 
   // Fields for the action configuration rendered in the admin panel then saved in the action config
   fields: FieldConfig[] = []
-
   /**
    * Helper method to add templateName field to fields array
    * Call this in constructor or fields initialization if you need template selection
