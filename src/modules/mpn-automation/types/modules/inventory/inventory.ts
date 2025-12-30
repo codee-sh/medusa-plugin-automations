@@ -92,6 +92,14 @@ export const INVENTORY_LEVEL_ATTRIBUTES = [
     isRelation: true,
     relationType: "stock_locations",
   },
+  {
+    value: "inventory_level.inventory_item.title",
+    label: "Inventory Item Title",
+    description: "Inventory item title",
+    examples: ["Product A", "Product B", "Product C"],
+    isRelation: true,
+    relationType: "inventory_item",
+  },
 ]
 
 // Fields for use in query.graph() - includes technical relations with *

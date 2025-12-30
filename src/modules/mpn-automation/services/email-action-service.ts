@@ -1,6 +1,6 @@
 import { FieldConfig } from "../types"
 import { BaseActionService } from "./base-action-service"
-import { renderTemplate } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
+import { emailService } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
 import { transformContext } from "@codee-sh/medusa-plugin-notification-emails/utils"
 
 import type {
@@ -71,8 +71,12 @@ export class EmailActionService extends BaseActionService {
    * This method can be used to register custom templates if needed
    */
   protected initializeTemplates(): void {
-    // Email templates are handled by external plugin
-    // Custom templates can be registered here if needed
+    // Email engine already has all prebuild templates registered
+    // You can register custom templates here if needed:
+    // emailEngine.registerTemplate("custom-template", {
+    //   ...emailEngine.getBaseTemplate(),
+    //   getConfig: () => ({ blocks: [...], translations: {...} })
+    // })
   }
 
   /**
@@ -85,10 +89,6 @@ export class EmailActionService extends BaseActionService {
     context: TemplateData
     contextType?: string | null
     options?: TemplateOptionsType
-    customTemplateFunction?: (
-      data: TemplateData,
-      options: TemplateOptionsType
-    ) => React.ReactElement<any>
   }): Promise<{
     html: string
     text: string
@@ -98,19 +98,21 @@ export class EmailActionService extends BaseActionService {
       templateName,
       context,
       contextType,
-      options,
-      customTemplateFunction,
+      options = {}
     } = params
 
     const transformedContext = transformContext(contextType, context)
 
-    const result = await renderTemplate(
+    const result = await emailService.render({
       templateName,
-      transformedContext,
-      options || {},
-      customTemplateFunction
-    )
+      data: transformedContext,
+      options: options || {},
+    })
 
-    return result
+    return {
+      html: result.html,
+      text: result.text,
+      subject: result.subject,
+    }
   }
 }

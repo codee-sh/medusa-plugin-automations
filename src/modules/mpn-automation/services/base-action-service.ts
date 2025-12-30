@@ -32,7 +32,7 @@ export class BaseActionService implements ActionHandler {
    */
   registerTemplate(
     name: string,
-    renderer: TemplateRenderer
+    renderer: any
   ): void {
     this.templates_.set(name, renderer)
   }
@@ -42,7 +42,7 @@ export class BaseActionService implements ActionHandler {
    * @param name - Template name
    * @returns Template renderer or undefined
    */
-  getTemplate(name: string): TemplateRenderer | undefined {
+  getTemplate(name: string): any | undefined {
     return this.templates_.get(name)
   }
 
