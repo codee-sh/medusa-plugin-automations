@@ -71,29 +71,40 @@ export class SlackNotificationProviderService extends AbstractNotificationProvid
       }
     }
 
-    const response = await fetch(
-      this.options_.webhook_url,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          text: content.text,
-          blocks: content.blocks,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-
-    if (!response.ok) {
-      throw new MedusaError(
-        MedusaError.Types.UNEXPECTED_STATE,
-        "Failed to send notification to Slack"
+    try {
+      const response = await fetch(
+        this.options_.webhook_url,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            text: content.text,
+            blocks: content.blocks,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       )
-    }
 
-    return {
-      status: response.ok ? "success" : "failed",
+      // Slack webhook API returns "ok" as plain text, not JSON
+      const responseText = await response.text()
+
+      if (responseText !== "ok") {
+        throw new MedusaError(
+          MedusaError.Types.UNEXPECTED_STATE,
+          `Failed to send notification to Slack: ${responseText}`
+        )
+      }
+
+      return {
+        status: responseText === "ok" ? "success" : "failed",
+      }
+    } catch (error) {
+      console.error("Failed to send notification to Slack", error)
+
+      return {
+        status: "failed"
+      }
     }
   }
 }

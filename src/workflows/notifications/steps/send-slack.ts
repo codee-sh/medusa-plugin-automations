@@ -4,12 +4,11 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
 import type { NotificationContent } from "@medusajs/framework/types"
-import type { SlackBlock } from "../../../templates/slack/types"
 import MpnAutomationService from "../../../modules/mpn-automation/services/service"
 import { MedusaError } from "@medusajs/utils"
 
 type SlackNotificationContent = NotificationContent & {
-  blocks?: SlackBlock[]
+  blocks?: any[]
 }
 
 export interface SendSlackConfig {
