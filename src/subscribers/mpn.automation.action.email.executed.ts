@@ -3,6 +3,7 @@ import {
   type SubscriberConfig,
 } from "@medusajs/medusa"
 import { runEmailActionWorkflow } from "../workflows/mpn-automation/run-email-action"
+import { getPluginOptions } from "../utils/plugins"
 
 /**
  * Event name for the MPN automation action email executed event.
@@ -28,6 +29,15 @@ export default async function mpnAutomationActionEmailExecutedHandler({
     eventName: triggerEventName,
     contextType,
   } = data
+  const pluginOptions = getPluginOptions(container, "@codee-sh/medusa-plugin-notification-emails")
+  const backendUrl = pluginOptions?.backend_url
+
+  const contextData = {
+    ...context,
+    global: {
+      backend_url: backendUrl,
+    },
+  }
 
   const { result } = await runEmailActionWorkflow(
     container
@@ -45,7 +55,7 @@ export default async function mpnAutomationActionEmailExecutedHandler({
             "inventory-level",
         },
       },
-      context: context,
+      context: contextData,
       contextType: contextType,
       eventName: triggerEventName,
     },

@@ -46,10 +46,7 @@ export class SlackActionService extends BaseActionService {
 
     const { blocks } = await slackService.render({
       templateName: params.templateName,
-      data: {
-        ...transformedContext,
-        backend_url: params.options?.backendUrl,
-      },
+      data: transformedContext,
       options: params.options
     })
 

@@ -4,6 +4,7 @@ import {
 } from "@medusajs/medusa"
 import { getInventoryLevelByIdWorkflow } from "../workflows/inventory/get-inventory-level-by-id"
 import { runAutomationWorkflow } from "../workflows/mpn-automation/run-automation"
+import { getPluginOptions } from "../utils/plugins"
 import { TriggerType } from "../utils/types"
 
 const eventName = "inventory.inventory-level.updated"

@@ -3,6 +3,7 @@ import {
   type SubscriberConfig,
 } from "@medusajs/medusa"
 import { runSlackActionWorkflow } from "../workflows/mpn-automation/run-slack-action"
+import { getPluginOptions } from "../utils/plugins"
 
 /**
  * Event name for the MPN automation action slack executed event.
@@ -28,9 +29,19 @@ export default async function mpnAutomationActionSlackExecutedHandler({
     eventName: triggerEventName,
     contextType,
   } = data
-  const config = container.resolve("configModule") as any
-  const moduleConfig = config?.modules.mpnAutomation
-  const backendUrl = moduleConfig?.options.backend_url
+  const pluginOptions = getPluginOptions(container, "@codee-sh/medusa-plugin-notification-emails")
+  const backendUrl = pluginOptions?.backend_url
+
+  // const config = container.resolve("configModule") as any
+  // const moduleConfig = config?.modules.mpnAutomation
+  // const backendUrl = moduleConfig?.options.backend_url
+
+  const contextData = {
+    ...context,
+    global: {
+      backend_url: backendUrl,
+    },
+  }
 
   // Execute slack action workflow
   const { result } = await runSlackActionWorkflow(
@@ -41,11 +52,10 @@ export default async function mpnAutomationActionSlackExecutedHandler({
         ...action,
         config: {
           ...action.config,
-          template: action.config.templateName,
-          backendUrl: backendUrl,
+          template: action.config.templateName
         },
       },
-      context: context,
+      context: contextData,
       contextType: contextType,
       eventName: triggerEventName,
     },
