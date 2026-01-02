@@ -1,5 +1,12 @@
 # @codee-sh/medusa-plugin-automations
 
+## 1.0.9
+
+### Patch Changes
+
+- 9089a49: Add transformContext from -emails plugin
+- 50fd1f5: Replace the Slack templates with external plugin
+
 ## 1.0.8
 
 ### Patch Changes
