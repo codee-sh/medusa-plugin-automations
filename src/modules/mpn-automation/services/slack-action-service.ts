@@ -1,16 +1,6 @@
 import { BaseActionService } from "./base-action-service"
-import {
-  SlackTemplateRenderer,
-  SlackBlock,
-} from "../../../templates/slack/types"
-import { renderInventoryLevel } from "../../../templates/slack/inventory-level"
-import { renderProductVariant } from "../../../templates/slack/product-variant/product-variant"
-import { renderProduct } from "../../../templates/slack/product/product"
-import { renderOrderPlaced } from "../../../templates/slack/order/order-placed"
-import { renderOrderCompleted } from "../../../templates/slack/order/order-completed"
-import { renderOrderUpdated } from "../../../templates/slack/order/order-updated"
-import { renderOrderCanceled } from "../../../templates/slack/order/order-canceled"
-import { renderOrderArchived } from "../../../templates/slack/order/order-archived"
+import { slackService } from "@codee-sh/medusa-plugin-notification-emails/templates/slack"
+import { transformContext } from "@codee-sh/medusa-plugin-notification-emails/utils"
 
 export class SlackActionService extends BaseActionService {
   id = "slack"
@@ -28,24 +18,16 @@ export class SlackActionService extends BaseActionService {
 
   /**
    * Initialize default Slack templates
+   * Slack engine already has all prebuild templates registered
+   * This method can be used to register custom templates if needed
    */
   protected initializeTemplates(): void {
-    // Register default templates
-    this.registerTemplate(
-      "inventory-level",
-      renderInventoryLevel as any
-    )
-    this.registerTemplate(
-      "product-variant",
-      renderProductVariant as any
-    )
-    this.registerTemplate("product", renderProduct as any)
-    
-    this.registerTemplate("order-placed", renderOrderPlaced as any)
-    this.registerTemplate("order-completed", renderOrderCompleted as any)
-    this.registerTemplate("order-updated", renderOrderUpdated as any)
-    this.registerTemplate("order-canceled", renderOrderCanceled as any)
-    this.registerTemplate("order-archived", renderOrderArchived as any)
+    // Slack engine already has all prebuild templates registered
+    // You can register custom templates here if needed:
+    // slackEngine.registerTemplate("custom-template", {
+    //   ...slackEngine.getBaseTemplate(),
+    //   getConfig: () => ({ blocks: [...], translations: {...} })
+    // })
   }
 
   /**
@@ -58,24 +40,28 @@ export class SlackActionService extends BaseActionService {
     context: any
     contextType?: string | null
     options?: any
-  }): Promise<{ text: string; blocks: SlackBlock[] }> {
-    const renderer = this.getTemplate(
-      params.templateName
-    ) as SlackTemplateRenderer | undefined
+  }): Promise<{ text: string; blocks: any[] }> {
 
-    if (!renderer) {
-      throw new Error(
-        `Slack template "${params.templateName}" not found. Available templates: ${Array.from(this.templates_.keys()).join(", ")}`
-      )
-    }
+    const transformedContext = transformContext(params.contextType, params.context)
 
-    const result = renderer({
-      context: params.context,
-      contextType: params.contextType,
-      options: params.options || {},
+    const { blocks } = await slackService.render({
+      templateName: params.templateName,
+      data: {
+        ...transformedContext,
+        backend_url: params.options?.backendUrl,
+      },
+      options: params.options
     })
 
-    // Handle both sync and async renderers
-    return result instanceof Promise ? await result : result
+    // For Slack, the 'text' field is a fallback for notifications that don't support blocks.
+    // We can derive it from the first header block or a generic message.
+    const fallbackText =
+      blocks.find((b) => b.type === "header" && b.text?.text)?.text?.text ||
+      `Notification for ${params.templateName}`
+
+    return {
+      text: fallbackText,
+      blocks: blocks,
+    }
   }
 }

@@ -560,4 +560,5 @@ export const ORDER_QUERY_FIELDS = [
   "order.fulfillments.*",
   "order.credit_lines.*",
   "order.summary.*",
+  "order.payment_collections.*",
 ]

@@ -1,6 +1,8 @@
 import { FieldConfig } from "../types"
 import { BaseActionService } from "./base-action-service"
-import { renderTemplate } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
+import { emailService } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
+import { transformContext } from "@codee-sh/medusa-plugin-notification-emails/utils"
+
 import type {
   TemplateData,
   TemplateOptionsType,
@@ -69,8 +71,12 @@ export class EmailActionService extends BaseActionService {
    * This method can be used to register custom templates if needed
    */
   protected initializeTemplates(): void {
-    // Email templates are handled by external plugin
-    // Custom templates can be registered here if needed
+    // Email engine already has all prebuild templates registered
+    // You can register custom templates here if needed:
+    // emailEngine.registerTemplate("custom-template", {
+    //   ...emailEngine.getBaseTemplate(),
+    //   getConfig: () => ({ blocks: [...], translations: {...} })
+    // })
   }
 
   /**
@@ -83,10 +89,6 @@ export class EmailActionService extends BaseActionService {
     context: TemplateData
     contextType?: string | null
     options?: TemplateOptionsType
-    customTemplateFunction?: (
-      data: TemplateData,
-      options: TemplateOptionsType
-    ) => React.ReactElement<any>
   }): Promise<{
     html: string
     text: string
@@ -95,18 +97,22 @@ export class EmailActionService extends BaseActionService {
     const {
       templateName,
       context,
-      options,
-      customTemplateFunction,
+      contextType,
+      options = {}
     } = params
 
-    // Use external plugin's renderTemplate function
-    const result = await renderTemplate(
-      templateName,
-      context,
-      options || {},
-      customTemplateFunction
-    )
+    const transformedContext = transformContext(contextType, context)
 
-    return result
+    const result = await emailService.render({
+      templateName,
+      data: transformedContext,
+      options: options || {},
+    })
+
+    return {
+      html: result.html,
+      text: result.text,
+      subject: result.subject,
+    }
   }
 }
