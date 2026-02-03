@@ -89,7 +89,7 @@ export interface FieldConfig {
   placeholder?: string
   required?: boolean
   defaultValue?: any
-  options?: Array<{ value: string; name: string }>
+  options?: Array<{ groupName: string; options: Array<{ value: string; label: string }> }>
   min?: number
   max?: number
   step?: number
