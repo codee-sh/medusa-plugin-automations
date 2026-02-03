@@ -22,6 +22,7 @@ import {
   useListAutomationsActions,
   useEditAutomationAction,
 } from "../../../../hooks/api/automations-actions"
+import { useAutomationsActionsData } from "../../../../hooks/api/automations-actions-data"
 import { useAvailableActions } from "../../../../hooks/api/available-actions"
 import { AutomationsGeneralForm } from "../automations-general-form"
 import { AutomationsRulesForm } from "../automations-rules-form"
@@ -88,6 +89,15 @@ export function AutomationsEditForm({
     extraKey: [id],
     enabled: open && !!id,
   })
+
+  const {
+    data: automationsActionsDataDynamicData,
+    isLoading: isAutomationsActionsDataDynamicLoading,
+  } = useAutomationsActionsData({
+    enabled: open && !!id,
+  })
+
+  console.log("automationsActionsDataDynamicData", automationsActionsDataDynamicData)
 
   // Fetch available actions - initially without eventName, then update when eventName changes
   const { data: availableActionsData } =

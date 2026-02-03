@@ -4,11 +4,11 @@ import {
   createStep,
 } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
-import { getPluginOptions } from "@codee-sh/medusa-plugin-automations/utils/plugins"
-import type {
-  TemplateData,
-  TemplateOptionsType,
-} from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
+// import { getPluginOptions } from "@codee-sh/medusa-plugin-automations/utils/plugins"
+// import type {
+//   TemplateData,
+//   TemplateOptionsType,
+// } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
 import MpnAutomationService from "../../../modules/mpn-automation/services/service"
 import { MedusaError } from "@medusajs/utils"
 
@@ -28,7 +28,7 @@ export interface SendEmailConfig {
 
 export interface SendEmailStepInput {
   settings: SendEmailConfig
-  templateData: TemplateData
+  templateData: any
   eventName?: string
   contextType?: string | null
 }
@@ -47,10 +47,9 @@ export const sendEmailStepId = "send-email"
  * This step can be used independently or as part of automation workflows.
  *
  * Configuration:
- * - templateName: Required - Name of the email template to use
+ * - templateId: Required - ID or name of the email template to use
  * - to: Required - Recipient email address
  * - locale: Optional - Locale for translations (default: "pl")
- * - customTemplate: Optional - Path to custom template function
  * - subject: Optional - Custom subject (otherwise uses template default)
  * - template: Optional - Template identifier for notification (defaults to templateName)
  * - resourceId: Optional - Resource ID for notification tracking
@@ -61,7 +60,7 @@ export const sendEmailStepId = "send-email"
  * // Standalone usage
  * const result = await sendEmailStep({
  *   settings: {
- *     templateName: "inventory-level",
+ *     templateId: "inventory-level",
  *     to: "admin@example.com",
  *     locale: "pl"
  *   },
@@ -99,14 +98,16 @@ export const sendEmailStep = createStep(
       })
     }
 
+    console.log("settings", settings)
+
     try {
       const notificationModuleService = container.resolve(
         Modules.NOTIFICATION
       )
-      const pluginOptions = getPluginOptions(
-        container,
-        "@codee-sh/medusa-plugin-notification-emails"
-      )
+      // const pluginOptions = getPluginOptions(
+      //   container,
+      //   "@codee-sh/medusa-plugin-notification-emails"
+      // )
 
       const templateName = settings.templateName
       const to = settings.to
@@ -118,52 +119,52 @@ export const sendEmailStep = createStep(
       const channel = settings.channel || "email"
       const triggerType = settings.triggerType || "system"
 
-      // Prepare render options
-      const renderOptions: TemplateOptionsType = {
-        locale,
-        theme: pluginOptions?.theme,
-        customTranslations:
-          pluginOptions?.customTranslations?.[templateName],
-        contextType: contextType,
-      }
+      // // Prepare render options
+      // const renderOptions: TemplateOptionsType = {
+      //   locale,
+      //   theme: pluginOptions?.theme,
+      //   customTranslations:
+      //     pluginOptions?.customTranslations?.[templateName],
+      //   contextType: contextType,
+      // }
 
       // Load custom template function if specified
-      let customTemplateFunction:
-        | ((
-            data: TemplateData,
-            options: TemplateOptionsType
-          ) => React.ReactElement<any>)
-        | undefined
+      // let customTemplateFunction:
+      //   | ((
+      //       data: TemplateData,
+      //       options: TemplateOptionsType
+      //     ) => React.ReactElement<any>)
+      //   | undefined
 
-      if (settings.customTemplate) {
-        try {
-          // Dynamic import of custom template
-          // config.customTemplate should be a relative path like "../emails/pos-email-inventory"
-          // or absolute path from project root like "src/emails/pos-email-inventory"
-          const customTemplateModule = await import(
-            settings.customTemplate
-          )
-          customTemplateFunction =
-            customTemplateModule.default ||
-            customTemplateModule.createCustomTemplate ||
-            customTemplateModule.createTemplate
+      // if (settings.customTemplate) {
+      //   try {
+      //     // Dynamic import of custom template
+      //     // config.customTemplate should be a relative path like "../emails/pos-email-inventory"
+      //     // or absolute path from project root like "src/emails/pos-email-inventory"
+      //     const customTemplateModule = await import(
+      //       settings.customTemplate
+      //     )
+      //     customTemplateFunction =
+      //       customTemplateModule.default ||
+      //       customTemplateModule.createCustomTemplate ||
+      //       customTemplateModule.createTemplate
 
-          if (!customTemplateFunction) {
-            throw new MedusaError(
-              MedusaError.Types.INVALID_DATA,
-              `Custom template module from ${settings.customTemplate} does not export a default function or createCustomTemplate/createTemplate`
-            )
-          }
-        } catch (error: any) {
-          if (error instanceof MedusaError) {
-            throw error
-          }
-          throw new MedusaError(
-            MedusaError.Types.INVALID_DATA,
-            `Failed to load custom template from ${settings.customTemplate}: ${error?.message || "Unknown error"}`
-          )
-        }
-      }
+      //     if (!customTemplateFunction) {
+      //       throw new MedusaError(
+      //         MedusaError.Types.INVALID_DATA,
+      //         `Custom template module from ${settings.customTemplate} does not export a default function or createCustomTemplate/createTemplate`
+      //       )
+      //     }
+      //   } catch (error: any) {
+      //     if (error instanceof MedusaError) {
+      //       throw error
+      //     }
+      //     throw new MedusaError(
+      //       MedusaError.Types.INVALID_DATA,
+      //       `Failed to load custom template from ${settings.customTemplate}: ${error?.message || "Unknown error"}`
+      //     )
+      //   }
+      // }
 
       // Use action handler for template rendering
       const mpnAutomationService =
@@ -185,7 +186,10 @@ export const sendEmailStep = createStep(
           templateName: templateName,
           context: templateData,
           contextType: contextType,
-          options: renderOptions,
+          options: {
+            locale: locale,
+          },
+          container: container,
         })
 
       // Send notification

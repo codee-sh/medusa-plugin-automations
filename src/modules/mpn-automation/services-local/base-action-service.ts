@@ -78,6 +78,40 @@ export class BaseActionService implements ActionHandler {
   }
 
   /**
+   * Get available templates for a given event name
+   * Uses getAvailableEvents() to find the event and extract template
+   *
+   * @param eventName - Event name to search for
+   * @returns Array of template options
+   */
+  getTemplatesForEvent({
+    eventName,
+    events,
+  }: {
+    eventName?: string
+    events?: any
+  }): Array<{ value: string; name: string }> {
+    if (!eventName) {
+      return []
+    }
+
+    const allEvents = events || []
+
+    // Search through all event groups
+    for (const group of allEvents) {
+      const event = group.events?.find(
+        (e: any) => e.value === eventName
+      )
+      if (event?.templates && event.templates.length > 0) {
+        return event.templates
+      }
+    }
+
+    return []
+  }
+
+
+  /**
    * Function that executes the action in the workflow actions
    *
    * @param trigger - Trigger object

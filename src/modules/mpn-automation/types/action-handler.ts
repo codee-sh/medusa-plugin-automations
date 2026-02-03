@@ -30,6 +30,11 @@ export interface ActionHandler {
   description?: string
 
   /**
+   * Enabled status of the action
+   */
+  enabled?: boolean
+
+  /**
    * Fields for the action configuration
    */
   fields?: FieldConfig[]
@@ -89,5 +94,6 @@ export interface ActionHandler {
     context: any
     contextType?: string | null
     options?: any
+    container?: any
   }) => Promise<any> | any
 }

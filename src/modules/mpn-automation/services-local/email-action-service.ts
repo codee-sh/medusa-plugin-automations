@@ -1,19 +1,22 @@
 import { FieldConfig } from "../types"
 import { BaseActionService } from "./base-action-service"
-import { emailService } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
 import { transformContext } from "@codee-sh/medusa-plugin-notification-emails/utils"
+import { emailServiceWorkflow } from "@codee-sh/medusa-plugin-notification-emails/workflows/mpn-builder-services/email-service"
 
 import type {
   TemplateData,
   TemplateOptionsType,
 } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
 import React from "react"
+import { getTemplatesWorkflow } from "@codee-sh/medusa-plugin-notification-emails/workflows/mpn-builder/get-templates"
 
 export class EmailActionService extends BaseActionService {
   id = "email"
   label = "Email"
+  container_: any
+  enabled = true
 
-  constructor() {
+  constructor({ events }: { events?: any }) {
     super()
     this.initializeTemplates()
   }
@@ -79,6 +82,47 @@ export class EmailActionService extends BaseActionService {
     // })
   }
 
+  async fetchData(params: {
+    container: any
+  }): Promise<any> {
+    const { result: { templates } } = await getTemplatesWorkflow(params.container).run({
+      input: {},
+    })
+
+    const newFields = this.fields.map((field) => {
+      if (
+        field.key === "templateName" &&
+        field.type === "select"
+      ) {
+        return {
+          ...field,
+          options:
+            templates.length > 0
+              ? templates.map((template: any) => ({
+                value: template.id,
+                name: template.name,
+              }))
+              : field.options || [],
+          defaultValue:
+            templates.length > 0
+              ? templates[0]?.id
+              : field.defaultValue,
+        }
+      }
+      return field
+    })
+
+    return {
+      value: this.id,
+      label: this.label,
+      description: this.description,
+      configComponentKey: this.configComponentKey,
+      fields: newFields,   
+      templates: templates,
+      enabled: this.enabled,
+    }
+  }
+
   /**
    * Render email template using external plugin
    * @param params - Template rendering parameters
@@ -89,6 +133,11 @@ export class EmailActionService extends BaseActionService {
     context: TemplateData
     contextType?: string | null
     options?: TemplateOptionsType
+    container?: any
+    customTemplateFunction?: (
+      data: TemplateData,
+      options: TemplateOptionsType
+    ) => React.ReactElement<any>
   }): Promise<{
     html: string
     text: string
@@ -98,21 +147,28 @@ export class EmailActionService extends BaseActionService {
       templateName,
       context,
       contextType,
-      options = {}
+      options,
+      customTemplateFunction,
+      container,
     } = params
 
     const transformedContext = transformContext(contextType, context)
 
-    const result = await emailService.render({
-      templateName,
-      data: transformedContext,
-      options: options || {},
+    const { result: { html, text, subject } } = await emailServiceWorkflow(container).run({
+      input: {
+        templateId: templateName,
+        data: transformedContext,
+        options: {
+          ...(options || {}),
+          customTemplateFunction,
+        },
+      },
     })
 
     return {
-      html: result.html,
-      text: result.text,
-      subject: result.subject,
+      html: html,
+      text: text,
+      subject: subject,
     }
   }
 }

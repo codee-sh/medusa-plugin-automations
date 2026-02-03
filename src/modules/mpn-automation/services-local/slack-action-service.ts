@@ -5,10 +5,16 @@ import { transformContext } from "@codee-sh/medusa-plugin-notification-emails/ut
 export class SlackActionService extends BaseActionService {
   id = "slack"
   label = "Slack"
-
-  constructor() {
+  enabled = true
+  templates: Array<{ value: string; name: string }> = []
+  events: Array<{ value: string; name: string }> = []
+  
+  constructor({ events }: { events?: any }) {
     super()
+    
     this.initializeTemplates()
+
+    this.events = events || []
   }
 
   fields = [
@@ -29,6 +35,52 @@ export class SlackActionService extends BaseActionService {
     //   getConfig: () => ({ blocks: [...], translations: {...} })
     // })
   }
+
+  async fetchData(params: {
+    container: any
+    eventName: string
+  }): Promise<any> {
+    this.templates = this.getTemplatesForEvent({
+      eventName: params.eventName,
+      events: this.events,
+    })
+
+    const templates = this.templates
+
+    const newFields = this.fields.map((field) => {
+      if (
+        field.key === "templateName" &&
+        field.type === "select"
+      ) {
+        return {
+          ...field,
+          options:
+            templates.length > 0
+              ? templates.map((template: any) => ({
+                value: template.value,
+                name: template.name,
+              }))
+              : field.options || [],
+          defaultValue:
+            templates.length > 0
+              ? templates[0]?.value
+              : field.defaultValue,
+        }
+      }
+      return field
+    })
+
+    return {
+      value: this.id,
+      label: this.label,
+      description: this.description,
+      configComponentKey: this.configComponentKey,
+      fields: newFields,   
+      templates: this.templates,
+      enabled: this.enabled,
+    }
+  }
+
 
   /**
    * Render Slack template
