@@ -11,8 +11,6 @@ export class SlackActionService extends BaseActionService {
   
   constructor({ events }: { events?: any }) {
     super()
-    
-    this.initializeTemplates()
 
     this.events = events || []
   }
@@ -21,20 +19,6 @@ export class SlackActionService extends BaseActionService {
     // Add templateName field - options will be populated dynamically by service based on eventName
     this.addTemplateNameField(),
   ]
-
-  /**
-   * Initialize default Slack templates
-   * Slack engine already has all prebuild templates registered
-   * This method can be used to register custom templates if needed
-   */
-  protected initializeTemplates(): void {
-    // Slack engine already has all prebuild templates registered
-    // You can register custom templates here if needed:
-    // slackEngine.registerTemplate("custom-template", {
-    //   ...slackEngine.getBaseTemplate(),
-    //   getConfig: () => ({ blocks: [...], translations: {...} })
-    // })
-  }
 
   async fetchData(params: {
     container: any
