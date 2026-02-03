@@ -85,39 +85,37 @@ export class EmailActionService extends BaseActionService {
   async fetchData(params: {
     container: any
   }): Promise<any> {
-    const { result: { templates } } = await getTemplatesWorkflow(params.container).run({
+    const { result: { templates: allTemplates } } = await getTemplatesWorkflow(params.container).run({
       input: {},
     })
 
-    const newFields = this.fields.map((field) => {
-      if (
-        field.key === "templateName" &&
-        field.type === "select"
-      ) {
-        return {
-          ...field,
-          options:
-            templates.length > 0
-              ? templates.map((template: any) => ({
-                value: template.id,
-                name: template.name,
-              }))
-              : field.options || [],
-          defaultValue:
-            templates.length > 0
-              ? templates[0]?.id
-              : field.defaultValue,
-        }
-      }
-      return field
-    })
+    const filteredTemplate = allTemplates.find((template: any) => template.id === this.id)
+    const templates = filteredTemplate ? filteredTemplate.templates.db : []
+    const templatesNew = filteredTemplate ? filteredTemplate.templates : []
+
+    const newFieldsNew = this.fillTemplateNameFieldWithOptions(this.fields, [
+      {
+        groupName: "System",
+        options: templatesNew.system.map((template: any) => ({
+          value: template.id,
+          name: template.name,
+        })),
+      },
+      {
+        groupName: "Database",
+        options: templatesNew.db.map((template: any) => ({
+          value: template.id,
+          name: template.label,
+        })),
+      },
+    ])
 
     return {
       value: this.id,
       label: this.label,
       description: this.description,
       configComponentKey: this.configComponentKey,
-      fields: newFields,   
+      fields: newFieldsNew,   
       templates: templates,
       enabled: this.enabled,
     }

@@ -40,35 +40,15 @@ export class SlackActionService extends BaseActionService {
     container: any
     eventName: string
   }): Promise<any> {
-    this.templates = this.getTemplatesForEvent({
+    const templates = this.getTemplatesForEvent({
       eventName: params.eventName,
       events: this.events,
     })
 
-    const templates = this.templates
-
-    const newFields = this.fields.map((field) => {
-      if (
-        field.key === "templateName" &&
-        field.type === "select"
-      ) {
-        return {
-          ...field,
-          options:
-            templates.length > 0
-              ? templates.map((template: any) => ({
-                value: template.value,
-                name: template.name,
-              }))
-              : field.options || [],
-          defaultValue:
-            templates.length > 0
-              ? templates[0]?.value
-              : field.defaultValue,
-        }
-      }
-      return field
-    })
+    const newFields = this.fillTemplateNameFieldWithOptions(this.fields, templates.map((template: any) => ({
+      value: template.value,
+      name: template.name,
+    })))
 
     return {
       value: this.id,

@@ -63,7 +63,7 @@ export class BaseActionService implements ActionHandler {
    * @returns FieldConfig for template
    */
   protected addTemplateNameField(
-    options: Array<{ value: string; name: string }> = [],
+    options: Array<any> = [],
     defaultValue?: string
   ): FieldConfig {
     return {
@@ -75,6 +75,37 @@ export class BaseActionService implements ActionHandler {
       options: options,
       defaultValue: defaultValue,
     }
+  }
+
+  /**
+   * Fill template name field with options
+   * @param field - Field config
+   * @param templates - Templates array
+   * @returns Field config with options filled
+   */
+  protected fillTemplateNameFieldWithOptions(
+    fields: FieldConfig[],
+    templates: Array<any> = []
+  ): FieldConfig[] {
+    return fields.map((field: FieldConfig) => {
+      if (
+        field.key === "templateName" &&
+        field.type === "select"
+      ) {
+        return {
+          ...field,
+          options:
+            templates.length > 0
+              ? templates
+              : field.options || [],
+          defaultValue:
+            templates.length > 0
+              ? templates[0]?.value
+              : field.defaultValue,
+        }
+      }
+      return field
+    })
   }
 
   /**
@@ -109,7 +140,6 @@ export class BaseActionService implements ActionHandler {
 
     return []
   }
-
 
   /**
    * Function that executes the action in the workflow actions
