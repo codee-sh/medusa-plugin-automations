@@ -1,7 +1,4 @@
 import { BaseActionService } from "./base-action-service"
-import {
-  SlackBlock,
-} from "../../../templates/slack/types"
 import { getServicesTypesTemplatesWorkflow } from "@codee-sh/medusa-plugin-notification-emails/workflows/mpn-builder/get-services-types-templates"
 import { slackServiceWorkflow } from "@codee-sh/medusa-plugin-notification-emails/workflows/mpn-builder-services/slack-service"
 
@@ -77,7 +74,7 @@ export class SlackActionService extends BaseActionService {
     contextType?: string | null
     options?: any
     container?: any
-  }): Promise<{ text: string; blocks: SlackBlock[] }> {
+  }): Promise<{ text: string; blocks: any[] }> {
     const {
       templateName,
       context,
@@ -93,7 +90,7 @@ export class SlackActionService extends BaseActionService {
     })
 
     return {
-      text: text || `Notification for ${templateName}`,
+      text: text,
       blocks: blocks,
     }
   }

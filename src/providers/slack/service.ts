@@ -47,16 +47,6 @@ export class SlackNotificationProviderService extends AbstractNotificationProvid
     }
   }
 
-  private async getDisplayAmount(
-    amount: number,
-    currencyCode: string
-  ) {
-    return Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: currencyCode,
-    }).format(amount)
-  }
-
   async send(
     notification: NotificationTypes.ProviderSendNotificationDTO & {
       content: any
