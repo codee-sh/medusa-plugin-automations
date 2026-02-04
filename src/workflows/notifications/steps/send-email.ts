@@ -3,14 +3,9 @@ import {
   StepResponse,
   createStep,
 } from "@medusajs/framework/workflows-sdk"
-import { Modules } from "@medusajs/framework/utils"
-// import { getPluginOptions } from "@codee-sh/medusa-plugin-automations/utils/plugins"
-// import type {
-//   TemplateData,
-//   TemplateOptionsType,
-// } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
-import MpnAutomationService from "../../../modules/mpn-automation/service"
 import { MedusaError } from "@medusajs/utils"
+import { Modules } from "@medusajs/framework/utils"
+import MpnAutomationService from "../../../modules/mpn-automation/service"
 
 export interface SendEmailConfig {
   templateName: string

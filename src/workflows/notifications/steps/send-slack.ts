@@ -3,9 +3,9 @@ import {
   createStep,
 } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
+import { MedusaError } from "@medusajs/utils"
 import type { NotificationContent } from "@medusajs/framework/types"
 import MpnAutomationService from "../../../modules/mpn-automation/service"
-import { MedusaError } from "@medusajs/utils"
 
 type SlackNotificationContent = NotificationContent & {
   blocks?: any[]
