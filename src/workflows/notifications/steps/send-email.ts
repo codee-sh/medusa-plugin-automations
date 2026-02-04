@@ -98,8 +98,6 @@ export const sendEmailStep = createStep(
       })
     }
 
-    console.log("options", options)
-
     try {
       const notificationModuleService = container.resolve(
         Modules.NOTIFICATION

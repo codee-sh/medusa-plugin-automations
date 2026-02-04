@@ -32,12 +32,6 @@ export default async function mpnAutomationActionSlackExecutedHandler({
   const moduleConfig = config?.modules.mpnAutomation
   const backendUrl = moduleConfig?.options.backend_url
 
-  console.log("action", action)
-  console.log("action config", action.config)
-  console.log("eventName", triggerEventName)
-  console.log("context", context)
-  console.log("contextType", contextType)
-
   const contextData = {
     ...context,
     backendUrl: backendUrl,
