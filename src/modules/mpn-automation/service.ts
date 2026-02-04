@@ -247,7 +247,6 @@ class MpnAutomationService extends MedusaService({
    * @returns void
    */
   private initializeActionHandlers() {
-    this.logger_.info("initializeActionHandlers")
     const defaultActions: ActionHandler[] = [
       new EmailActionService({
         events: this.getAvailableEvents(),
@@ -304,74 +303,6 @@ class MpnAutomationService extends MedusaService({
               `Action handler "${actionConfig.id}" already exists, skipping custom handler registration`
             )
           }
-        }
-
-        // 2. Register templates (for existing or newly registered handler)
-        if (
-          actionConfig.templates &&
-          Array.isArray(actionConfig.templates)
-        ) {
-          const handlerData = this.getActionHandler(
-            actionConfig.id
-          )
-
-          if (!handlerData) {
-            this.logger_.warn(
-              `Cannot register templates for "${actionConfig.id}" - handler not found`
-            )
-            return
-          }
-
-          const { handler } = handlerData
-
-          if (!handler.registerTemplate) {
-            this.logger_.warn(
-              `Handler "${actionConfig.id}" does not support template registration`
-            )
-            return
-          }
-
-          await Promise.all(
-            actionConfig.templates.map(
-              async (template: any) => {
-                const templateName = template.name
-                const templateValue = template.path
-
-                let renderer = templateValue
-
-                try {
-                  const templateModule = await import(
-                    templateValue
-                  )
-                  const template = templateModule.default
-                  renderer = template?.default || template
-
-                  if (!renderer) {
-                    this.logger_.warn(
-                      `Template module from "${templateValue}" does not export a default function or expected named export`
-                    )
-                    return
-                  }
-                } catch (error: any) {
-                  this.logger_.warn(
-                    `Failed to load template from "${templateValue}": ${error?.message || "Unknown error"}`
-                  )
-                  return
-                }
-
-                if (templateName) {
-                  handler.registerTemplate!(
-                    templateName,
-                    renderer
-                  )
-
-                  this.logger_.info(
-                    `Custom template "${templateName}" registered for handler "${actionConfig.id}"`
-                  )
-                }
-              }
-            )
-          )
         }
       })
     )
