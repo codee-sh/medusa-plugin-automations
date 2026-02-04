@@ -8,7 +8,7 @@ import type {
   TemplateOptionsType,
 } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
 import React from "react"
-import { getTemplatesWorkflow } from "@codee-sh/medusa-plugin-notification-emails/workflows/mpn-builder/get-templates"
+import { getServicesTypesTemplatesWorkflow } from "@codee-sh/medusa-plugin-notification-emails/workflows/mpn-builder/get-services-types-templates"
 
 export class EmailActionService extends BaseActionService {
   id = "email"
@@ -85,7 +85,7 @@ export class EmailActionService extends BaseActionService {
   async fetchData(params: {
     container: any
   }): Promise<any> {
-    const { result: { templates: allTemplates } } = await getTemplatesWorkflow(params.container).run({
+    const { result: { templates: allTemplates } } = await getServicesTypesTemplatesWorkflow(params.container).run({
       input: {},
     })
 
@@ -154,7 +154,7 @@ export class EmailActionService extends BaseActionService {
 
     const { result: { html, text, subject } } = await emailServiceWorkflow(container).run({
       input: {
-        templateId: templateName,
+        template_id: templateName,
         data: transformedContext,
         options: {
           ...(options || {}),
