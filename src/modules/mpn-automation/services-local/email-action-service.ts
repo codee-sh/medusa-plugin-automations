@@ -96,6 +96,13 @@ export class EmailActionService extends BaseActionService {
           name: template.label,
         })),
       },
+      {
+        groupName: "External",
+        options: templatesNew.external.map((template: any) => ({
+          value: template.id,
+          name: template.label,
+        })),
+      },
     ])
 
     return {
