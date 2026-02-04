@@ -4,12 +4,10 @@ import {
   WorkflowResponse,
 } from "@medusajs/framework/workflows-sdk"
 import { sendEmailStep } from "./steps/send-email"
-import type { TemplateData } from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
-import { logStep } from "../steps/log-step"
 
 export interface SendEmailWorkflowInput {
-  settings: any
-  templateData: TemplateData
+  options: any
+  templateData: any
   eventName?: string
   contextType?: string | null
 }
@@ -20,7 +18,7 @@ export interface SendEmailWorkflowOutput {
   error?: string
 }
 
-export const sendEmailWorkflowId = "send-email"
+export const sendNotificationEmailWorkflowId = "send-notification-email"
 
 /**
  * Universal workflow that sends an email notification.
@@ -41,9 +39,9 @@ export const sendEmailWorkflowId = "send-email"
  * @example
  * ```typescript
  * // Standalone usage
- * const { result } = await sendEmailWorkflow(container).run({
+ * const { result } = await sendNotificationEmailWorkflow(container).run({
  *   input: {
- *     settings: {
+ *     options: {
  *       templateName: "inventory-level",
  *       to: "admin@example.com",
  *       locale: "pl"
@@ -58,11 +56,11 @@ export const sendEmailWorkflowId = "send-email"
  * })
  * ```
  */
-export const sendEmailWorkflow = createWorkflow(
-  sendEmailWorkflowId,
+export const sendNotificationEmailWorkflow = createWorkflow(
+  sendNotificationEmailWorkflowId,
   (input: WorkflowData<SendEmailWorkflowInput>) => {
     const result = sendEmailStep({
-      settings: input.settings,
+      options: input.options,
       templateData: input.templateData,
       eventName: input.eventName,
       contextType: input.contextType,

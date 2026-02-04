@@ -3,7 +3,7 @@ import {
   createStep,
 } from "@medusajs/framework/workflows-sdk"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
-import MpnAutomationService from "../../../modules/mpn-automation/services/service"
+import MpnAutomationService from "../../../modules/mpn-automation/service"
 import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
 import { AutomationTrigger } from "../../../modules/mpn-automation/types/interfaces"
 

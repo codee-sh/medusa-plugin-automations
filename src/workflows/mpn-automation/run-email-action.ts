@@ -4,7 +4,7 @@ import {
   WorkflowResponse,
   transform,
 } from "@medusajs/framework/workflows-sdk"
-import { sendEmailWorkflow } from "../notifications/send-email"
+import { sendNotificationEmailWorkflow } from "../notifications/send-email"
 import { AutomationAction } from "../../modules/mpn-automation/types/interfaces"
 
 export interface RunEmailActionWorkflowInput {
@@ -25,11 +25,11 @@ export const runEmailActionWorkflowId = "run-email-action"
 /**
  * Workflow wrapper for automation system that runs an email action.
  *
- * This is a convenience wrapper around the universal sendEmailWorkflow,
+ * This is a convenience wrapper around the universal sendNotificationEmailWorkflow,
  * specifically designed for use with automation actions.
  *
  * It extracts configuration from action.config and context, then calls
- * the universal sendEmailWorkflow.
+ * the universal sendNotificationEmailWorkflow.
  *
  * Configuration is stored in action.config:
  * - templateName: Required - Name of the email template
@@ -65,8 +65,8 @@ export const runEmailActionWorkflowId = "run-email-action"
 export const runEmailActionWorkflow = createWorkflow(
   runEmailActionWorkflowId,
   (input: WorkflowData<RunEmailActionWorkflowInput>) => {
-    // Transform automation action format for sendEmailWorkflow
-    const settings = transform(
+    // Transform automation action format for sendNotificationEmailWorkflow
+    const options = transform(
       {
         action: input.action,
         eventName: input.eventName,
@@ -90,9 +90,9 @@ export const runEmailActionWorkflow = createWorkflow(
       }
     )
 
-    const result = sendEmailWorkflow.runAsStep({
+    const result = sendNotificationEmailWorkflow.runAsStep({
       input: {
-        settings: settings,
+        options: options,
         templateData: input.context,
         eventName: input.eventName,
         contextType: input.contextType,

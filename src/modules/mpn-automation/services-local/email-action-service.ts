@@ -86,10 +86,13 @@ export class EmailActionService extends BaseActionService {
     container: any
   }): Promise<any> {
     const { result: { templates: allTemplates } } = await getServicesTypesTemplatesWorkflow(params.container).run({
-      input: {},
+      input: {
+        service_id: this.id,
+      },
     })
 
-    const filteredTemplate = allTemplates.find((template: any) => template.id === this.id)
+    // If service_id was provided, allTemplates will contain only one item
+    const filteredTemplate = allTemplates.length > 0 ? allTemplates[0] : null
     const templates = filteredTemplate ? filteredTemplate.templates.db : []
     const templatesNew = filteredTemplate ? filteredTemplate.templates : []
 

@@ -85,6 +85,12 @@ export class SlackNotificationProviderService extends AbstractNotificationProvid
           },
         }
       )
+      if (!response.ok) {
+        throw new MedusaError(
+          MedusaError.Types.UNEXPECTED_STATE,
+          "Failed to send notification to Slack"
+        )
+      }
 
       // Slack webhook API returns "ok" as plain text, not JSON
       const responseText = await response.text()

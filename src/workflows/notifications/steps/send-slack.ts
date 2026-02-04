@@ -4,25 +4,24 @@ import {
 } from "@medusajs/framework/workflows-sdk"
 import { Modules } from "@medusajs/framework/utils"
 import type { NotificationContent } from "@medusajs/framework/types"
-import MpnAutomationService from "../../../modules/mpn-automation/services/service"
+import MpnAutomationService from "../../../modules/mpn-automation/service"
 import { MedusaError } from "@medusajs/utils"
 
 type SlackNotificationContent = NotificationContent & {
   blocks?: any[]
 }
 
-export interface SendSlackConfig {
-  template: string
+export interface SendSlackOptions {
+  templateName: string
   resourceId?: string
   resourceType?: string
   channel?: string
   triggerType?: string
-  backendUrl?: string
   [key: string]: any // Allow additional config options
 }
 
 export interface SendSlackStepInput {
-  settings: SendSlackConfig
+  options: SendSlackOptions
   context: any
   eventName?: string
   contextType?: string | null
@@ -65,14 +64,14 @@ export const sendSlackStep = createStep(
     input: SendSlackStepInput,
     { container }
   ): Promise<StepResponse<SendSlackStepOutput>> => {
-    const { settings, context, contextType, eventName } =
+    const { options, context, contextType, eventName } =
       input
 
     // Validate required config
-    if (!settings.template) {
+    if (!options.templateName) {
       return new StepResponse({
         success: false,
-        error: "template is required in config",
+        error: "templateName is required in config",
       })
     }
 
@@ -81,15 +80,13 @@ export const sendSlackStep = createStep(
         Modules.NOTIFICATION
       )
 
-      const template = settings.template
-      const to = settings.to || "slack-channel"
-      const locale = settings.locale || "pl"
-      const resourceId = settings.resourceId || "unknown"
-      const resourceType =
-        settings.resourceType || "slack.notification"
-      const channel = settings.channel || "slack"
-      const triggerType = settings.triggerType || "system"
-      const backendUrl = settings.backendUrl || ""
+      const templateName = options.templateName
+      const to = options.to || "slack-channel"
+      const locale = options.locale || "pl"
+      const resourceId = options.resourceId || "unknown"
+      const resourceType = options.resourceType || "slack.notification"
+      const channel = "slack"
+      const triggerType = options.triggerType || "system"
 
       // Use action handler for template rendering
       const mpnAutomationService =
@@ -108,13 +105,13 @@ export const sendSlackStep = createStep(
 
       const { text, blocks } =
         await slackHandler.handler.renderTemplate({
-          templateName: template,
+          templateName: templateName,
           context: context,
           contextType: contextType,
           options: {
-            locale: locale,
-            backendUrl: backendUrl,
+            locale: locale
           },
+          container: container
         })
 
       // Send notification
@@ -123,7 +120,7 @@ export const sendSlackStep = createStep(
           {
             to: to,
             channel: channel,
-            template: template,
+            template: templateName,
             trigger_type: triggerType,
             resource_id: resourceId,
             resource_type: resourceType,

@@ -1,6 +1,9 @@
 import { BaseActionService } from "./base-action-service"
-import { slackService } from "@codee-sh/medusa-plugin-notification-emails/templates/slack"
-import { transformContext } from "@codee-sh/medusa-plugin-notification-emails/utils"
+import {
+  SlackBlock,
+} from "../../../templates/slack/types"
+import { getServicesTypesTemplatesWorkflow } from "@codee-sh/medusa-plugin-notification-emails/workflows/mpn-builder/get-services-types-templates"
+import { slackServiceWorkflow } from "@codee-sh/medusa-plugin-notification-emails/workflows/mpn-builder-services/slack-service"
 
 export class SlackActionService extends BaseActionService {
   id = "slack"
@@ -24,22 +27,39 @@ export class SlackActionService extends BaseActionService {
     container: any
     eventName: string
   }): Promise<any> {
-    const templates = this.getTemplatesForEvent({
-      eventName: params.eventName,
-      events: this.events,
+    const { result: { templates: allTemplates } } = await getServicesTypesTemplatesWorkflow(params.container).run({
+      input: {
+        service_id: this.id,
+      },
     })
 
-    const newFields = this.fillTemplateNameFieldWithOptions(this.fields, templates.map((template: any) => ({
-      value: template.value,
-      name: template.name,
-    })))
+    // If service_id was provided, allTemplates will contain only one item
+    const filteredTemplate = allTemplates.length > 0 ? allTemplates[0] : null
+    const templatesNew = filteredTemplate ? filteredTemplate.templates : { system: [], db: [] }
+
+    const newFieldsNew = this.fillTemplateNameFieldWithOptions(this.fields, [
+      {
+        groupName: "System",
+        options: templatesNew.system.map((template: any) => ({
+          value: template.id,
+          name: template.name,
+        })),
+      },
+      {
+        groupName: "Database",
+        options: templatesNew.db.map((template: any) => ({
+          value: template.id,
+          name: template.label,
+        })),
+      },
+    ])
 
     return {
       value: this.id,
       label: this.label,
       description: this.description,
       configComponentKey: this.configComponentKey,
-      fields: newFields,   
+      fields: newFieldsNew,   
       templates: this.templates,
       enabled: this.enabled,
     }
@@ -56,27 +76,24 @@ export class SlackActionService extends BaseActionService {
     context: any
     contextType?: string | null
     options?: any
-  }): Promise<{ text: string; blocks: any[] }> {
+    container?: any
+  }): Promise<{ text: string; blocks: SlackBlock[] }> {
+    const {
+      templateName,
+      context,
+      container,
+    } = params
 
-    const transformedContext = transformContext(params.contextType, params.context)
-
-    const { blocks } = await slackService.render({
-      templateName: params.templateName,
-      data: {
-        ...transformedContext,
-        backend_url: params.options?.backendUrl,
+    const { result: { blocks, text } } = await slackServiceWorkflow(container).run({
+      input: {
+        template_id: templateName,
+        data: context,
+        options: params.options || {},
       },
-      options: params.options
     })
 
-    // For Slack, the 'text' field is a fallback for notifications that don't support blocks.
-    // We can derive it from the first header block or a generic message.
-    const fallbackText =
-      blocks.find((b) => b.type === "header" && b.text?.text)?.text?.text ||
-      `Notification for ${params.templateName}`
-
     return {
-      text: fallbackText,
+      text: text || `Notification for ${templateName}`,
       blocks: blocks,
     }
   }
