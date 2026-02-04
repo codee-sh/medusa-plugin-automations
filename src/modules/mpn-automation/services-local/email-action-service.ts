@@ -18,7 +18,6 @@ export class EmailActionService extends BaseActionService {
 
   constructor({ events }: { events?: any }) {
     super()
-    this.initializeTemplates()
   }
 
   fields: FieldConfig[] = [
@@ -67,20 +66,6 @@ export class EmailActionService extends BaseActionService {
     // Add templateName field - options will be populated dynamically by service based on eventName
     this.addTemplateNameField(),
   ]
-
-  /**
-   * Initialize default email templates
-   * Email templates are managed by @codee-sh/medusa-plugin-notification-emails
-   * This method can be used to register custom templates if needed
-   */
-  protected initializeTemplates(): void {
-    // Email engine already has all prebuild templates registered
-    // You can register custom templates here if needed:
-    // emailEngine.registerTemplate("custom-template", {
-    //   ...emailEngine.getBaseTemplate(),
-    //   getConfig: () => ({ blocks: [...], translations: {...} })
-    // })
-  }
 
   async fetchData(params: {
     container: any

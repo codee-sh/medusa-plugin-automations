@@ -11,7 +11,6 @@ export class SlackActionService extends BaseActionService {
   
   constructor({ events }: { events?: any }) {
     super()
-
     this.events = events || []
   }
 
