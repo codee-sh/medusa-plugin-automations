@@ -213,10 +213,10 @@ export const runAutomationWorkflow = createWorkflow(
       }
     )
 
-    /**
-     * Log the final result
-     */
-    logStep(finalResult)
+    // /**
+    //  * Log the final result
+    //  */
+    // logStep(finalResult)
 
     return new WorkflowResponse(finalResult)
   }

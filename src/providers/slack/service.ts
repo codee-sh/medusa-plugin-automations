@@ -47,16 +47,6 @@ export class SlackNotificationProviderService extends AbstractNotificationProvid
     }
   }
 
-  private async getDisplayAmount(
-    amount: number,
-    currencyCode: string
-  ) {
-    return Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: currencyCode,
-    }).format(amount)
-  }
-
   async send(
     notification: NotificationTypes.ProviderSendNotificationDTO & {
       content: any
@@ -85,6 +75,12 @@ export class SlackNotificationProviderService extends AbstractNotificationProvid
           },
         }
       )
+      if (!response.ok) {
+        throw new MedusaError(
+          MedusaError.Types.UNEXPECTED_STATE,
+          "Failed to send notification to Slack"
+        )
+      }
 
       // Slack webhook API returns "ok" as plain text, not JSON
       const responseText = await response.text()

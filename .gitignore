@@ -2,7 +2,6 @@
 .medusa
 node_modules/
 .yarn/
-yarn.lock
 .yalc
 yalc.lock
 

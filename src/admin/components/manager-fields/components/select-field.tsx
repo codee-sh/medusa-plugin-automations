@@ -4,7 +4,7 @@ interface SelectFieldProps {
   label: string
   value: string
   onChange: (value: string) => void
-  options: Array<{ value: string; name: string }>
+  options: Array<any>
   required?: boolean
   disabled?: boolean
 }
@@ -17,6 +17,8 @@ export const SelectField = ({
   required = false,
   disabled = false,
 }: SelectFieldProps) => {
+  const isGrouped = options.length > 0 && options[0]?.groupName && options[0]?.options
+
   return (
     <Select
       value={value}
@@ -27,14 +29,24 @@ export const SelectField = ({
         <Select.Value placeholder="Select an option" />
       </Select.Trigger>
       <Select.Content>
-        {options.map((option) => (
-          <Select.Item
-            key={option.value}
-            value={option.value}
-          >
-            {option.name}
-          </Select.Item>
-        ))}
+        {isGrouped ? (
+          options.map((option) => (
+            <Select.Group key={option?.groupName}>
+              <Select.Label>{option?.groupName}</Select.Label>
+              {option.options.map((option: { value: string; name: string }) => (
+                <Select.Item key={option.value} value={option.value}>
+                  {option.name}
+                </Select.Item>
+              ))}
+            </Select.Group>
+          ))
+        ) : (
+          options.map((option: { value: string; name: string }) => (
+            <Select.Item key={option.value} value={option.value}>
+              {option.name}
+            </Select.Item>
+          ))
+        )}
       </Select.Content>
     </Select>
   )

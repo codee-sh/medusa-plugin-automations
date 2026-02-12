@@ -8,15 +8,15 @@ import {
   MpnAutomationRule,
   MpnAutomationRuleValue,
   MpnAutomationAction,
-} from "../models"
+} from "./models"
 import {
   ModuleOptions,
   ActionHandler,
   CustomEventGroup,
   TRIGGER_TYPES,
-} from "../types"
-import { EmailActionService } from "./email-action-service"
-import { SlackActionService } from "./slack-action-service"
+} from "./types"
+import { EmailActionService } from "./services-local/email-action-service"
+import { SlackActionService } from "./services-local/slack-action-service"
 import { Logger } from "@medusajs/framework/types"
 import {
   InventoryEvents,
@@ -39,7 +39,8 @@ import {
   FulfillmentWorkflowEvents,
   PaymentEvents,
 } from "@medusajs/framework/utils"
-import { getEventMetadata } from "../types/modules"
+import { getEventMetadata } from "./types/modules"
+
 
 type InjectedDependencies = {
   logger: Logger
@@ -57,7 +58,7 @@ class MpnAutomationService extends MedusaService({
   private events_: CustomEventGroup[]
   private actionsEnabled_: any
   private actionHandlers_: Map<string, any> = new Map()
-
+  
   constructor(
     { logger }: InjectedDependencies,
     options?: ModuleOptions
@@ -100,7 +101,7 @@ class MpnAutomationService extends MedusaService({
    *
    * @returns Map of action handlers
    */
-  private getActionHandlers(): Map<
+  public getActionHandlers(): Map<
     string,
     { handler: ActionHandler; enabled: boolean }
   > {
@@ -241,47 +242,24 @@ class MpnAutomationService extends MedusaService({
   }
 
   /**
-   * Get available templates for a given event name
-   * Uses getAvailableEvents() to find the event and extract template
-   *
-   * @param eventName - Event name to search for
-   * @returns Array of template options
-   */
-  getTemplatesForEvent(
-    eventName?: string
-  ): Array<{ value: string; name: string }> {
-    if (!eventName) {
-      return []
-    }
-
-    const allEvents = this.getAvailableEvents()
-
-    // Search through all event groups
-    for (const group of allEvents) {
-      const event = group.events?.find(
-        (e: any) => e.value === eventName
-      )
-      if (event?.templates && event.templates.length > 0) {
-        return event.templates
-      }
-    }
-
-    return []
-  }
-
-  /**
    * Initialize action handlers from defaults and options
    *
    * @returns void
    */
   private initializeActionHandlers() {
     const defaultActions: ActionHandler[] = [
-      new EmailActionService(),
-      new SlackActionService(),
+      new EmailActionService({
+        events: this.getAvailableEvents(),
+      }),
+      new SlackActionService({
+        events: this.getAvailableEvents(),
+      }),
     ]
 
     defaultActions.forEach((action) => {
       const isEnabled = this.actionsEnabled_[action.id]
+
+      action.enabled = isEnabled
 
       this.actionHandlers_.set(action.id, {
         handler: action,
@@ -326,130 +304,8 @@ class MpnAutomationService extends MedusaService({
             )
           }
         }
-
-        // 2. Register templates (for existing or newly registered handler)
-        if (
-          actionConfig.templates &&
-          Array.isArray(actionConfig.templates)
-        ) {
-          const handlerData = this.getActionHandler(
-            actionConfig.id
-          )
-
-          if (!handlerData) {
-            this.logger_.warn(
-              `Cannot register templates for "${actionConfig.id}" - handler not found`
-            )
-            return
-          }
-
-          const { handler } = handlerData
-
-          if (!handler.registerTemplate) {
-            this.logger_.warn(
-              `Handler "${actionConfig.id}" does not support template registration`
-            )
-            return
-          }
-
-          await Promise.all(
-            actionConfig.templates.map(
-              async (template: any) => {
-                const templateName = template.name
-                const templateValue = template.path
-
-                let renderer = templateValue
-
-                try {
-                  const templateModule = await import(
-                    templateValue
-                  )
-                  const template = templateModule.default
-                  renderer = template?.default || template
-
-                  if (!renderer) {
-                    this.logger_.warn(
-                      `Template module from "${templateValue}" does not export a default function or expected named export`
-                    )
-                    return
-                  }
-                } catch (error: any) {
-                  this.logger_.warn(
-                    `Failed to load template from "${templateValue}": ${error?.message || "Unknown error"}`
-                  )
-                  return
-                }
-
-                if (templateName) {
-                  handler.registerTemplate!(
-                    templateName,
-                    renderer
-                  )
-
-                  this.logger_.info(
-                    `Custom template "${templateName}" registered for handler "${actionConfig.id}"`
-                  )
-                }
-              }
-            )
-          )
-        }
       })
     )
-  }
-
-  /**
-   * Get available actions for the admin panel form
-   * If Handler has fields, we can push templateName field to fields array, then in the admin panel form we can render the templateName field as a select field with the templates options.
-   *
-   * @param eventName - Optional event name to filter templates dynamically
-   * @returns Array of actions
-   */
-  getAvailableActions(eventName?: string) {
-    const handlers = this.getActionHandlers()
-
-    return Array.from(handlers.values()).map((handler) => {
-      // Get fields, potentially with dynamic template options
-      let fields = handler.handler.fields || []
-
-      // If eventName is provided, update templateName fields dynamically
-      if (eventName && fields.length > 0) {
-        const templates =
-          this.getTemplatesForEvent(eventName)
-
-        fields = fields.map((field) => {
-          // If this is a templateName field, update its options
-          if (
-            field.key === "templateName" &&
-            field.type === "select"
-          ) {
-            return {
-              ...field,
-              options:
-                templates.length > 0
-                  ? templates
-                  : field.options || [],
-              defaultValue:
-                templates.length > 0
-                  ? templates[0]?.value
-                  : field.defaultValue,
-            }
-          }
-          return field
-        })
-      }
-
-      return {
-        value: handler.handler.id,
-        label: handler.handler.label,
-        description: handler.handler.description,
-        configComponentKey:
-          handler.handler.configComponentKey,
-        templateLoaders: handler.handler.templateLoaders,
-        fields: fields,
-        enabled: handler.enabled,
-      }
-    })
   }
 
   /**

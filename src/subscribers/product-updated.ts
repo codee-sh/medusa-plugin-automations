@@ -36,8 +36,6 @@ export default async function productUpdatedHandler({
     product: product,
   }
 
-  console.log(contextData)
-
   // Run automation workflow - this will:
   // 1. Retrieve triggers for the event
   // 2. Validate triggers against context

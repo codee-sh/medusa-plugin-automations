@@ -2,7 +2,7 @@ import {
   createStep,
   StepResponse,
 } from "@medusajs/framework/workflows-sdk"
-import MpnAutomationService from "../../../modules/mpn-automation/services/service"
+import MpnAutomationService from "../../../modules/mpn-automation/service"
 import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
 import { AutomationTrigger } from "../../../modules/mpn-automation/types/interfaces"
 

@@ -163,13 +163,13 @@ export function validateRulesForContext(
       context
     )
 
-    console.log("Rule evaluation:", {
-      attribute: rule.attribute,
-      operator: rule.operator,
-      ruleValues: validRuleValues,
-      valuesToCheck: valuesToCheck,
-      contextKeys: Object.keys(context),
-    })
+    // console.log("Rule evaluation:", {
+    //   attribute: rule.attribute,
+    //   operator: rule.operator,
+    //   ruleValues: validRuleValues,
+    //   valuesToCheck: valuesToCheck,
+    //   contextKeys: Object.keys(context),
+    // })
 
     return validateRuleValueCondition(
       validRuleValues,
