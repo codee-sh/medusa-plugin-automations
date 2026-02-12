@@ -3,10 +3,6 @@ import { BaseActionService } from "./base-action-service"
 import { transformContext } from "@codee-sh/medusa-plugin-notification-emails/utils"
 import { emailServiceWorkflow } from "@codee-sh/medusa-plugin-notification-emails/workflows/mpn-builder-services/email-service"
 
-import type {
-  TemplateData,
-  TemplateOptionsType,
-} from "@codee-sh/medusa-plugin-notification-emails/templates/emails"
 import React from "react"
 import { getServicesTypesTemplatesWorkflow } from "@codee-sh/medusa-plugin-notification-emails/workflows/mpn-builder/get-services-types-templates"
 
@@ -123,13 +119,13 @@ export class EmailActionService extends BaseActionService {
    */
   async renderTemplate(params: {
     templateName: string
-    context: TemplateData
+    context: any
     contextType?: string | null
-    options?: TemplateOptionsType
+    options?: any
     container?: any
     customTemplateFunction?: (
-      data: TemplateData,
-      options: TemplateOptionsType
+      data: any,
+      options: any
     ) => React.ReactElement<any>
   }): Promise<{
     html: string
