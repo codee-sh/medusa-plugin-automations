@@ -1,4 +1,4 @@
-import { ActionHandler, TemplateRenderer } from "../types"
+import { ActionHandler } from "../types"
 import { FieldConfig } from "../types"
 import { Modules } from "@medusajs/framework/utils"
 
@@ -20,40 +20,6 @@ export class BaseActionService implements ActionHandler {
 
   // Fields for the action configuration rendered in the admin panel then saved in the action config
   fields: FieldConfig[] = []
-
-  // Template registry - each service manages its own templates
-  protected templates_: Map<string, TemplateRenderer> =
-    new Map()
-
-  /**
-   * Register a template for this service
-   * @param name - Template name
-   * @param renderer - Template renderer function
-   */
-  registerTemplate(
-    name: string,
-    renderer: any
-  ): void {
-    this.templates_.set(name, renderer)
-  }
-
-  /**
-   * Get template renderer by name
-   * @param name - Template name
-   * @returns Template renderer or undefined
-   */
-  getTemplate(name: string): any | undefined {
-    return this.templates_.get(name)
-  }
-
-  /**
-   * Initialize default templates (override in subclasses)
-   * Called automatically in constructor
-   */
-  protected initializeTemplates(): void {
-    // Override in subclasses to register default templates
-  }
-
   /**
    * Helper method to add templateName field to fields array
    * Call this in constructor or fields initialization if you need template selection
@@ -63,7 +29,7 @@ export class BaseActionService implements ActionHandler {
    * @returns FieldConfig for template
    */
   protected addTemplateNameField(
-    options: Array<{ value: string; name: string }> = [],
+    options: Array<any> = [],
     defaultValue?: string
   ): FieldConfig {
     return {
@@ -75,6 +41,70 @@ export class BaseActionService implements ActionHandler {
       options: options,
       defaultValue: defaultValue,
     }
+  }
+
+  /**
+   * Fill template name field with options
+   * @param field - Field config
+   * @param templates - Templates array
+   * @returns Field config with options filled
+   */
+  protected fillTemplateNameFieldWithOptions(
+    fields: FieldConfig[],
+    templates: Array<any> = []
+  ): FieldConfig[] {
+    return fields.map((field: FieldConfig) => {
+      if (
+        field.key === "templateName" &&
+        field.type === "select"
+      ) {
+        return {
+          ...field,
+          options:
+            templates.length > 0
+              ? templates
+              : field.options || [],
+          defaultValue:
+            templates.length > 0
+              ? templates[0]?.value
+              : field.defaultValue,
+        }
+      }
+      return field
+    })
+  }
+
+  /**
+   * Get available templates for a given event name
+   * Uses getAvailableEvents() to find the event and extract template
+   *
+   * @param eventName - Event name to search for
+   * @returns Array of template options
+   */
+  getTemplatesForEvent({
+    eventName,
+    events,
+  }: {
+    eventName?: string
+    events?: any
+  }): Array<{ value: string; name: string }> {
+    if (!eventName) {
+      return []
+    }
+
+    const allEvents = events || []
+
+    // Search through all event groups
+    for (const group of allEvents) {
+      const event = group.events?.find(
+        (e: any) => e.value === eventName
+      )
+      if (event?.templates && event.templates.length > 0) {
+        return event.templates
+      }
+    }
+
+    return []
   }
 
   /**

@@ -87,26 +87,3 @@ export async function GET(
     offset: skip || 0,
   })
 }
-
-// export const DeleteAutomationSchema = z.object({
-//   id: z.string(),
-// });
-
-// type DeleteAutomationSchema = z.infer<typeof DeleteAutomationSchema>;
-
-// export async function DELETE(
-//   req: MedusaStoreRequest<DeleteAutomationSchema>,
-//   res: MedusaResponse
-// ) {
-//   // const { result: automation } = await deleteAutomationWorkflow(
-//   //   req.scope
-//   // ).run({
-//   //   input: {
-//   //     id: req.body.id as string
-//   //   },
-//   // });
-
-//   // res.json({
-//   //   automation: automation,
-//   // });
-// }

@@ -3,7 +3,7 @@ import {
   createStep,
 } from "@medusajs/framework/workflows-sdk"
 import { MPN_AUTOMATION_MODULE } from "../../../modules/mpn-automation"
-import type MpnAutomationService from "../../../modules/mpn-automation/services/service"
+import type MpnAutomationService from "../../../modules/mpn-automation/service"
 import {
   AutomationTrigger,
   TriggerType,

@@ -21,3 +21,11 @@ dependencies:
   - title: ["deps:", "dependencies:", "bump "]
   - head: ["deps/", "dependencies/"]
 
+"type: chore":
+  - title: ["chore:"]
+  - head: ["chore/"]
+
+breaking:
+  - title: ["breaking:", "BREAKING:"]
+  - head: ["breaking/"]
+

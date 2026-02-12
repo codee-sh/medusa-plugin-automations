@@ -6,7 +6,7 @@ import {
 import { sendSlackStep } from "./steps/send-slack"
 
 export interface SendSlackWorkflowInput {
-  settings: any
+  options: any
   context: any
   eventName?: string
   contextType?: string | null
@@ -18,7 +18,7 @@ export interface SendSlackWorkflowOutput {
   error?: string
 }
 
-export const sendSlackWorkflowId = "send-slack"
+export const sendNotificationSlackWorkflowId = "send-notification-slack"
 
 /**
  * Universal workflow that sends a slack notification.
@@ -32,7 +32,7 @@ export const sendSlackWorkflowId = "send-slack"
  * @example
  * ```typescript
  * // Standalone usage
- * const { result } = await sendSlackWorkflow(container).run({
+ * const { result } = await sendNotificationSlackWorkflow(container).run({
  *   input: {
  *     settings: {
  *       templateName: "inventory-level",
@@ -49,14 +49,14 @@ export const sendSlackWorkflowId = "send-slack"
  * })
  * ```
  */
-export const sendSlackWorkflow = createWorkflow(
-  sendSlackWorkflowId,
+export const sendNotificationSlackWorkflow = createWorkflow(
+  sendNotificationSlackWorkflowId,
   (input: WorkflowData<SendSlackWorkflowInput>) => {
     const result = sendSlackStep({
-      settings: input.settings,
-      context: input.context,
       eventName: input.eventName,
+      context: input.context,
       contextType: input.contextType,
+      options: input.options
     })
 
     return new WorkflowResponse(result)

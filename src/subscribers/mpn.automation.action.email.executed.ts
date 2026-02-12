@@ -28,6 +28,14 @@ export default async function mpnAutomationActionEmailExecutedHandler({
     eventName: triggerEventName,
     contextType,
   } = data
+  const config = container.resolve("configModule") as any
+  const moduleConfig = config?.modules.mpnAutomation
+  const backendUrl = moduleConfig?.options.backend_url
+
+  const contextData = {
+    ...context,
+    backendUrl: backendUrl,
+  }
 
   const { result } = await runEmailActionWorkflow(
     container
@@ -45,7 +53,7 @@ export default async function mpnAutomationActionEmailExecutedHandler({
             "inventory-level",
         },
       },
-      context: context,
+      context: contextData,
       contextType: contextType,
       eventName: triggerEventName,
     },
