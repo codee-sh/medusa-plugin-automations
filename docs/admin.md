@@ -1,6 +1,6 @@
 # Admin Panel Documentation
 
-The plugin provides an admin interface for managing notification automations.
+User guide for managing automations in the admin panel.
 
 ## Accessing the Admin Panel
 
@@ -30,7 +30,7 @@ The admin panel allows you to:
 Automations can be triggered by:
 
 - **Events**: Medusa events (e.g., `inventory.inventory-level.updated`, `order.placed`)
-- **Schedule**: Time-based triggers with configurable intervals (in minutes)
+- **Schedule**: Time-based triggers with configurable intervals in seconds
 - **Manual**: Triggered manually from the admin panel
 
 #### Rules
@@ -57,28 +57,20 @@ When all rules pass, actions are executed:
 - **Channels**: Configure delivery channels (email, slack etc.)
 - **Metadata**: Add custom config for actions
 
+#### Template Selection
+
+Email and Slack actions use a `Template Name` field.
+The template list loads dynamically and is grouped
+as `System`, `Database`, and `External`.
+
 ## Using the Admin Panel
 
 ### Creating an Automation
 
 1. **Navigate to Automations**: Go to `/app/notifications/automations`
 2. **Click Create**: Start creating a new automation
-3. **Configure Trigger**:
-   - Set trigger type (event, schedule, or manual)
-   - If event: Select the event name
-   - If schedule: Set interval in minutes
-   - Set a name and description
-4. **Add Rules**:
-   - Select rule attributes from available options (including relations and nested objects)
-   - Choose operators based on your needs:
-     - Use `in` or `not in` for checking if a value exists in an array
-     - Use `contains` or `not contains` for partial matches in arrays
-     - Use `empty` or `not empty` to check for null/empty values
-   - Set comparison values:
-     - For array operators (`in`, `not in`, `contains`, `not contains`): Use the chip input to add multiple values
-     - For basic operators: Enter a single value
-     - For `empty`/`not empty`: No value input needed
-   - Add multiple rules as needed (all rules must pass for the automation to trigger)
+3. **Configure Trigger**: Set trigger type (event, schedule, or manual). If event, select the event name. If schedule, set interval in seconds. Set a name and description.
+4. **Add Rules**: Select rule attributes, choose operators, and set values. For array operators, use the chip input. For `empty`/`not empty`, no value input is required. Add multiple rules as needed (all rules must pass for the automation to trigger).
 5. **Configure Actions**:
    - Set delivery channels
    - Add config if needed
@@ -110,7 +102,7 @@ Create an automation that sends a notification when inventory levels drop below 
 
 Create an automation that triggers when a product has specific tags:
 
-- **Trigger**: Event `product.product.updated`
+- **Trigger**: Event `product.updated`
 - **Rule**: `product.tags.id` is `in` `[tag-premium, tag-featured]` (use chip input for multiple tag IDs)
 - **Action**: Send Slack notification
 
@@ -118,7 +110,7 @@ Create an automation that triggers when a product has specific tags:
 
 Create an automation for products in specific categories:
 
-- **Trigger**: Event `product.product.created`
+- **Trigger**: Event `product.updated`
 - **Rule**: `product.categories.name` contains `"Electronics"` (or use `in` operator with multiple category names)
 - **Action**: Send email notification
 
@@ -146,9 +138,10 @@ Create an automation for when inventory exceeds a certain level:
 4. **Use Appropriate Triggers**: Choose the right trigger type for your use case
 5. **Combine Rules**: Use multiple rules to create complex conditions
 6. **Document Automations**: Add descriptions to explain automation purpose
-7. **Choose the Right Operator**: 
-   - Use `in`/`not in` for exact matches in arrays (e.g., checking if product has specific tags)
-   - Use `contains`/`not contains` for partial matches (e.g., checking if category name contains a substring)
-   - Use `empty`/`not empty` for null checks
-8. **Use Array Values Correctly**: When using array operators (`in`, `not in`, `contains`, `not contains`), use the chip input to add multiple values
-9. **Leverage Relations**: Use relation-based attributes (e.g., `product.tags.id`, `product.categories.name`) to create powerful automations based on related data
+7. **Choose the Right Operator**: Use `in`/`not in` for exact array matches, `contains`/`not contains` for partial matches, and `empty`/`not empty` for null checks
+8. **Use Array Values Correctly**: For array operators, use the chip input to add multiple values
+9. **Leverage Relations**: Use relation-based attributes (e.g., `product.tags.id`, `product.categories.name`) to create powerful automations
+
+## See Also
+
+- [Configuration](./configuration.md)
