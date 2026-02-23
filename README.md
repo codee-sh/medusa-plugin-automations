@@ -1,16 +1,17 @@
 # Medusa plugin automations
 
-A comprehensive automation plugin for Medusa v2 that provides a flexible rule-based automation system with triggers, conditions, and actions. Create automated workflows that can send notifications (email, Slack), execute custom actions, or trigger other processes based on events, schedules, or manual triggers with customizable rules.
+Automation plugin for Medusa v2 with rule-based
+triggers and actions for notifications and workflows.
 
 ## Features
 
-- **Automation Triggers**: Create automations triggered by events, schedules, or manual actions ([see details](#automation-triggers))
-- **Rule-Based Conditions**: Define complex conditions with support for arrays, relations, and multiple data types ([see details](#rules-and-conditions))
-- **Rich Attribute Support**: Pre-configured attributes for Products, Variants, Tags, Categories, and Inventory ([see available attributes](./docs/configuration.md#available-attributes-reference))
-- **Multiple Action Types**: Execute various actions including email notifications, Slack messages, SMS, push notifications, and custom actions ([see details](#actions))
-- **Event Subscribers**: Built-in subscribers for common Medusa events ([see available events](./docs/configuration.md#available-subscribers))
+- **Automation Triggers**: Events, schedules, or manual actions ([see details](#automation-triggers))
+- **Rule-Based Conditions**: Arrays, relations, and multiple data types ([see details](#rules-and-conditions))
+- **Rich Attribute Support**: Products, Variants, Tags, Categories, Inventory ([see available attributes](./docs/attributes.md))
+- **Multiple Action Types**: Email, Slack, and custom actions ([see details](#actions))
+- **Event Subscribers**: Built-in subscribers for common Medusa events ([see available events](./docs/available-subscribers.md))
 - **Admin Panel**: Manage automations directly from Medusa Admin ([see details](#admin-panel))
-- **Extensible**: Add custom action handlers and extend automation capabilities
+- **Extensible**: Add custom action handlers
 - **Type-Safe**: Full TypeScript support with exported types and workflows
 
 ## Compatibility
@@ -64,19 +65,20 @@ Navigate to **Notifications > Automations** in your Medusa Admin dashboard, or d
 
 Automations are triggered by:
 - **Events**: Medusa events (e.g., `inventory.inventory-level.updated`, `product.updated`)
-- **Schedule**: Time-based triggers with configurable intervals (In progress)
+- **Schedule**: Time-based triggers with configurable intervals
 - **Manual**: Triggered manually from the admin panel
 
-See [Available Subscribers](./docs/configuration.md#available-subscribers) in the configuration documentation for a complete list of supported events.
+See [Available Subscribers](./docs/available-subscribers.md) for a complete list of supported events.
 
 ### Rules and Conditions
 
 Each automation can have multiple rules that define when actions should be executed. Rules support primitive fields, relations (arrays), nested objects, and various operators for complex conditions.
 
 For detailed information, see:
-- [Available Attributes Reference](./docs/configuration.md#available-attributes-reference) - Complete list of attributes for each event type
-- [Rule Operators](./docs/configuration.md#rule-operators) - All supported operators with examples
+- [Available Attributes Reference](./docs/attributes.md) - Complete list of attributes for each event type
+- [Rule Operators](./docs/rule-operators.md) - All supported operators with examples
 - [Rule Values](./docs/configuration.md#rule-values) - Supported data types and usage
+- [Custom Action Handlers](./docs/custom-action-handlers.md) - Extend actions with custom handlers
 
 ### Actions
 
@@ -87,6 +89,9 @@ When automation rules pass, actions are executed. Supported action types include
 - **Custom**: Extend with custom action handlers
 
 See [Actions](./docs/configuration.md#actions) and [Slack Notification Provider](./docs/configuration.md#slack-notification-provider) in the configuration documentation for details on configuring and extending actions.
+
+Email and Slack templates are rendered by
+`@codee-sh/medusa-plugin-notification-emails`.
 
 ## Admin Panel
 
@@ -114,7 +119,7 @@ The plugin exports the following:
 
 ## Related Plugins
 
-For email templates and rendering functionality, see [@codee-sh/medusa-plugin-automations-emails](https://github.com/codee-sh/medusa-plugin-notification-emails).
+For email and Slack template rendering, see [@codee-sh/medusa-plugin-notification-emails](https://github.com/codee-sh/medusa-plugin-notification-emails).
 
 ## License
 
@@ -123,3 +128,8 @@ MIT
 ## Author
 
 Codee Team - [https://codee.dev](https://codee.dev)
+
+## See Also
+
+- [Configuration](./docs/configuration.md)
+- [Admin Panel](./docs/admin.md)
