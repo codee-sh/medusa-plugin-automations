@@ -116,5 +116,5 @@ If symlinked, use `.ai/skills/` with
 3. Add a changeset (`yarn changeset`) for any user-facing change.
 4. Use consistent terminology: `automation`, `trigger`,
    `rule`, `action`, `mpn-automation`, `workflow`.
-5. When changing docs, follow the `plugin-docs-authoring` skill.
+5. When changing docs, follow the `docs` skill.
 6. Do not commit `.env`, `node_modules`, `.medusa/`, or build artifacts.
