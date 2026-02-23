@@ -107,9 +107,7 @@ If symlinked, use `.ai/skills/` with
 
 | Skill | When to use |
 |-------|-------------|
-| `plugin-docs-authoring` | Writing or updating documentation |
-| `release-pr-hygiene` | Preparing release PRs and changesets |
-| `medusa-plugin-context` | Quick domain context before any work |
+| `docs` | Writing or updating documentation |
 
 ## Rules for Agents
 
