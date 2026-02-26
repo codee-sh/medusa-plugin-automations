@@ -1,5 +1,12 @@
 # @codee-sh/medusa-plugin-automations
 
+## 1.0.11
+
+### Patch Changes
+
+- dd40d44: Add skills and agents
+- f9cf002: Add changeset
+
 ## 1.0.10
 
 ### Patch Changes
