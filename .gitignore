@@ -15,9 +15,14 @@ build/
 # IDE
 .vscode/
 .idea/
+.cursor/
+.codex/
+.claude/
 *.swp
 *.swo
 *~
+.github-workflow
+
 
 # OS
 .DS_Store
