@@ -1318,7 +1318,7 @@ __metadata:
   resolution: "@codee-sh/medusa-plugin-automations@workspace:."
   dependencies:
     "@changesets/cli": ^2.29.8
-    "@codee-sh/medusa-plugin-notification-emails": 1.0.1
+    "@codee-sh/medusa-plugin-notification-emails": 1.0.2
     "@medusajs/admin-sdk": 2.8.8
     "@medusajs/cli": 2.8.8
     "@medusajs/framework": 2.8.8
@@ -1347,9 +1347,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@codee-sh/medusa-plugin-notification-emails@npm:1.0.1":
-  version: 1.0.1
-  resolution: "@codee-sh/medusa-plugin-notification-emails@npm:1.0.1"
+"@codee-sh/medusa-plugin-notification-emails@npm:1.0.2":
+  version: 1.0.2
+  resolution: "@codee-sh/medusa-plugin-notification-emails@npm:1.0.2"
   dependencies:
     "@dnd-kit/core": ^6.3.1
     "@lexical/extension": ^0.39.0
@@ -1362,7 +1362,7 @@ __metadata:
     "@react-email/render": ^1.4.0
     lexical: ^0.39.0
     react-email: ^4.3.1
-  checksum: d26064ee0f9cb6ca04affa17657f737cce33f159adf84c4cd24a70a4d6e1369d0c4967b9c623b7c8645d1c4be30d7ab2a4ecfcd73c311f88d9a0db1c9ee746e8
+  checksum: 689faae6e81969d3d6881aecdf653fdf14fb7bfaa24764d375f26f84400c72ec74d185534f5df126723a705f37bd1bb0db98972fbef014fadc197d847a0b6675
   languageName: node
   linkType: hard
 
