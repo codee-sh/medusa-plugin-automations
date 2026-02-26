@@ -6,13 +6,7 @@ This directory contains project-level skills for AI coding agents.
 
 ```
 .ai/skills/
-  plugin-docs-authoring/
-    SKILL.md
-  template-blocks-architecture/
-    SKILL.md
-  release-pr-hygiene/
-    SKILL.md
-  medusa-plugin-context/
+  docs/
     SKILL.md
 ```
 

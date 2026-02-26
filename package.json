@@ -50,11 +50,12 @@
     "version": "changeset version",
     "release": "changeset publish",
     "release:manual": "npm run build && npm publish --access public",
-    "prepare-release": "bash scripts/prepare-release.sh"
+    "prepare-release": "bash scripts/prepare-release.sh",
+    "pr:create": "bash scripts/create-pr.sh"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
-    "@codee-sh/medusa-plugin-notification-emails": "1.0.0",
+    "@codee-sh/medusa-plugin-notification-emails": "1.0.1",
     "@medusajs/admin-sdk": "2.8.8",
     "@medusajs/cli": "2.8.8",
     "@medusajs/framework": "2.8.8",

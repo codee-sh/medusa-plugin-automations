@@ -30,6 +30,13 @@ yarn release:manual     # build + npm publish
 yarn prepare-release    # prep release branch
 ```
 
+## Shell Scripts
+
+Daily workflow helpers in `scripts/`:
+
+- `scripts/create-pr.sh` — create a PR (used by `yarn pr:create`).
+- `scripts/prepare-release.sh` — prepare a release branch (used by `yarn prepare-release`).
+
 ## Code Style
 
 - Prettier: 60-char print width, no semicolons, double quotes, trailing commas (es5)
