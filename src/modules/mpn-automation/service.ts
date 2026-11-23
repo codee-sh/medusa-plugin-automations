@@ -16,6 +16,7 @@ import {
   TRIGGER_TYPES,
 } from "./types"
 import { EmailActionService } from "./services-local/email-action-service"
+import { NotificationActionService } from "./services-local/notification-action-service"
 import { SlackActionService } from "./services-local/slack-action-service"
 import { Logger } from "@medusajs/framework/types"
 import {
@@ -254,6 +255,7 @@ class MpnAutomationService extends MedusaService({
       new SlackActionService({
         events: this.getAvailableEvents(),
       }),
+      new NotificationActionService(),
     ]
 
     defaultActions.forEach((action) => {
